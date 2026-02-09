@@ -11,5 +11,5 @@ $title = $title ?? 'Certificate System';
   <link rel="stylesheet" href="<?= e(base_url('assets/css/app.css')) ?>">
 </head>
 <body>
-  <div>
+  <div class="main-content">
     <main>

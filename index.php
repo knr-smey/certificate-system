@@ -6,6 +6,7 @@ require __DIR__ . '/app/bootstrap.php';
 use App\Core\Router;
 use App\Controllers\DashboardController;
 use App\Controllers\CertificateController;
+use App\Controllers\FormController;
 
 $router = new Router();
 
@@ -13,6 +14,10 @@ $router = new Router();
 $router->get('/', [DashboardController::class, 'index']);
 $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->get('/certificate', [CertificateController::class, 'index']);
+
+// Certificate Form Routes
+$router->get('/form/certificate', [FormController::class, 'index']);
+$router->post('/form/certificate/submit', [FormController::class, 'submit']);
 
 // API Routes
 $router->get('/api/classes', [CertificateController::class, 'getClasses']);
