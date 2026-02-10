@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controllers;
@@ -11,12 +12,12 @@ final class CertificateController extends Controller
 {
     public function index(): void
     {
-        // Just show page; data loads via AJAX from API routes
+        $type = $_GET['type'] ?? 'normal';
         $this->view('certificate/index', [
             'title' => 'Certificate',
+            'type' => $type
         ]);
     }
-
     public function getClasses(): void
     {
         // example

@@ -6,9 +6,8 @@ function e(string $s): string {
 }
 
 function base_url(string $path = ''): string {
-    // Works for InfinityFree subfolder too
-    $script = $_SERVER['SCRIPT_NAME'] ?? '';
-    $dir = rtrim(str_replace('\\','/', dirname($script)), '/');
-    $base = ($dir === '' ? '/' : $dir . '/');
-    return $base . ltrim($path, '/');
+    $script = $_SERVER['SCRIPT_NAME'];   // /project/public/index.php
+    $base = str_replace('/index.php', '', $script);
+    return $base . '/' . ltrim($path, '/');
 }
+
