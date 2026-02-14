@@ -12,6 +12,7 @@
     <!-- link css -->
     <link href="./assets/css/app.css" rel="stylesheet">
     <link href="./assets/css/sidebar.css" rel="stylesheet">
+    <link href="./assets/css/dashboard.css" rel="stylesheet">
 </head>
 <body>
 <div class="d-flex font-siemreap">

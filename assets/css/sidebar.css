@@ -5,15 +5,15 @@
   top: 0;
   align-self: flex-start;
   overflow-y: auto;
-  background: #2D2E81;
-  color: #f5f6ff;
-  border-right: 1px solid #24256b;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text-main);
+  border-right: 1px solid var(--sidebar-border);
 }
 
 .logo {
   padding: 18px 20px;
-  background: #272878;
-  border-bottom: 1px solid #232469;
+  background: var(--sidebar-logo-bg);
+  border-bottom: 1px solid var(--sidebar-root-color);
 }
 
 .logo-content {
@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
-  color: #ffffff;
+  color: var(--sidebar-text-white);
   font-weight: 600;
   font-size: 16px;
   letter-spacing: 0.2px;
@@ -29,7 +29,7 @@
 
 .logo-icon {
   font-size: 24px;
-  color: #cfd2ff;
+  color: var(--sidebar-logo-icon);
 }
 
 .sidebar-nav {
@@ -46,7 +46,7 @@
   gap: 12px;
   padding: 10px 12px;
   border-radius: 8px;
-  color: #e6e8ff;
+  color: var(--sidebar-text-link);
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -54,13 +54,13 @@
 }
 
 .link:hover {
-  background: #24256b;
-  color: #ffffff;
+  background: var(--sidebar-border);
+  color: var(--sidebar-text-white);
 }
 
 .kh-active {
-  background: #1f2060;
-  color: #fff !important;
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-text-white) !important;
   font-weight: 600;
 }
 
@@ -69,11 +69,11 @@
   width: 22px;
   text-align: center;
   flex-shrink: 0;
-  color: #d7dbff;
+  color: var(--sidebar-text-icon);
 }
 
 .kh-active .icon {
-  color: #ffffff;
+  color: var(--sidebar-text-white);
 }
 
 .collapse-toggle {
@@ -94,7 +94,7 @@
 .sub {
   margin-top: 4px;
   padding-left: 8px;
-  border-left: 1px solid #24256b;
+  border-left: 1px solid var(--sidebar-border);
   margin-left: 16px;
 }
 
@@ -102,16 +102,16 @@
   font-size: 13px;
   padding: 8px 10px;
   padding-left: 30px;
-  color: #d9dcff;
+  color: var(--sidebar-text-sub);
   font-weight: 400;
 }
 
 .sub .link:hover {
-  color: #ffffff;
+  color: var(--sidebar-text-white);
 }
 
 .sub .kh-active {
-  color: #fff !important;
+  color: var(--sidebar-text-white) !important;
   font-weight: 500;
 }
 
@@ -121,16 +121,16 @@
 }
 
 .sidebar::-webkit-scrollbar-track {
-  background: #232469;
+  background: var(--sidebar-root-color);
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: #2D2E81;
+  background: var(--sidebar-bg);
   border-radius: 3px;
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: #3a3c99;
+  background: var(--sidebar-thumb-hover);
 }
 
 /* Responsive */

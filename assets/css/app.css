@@ -8,9 +8,33 @@
     src: url('../fonts/Battambang-Regular.ttf') format('truetype');
 }
 
+:root {
+    --app-bg-color: #f4f4f4;
+    --app-card-bg: #ffffff;
+    --app-card-border: #e5e7f2;
+    --app-text-main: #1f2442;
+    --app-text-muted: #6d7393;
+    --app-primary: #2d2e81;
+    --app-primary-dark: #232469;
+    --app-success: #1f9d65;
+
+    --sidebar-bg: #2d2e81;
+    --sidebar-border: #24256b;
+    --sidebar-logo-bg: #272878;
+    --sidebar-root-color: #232469;
+    --sidebar-text-main: #f5f6ff;
+    --sidebar-text-link: #e6e8ff;
+    --sidebar-text-icon: #d7dbff;
+    --sidebar-text-sub: #d9dcff;
+    --sidebar-text-white: #ffffff;
+    --sidebar-active-bg: #1f2060;
+    --sidebar-logo-icon: #cfd2ff;
+    --sidebar-thumb-hover: #3a3c99;
+}
+
 body{
-    font-family: 'siemreap-Regular', sans-serif;    
-    background-color: #f4f4f4;
+    font-family: 'siemreap-Regular', sans-serif;
+    background-color: var(--app-bg-color);
     margin: 0;
     padding: 0;
 }
