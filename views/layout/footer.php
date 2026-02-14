@@ -1,7 +1,7 @@
     </main>
-    <!-- <footer class="footer">
+    <footer class="footer">
       <small>Simple MVC (OOP) + AJAX</small>
-    </footer> -->
+    </footer>
     </div>
   <script src="<?= e(base_url('assets/js/app.js')) ?>"></script>
 </body>
