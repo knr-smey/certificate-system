@@ -1,6 +1,6 @@
 <?php
 $message = $_SESSION['form_message'] ?? '';
-unset($_SESSION['form_message']); /
+unset($_SESSION['form_message']); 
 ?>
 
 <link rel="stylesheet" href="assets/css/forms/class-free-form.css">
