@@ -15,30 +15,33 @@ final class ClassModel
         $this->pdo = Database::pdo();
     }
 
-    /**
-     * Example query. Adjust to your real schema:
-     * - finished classes
-     * - optionally filter by certificate type & course
-     */
-    public function getFinishedClasses(string $type, string $course = ''): array
+ public function getFinishedClasses(string $type = '', string $course = ''): array
     {
-        // NOTE: Replace these fields/tables with your real ones.
-        $sql = "SELECT id, class_name, course, teacher_name, end_date
-                FROM classes
-                WHERE status = 'finished'";
+        $sql = "
+            SELECT 
+                classes.id,
+                classes.course,
+                classes.category,
+                classes.time,
+                users.name AS teacher_name
+            FROM classes
+            LEFT JOIN users 
+                ON users.id = classes.user_id
+            WHERE classes.type = :type
+        ";
 
-        $params = [];
+        $params = ['type' => $type];
 
         if ($course !== '') {
-            $sql .= " AND course = ?";
-            $params[] = $course;
+            $sql .= " AND classes.course = :course";
+            $params['course'] = $course;
         }
 
-        $sql .= " ORDER BY id DESC";
+        $sql .= " ORDER BY classes.category, classes.course, classes.id DESC";
 
-        $st = $this->pdo->prepare($sql);
-        $st->execute($params);
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
 
-        return $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
