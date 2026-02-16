@@ -1,3 +1,9 @@
-<h1>Certificate</h1>
-<h1 class="font-siemreap">អត្ថបទជាភាសាខ្មែរ (Siemreap)</h1>
-<h1 class="font-battambang">អត្ថបទជាភាសាខ្មែរ (Battambang)</h1>
+<?php if ($type === 'normal'): ?>
+
+    <?php include './views/components/tables/table_teacher.php'; ?>
+
+<?php else: ?>
+
+    <p>Invalid certificate type.</p>
+
+<?php endif; ?>

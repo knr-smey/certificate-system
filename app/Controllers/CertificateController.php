@@ -18,17 +18,17 @@ final class CertificateController extends Controller
             'type' => $type
         ]);
     }
-    public function getClasses(): void
+ public function getClasses(): void
     {
-        // example
         try {
-            $type = (string)($_GET['type'] ?? 'normal');  // normal|free|scholarship
-            $course = (string)($_GET['course'] ?? '');    // optional filter
+            $type = (string)($_GET['type'] ?? 'normal');
+            $course = (string)($_GET['course'] ?? '');
 
             $model = new ClassModel();
             $classes = $model->getFinishedClasses($type, $course);
 
             $this->jsonResponse(true, $classes);
+
         } catch (\Throwable $e) {
             $this->jsonResponse(false, [], $e->getMessage(), 500);
         }
