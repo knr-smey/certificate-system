@@ -14,7 +14,17 @@ final class Database
     {
         if (self::$pdo instanceof PDO) return self::$pdo;
 
-        $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
+        $dsnParts = [
+            'host=' . DB_HOST,
+            'dbname=' . DB_NAME,
+            'charset=' . DB_CHARSET,
+        ];
+
+        if (defined('DB_PORT') && DB_PORT) {
+            $dsnParts[] = 'port=' . DB_PORT;
+        }
+
+        $dsn = 'mysql:' . implode(';', $dsnParts);
 
         try {
             self::$pdo = new PDO($dsn, DB_USER, DB_PASS, [

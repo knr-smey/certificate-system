@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 defined('DB_HOST') || define('DB_HOST', 'localhost');
+defined('DB_PORT') || define('DB_PORT', 3306);
 defined('DB_NAME') || define('DB_NAME', 'your_db_name');
 defined('DB_USER') || define('DB_USER', 'your_user_name');
 defined('DB_PASS') || define('DB_PASS', 'your_password');
