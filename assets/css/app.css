@@ -1,7 +1,228 @@
-body{
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
+/* ============================================
+   Certificate System - Global Styles
+   ============================================ */
+
+/* Font Imports */
+@font-face {
+    font-family: 'Siemreap-Regular';
+    src: url('../fonts/Siemreap-Regular.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'Battambang-Regular';
+    src: url('../fonts/Battambang-Regular.ttf') format('truetype');
+}
+
+/* CSS Variables - Design System */
+:root {
+    /* Colors - Base */
+    --app-bg-color: #f8f9fb;
+    --app-card-bg: #ffffff;
+    --app-card-border: #e5e7f2;
+    --app-text-main: #1f2442;
+    --app-text-muted: #6d7393;
+
+    /* Colors - Primary */
+    --app-primary: #2d2e81;
+    --app-primary-dark: #232469;
+    --app-primary-light: #3d3ea1;
+
+    /* Colors - Status */
+    --app-success: #1f9d65;
+    --app-warning: #f59e0b;
+    --app-danger: #dc3545;
+    --app-info: #3b82f6;
+
+    /* Sidebar */
+    --sidebar-bg: #2d2e81;
+    --sidebar-border: #24256b;
+    --sidebar-active-bg: #1f2060;
+    --sidebar-text-main: #f5f6ff;
+    --sidebar-text-muted: #d9dcff;
+    --sidebar-hover: #3a3c99;
+}
+
+/* Base Styles */
+body {
+    font-family: 'Siemreap-Regular', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--app-bg-color);
+    color: var(--app-text-main);
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Font Utilities */
+.font-battambang {
+    font-family: 'Battambang-Regular', sans-serif;
+}
+
+.font-siemreap {
+    font-family: 'Siemreap-Regular', sans-serif;
+}
+
+/* Main Layout */
+.app-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.app-main {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-x: hidden;
+}
+
+/* Page Container */
+.page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Card Component */
+.card {
+    background: var(--app-card-bg);
+    border: 1px solid var(--app-card-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+}
+
+.card-hover:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: var(--app-primary-light);
+}
+
+/* Button Base */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: var(--app-primary);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: var(--app-primary-dark);
+}
+
+.btn-secondary {
+    background-color: var(--app-card-bg);
+    color: var(--app-text-main);
+    border: 1px solid var(--app-card-border);
+}
+
+.btn-secondary:hover {
+    background-color: var(--app-bg-color);
+    border-color: var(--app-text-muted);
+}
+
+/* Form Elements */
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--app-text-main);
+    background-color: #fff;
+    border: 1px solid var(--app-card-border);
+    border-radius: 0.5rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--app-primary);
+    box-shadow: 0 0 0 3px rgba(45, 46, 129, 0.1);
+}
+
+/* Badge */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 9999px;
+}
+
+.badge-success {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.badge-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.badge-danger {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-info {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+/* Utility Classes */
+.text-muted {
+    color: var(--app-text-muted);
+}
+
+.text-primary {
+    color: var(--app-primary);
+}
+
+.text-success {
+    color: var(--app-success);
+}
+
+.text-warning {
+    color: var(--app-warning);
+}
+
+.text-danger {
+    color: var(--app-danger);
+}
+
+/* Spacing */
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+.mt-4 { margin-top: 1.5rem; }
+
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 1rem; }
+.gap-4 { gap: 1.5rem; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .app-main {
+        padding: 1rem;
+    }
+}

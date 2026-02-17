@@ -1,0 +1,336 @@
+.dashboard-page {
+    padding: 2rem 1.5rem;
+    color: var(--app-text-main);
+    --dashboard-border: #cfd6e6;
+    --dashboard-border-strong: #bcc6dc;
+}
+
+.dashboard-header {
+    margin-bottom: 2rem;
+}
+
+.dashboard-kicker {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--app-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+
+.dashboard-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--app-text-main);
+    margin: 0;
+}
+
+.btn-modern {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    border: none;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-modern-light {
+    background-color: var(--app-card-bg);
+    color: var(--app-text-main);
+    border: 1px solid var(--dashboard-border);
+}
+
+.btn-modern-light:hover {
+    background-color: var(--app-bg-color);
+    border-color: var(--app-text-muted);
+}
+
+.btn-modern-primary {
+    background-color: var(--app-primary);
+    color: #fff;
+}
+
+.btn-modern-primary:hover {
+    background-color: var(--app-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card {
+    background: var(--app-card-bg);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border: 1px solid var(--dashboard-border);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.stat-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--app-text-muted);
+}
+
+.stat-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.stat-icon-primary {
+    background-color: #eef2ff;
+    color: #6366f1;
+}
+
+.stat-icon-success {
+    background-color: #dcfce7;
+    color: #10b981;
+}
+
+.stat-icon-warning {
+    background-color: #fef3c7;
+    color: #f59e0b;
+}
+
+.stat-icon-info {
+    background-color: #dbeafe;
+    color: #3b82f6;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--app-text-main);
+    margin-bottom: 0.5rem;
+}
+
+.stat-change {
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.stat-change.positive {
+    color: #10b981;
+}
+
+.stat-change.neutral {
+    color: var(--app-text-muted);
+}
+
+.panel {
+    background: var(--app-card-bg);
+    border-radius: 1rem;
+    border: 1px solid var(--dashboard-border);
+    overflow: hidden;
+    height: 100%;
+}
+
+.panel-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--dashboard-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--app-text-main);
+    margin: 0;
+}
+
+.panel-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--app-primary);
+    text-decoration: none;
+}
+
+.panel-link:hover {
+    color: var(--app-primary-dark);
+    text-decoration: underline;
+}
+
+.panel-body {
+    padding: 1.5rem;
+}
+
+.panel-body-compact {
+    padding: 0;
+}
+
+.modern-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-top: 1px solid var(--dashboard-border);
+    border-bottom: 1px solid var(--dashboard-border);
+}
+
+.modern-table thead th {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--app-text-muted);
+    border-bottom: 1px solid var(--dashboard-border-strong);
+    text-align: left;
+}
+
+.modern-table tbody td {
+    padding: 1rem;
+    font-size: 0.875rem;
+    color: var(--app-text-main);
+    border-bottom: 1px solid var(--dashboard-border);
+}
+
+.modern-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.modern-table tbody tr:hover {
+    background-color: var(--app-bg-color);
+}
+
+.badge-modern {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 9999px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+
+.badge-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.badge-success {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.badge-primary {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-danger {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.quick-action-btn {
+    padding: 1rem;
+    background: var(--app-bg-color);
+    border: 1px solid var(--dashboard-border);
+    border-radius: 0.75rem;
+    color: var(--app-text-main);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: left;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+
+.quick-action-btn:hover {
+    background: var(--app-card-bg);
+    border-color: var(--app-primary);
+    transform: translateX(4px);
+}
+
+.quick-action-btn i {
+    font-size: 1.125rem;
+    color: var(--app-primary);
+}
+
+.student-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+.avatar-1 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.avatar-2 {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.avatar-3 {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.avatar-4 {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.student-name {
+    font-weight: 500;
+}
+
+.date-muted {
+    color: var(--app-text-muted);
+}
+
+@media (max-width: 768px) {
+    .dashboard-page {
+        padding: 1rem;
+    }
+
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+
+    .stat-value {
+        font-size: 1.75rem;
+    }
+
+    .panel-header {
+        padding: 1rem;
+    }
+
+    .panel-body {
+        padding: 1rem;
+    }
+
+    .modern-table thead th,
+    .modern-table tbody td {
+        padding: 0.75rem 0.5rem;
+    }
+}

@@ -7,6 +7,7 @@ use App\Core\Router;
 use App\Controllers\DashboardController;
 use App\Controllers\CertificateController;
 use App\Controllers\TeacherController;
+use App\Controllers\FormController;
 
 $router = new Router();
 
@@ -15,6 +16,8 @@ $router->get('/', [DashboardController::class, 'index']);
 $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->get('/certificate', [CertificateController::class, 'index']);
 $router->get('/teacher', [TeacherController::class, 'index']);
+$router->get('/form', [FormController::class, 'index']);
+$router->post('/form/submit', [FormController::class, 'submit']);
 
 // API Routes
 $router->get('/api/classes', [CertificateController::class, 'getClasses']);
