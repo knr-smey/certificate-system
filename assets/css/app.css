@@ -19,7 +19,7 @@
     --app-bg-color: #f8f9fb;
     --app-card-bg: #ffffff;
     --app-card-border: #e5e7f2;
-    --app-text-main: #1f2442;
+    --app-text-main: #f1f1f1;
     --app-text-muted: #6d7393;
 
     /* Colors - Primary */
@@ -40,6 +40,11 @@
     --sidebar-text-main: #f5f6ff;
     --sidebar-text-muted: #d9dcff;
     --sidebar-hover: #3a3c99;
+
+     --sidebar-text-white: #ffffff;           
+    --sidebar-text-sub: rgba(255,255,255,0.6); 
+    --sidebar-logo-bg: rgba(255,255,255,0.15); 
+    --sidebar-logo-icon: #cfd2ff;  
 }
 
 /* Base Styles */

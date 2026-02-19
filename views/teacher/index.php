@@ -2,11 +2,11 @@
 
     <!-- Header -->
     <div class="t-page-header mb-4">
-        <div class="t-header-icon">
+        <div class="t-header-icon text-white">
             <i class="bi bi-person-video3"></i>
         </div>
         <div>
-            <h1 class="t-page-title">គ្រូបង្រៀន</h1>
+            <h1 class="t-page-title pb-2">គ្រូបង្រៀន</h1>
             <p class="t-page-sub">គ្រប់គ្រងគ្រូបង្រៀនរបស់អ្នក</p>
         </div>
     </div>
@@ -51,7 +51,7 @@
                     <?php else: ?>
                         <?php foreach ($teachers as $i => $t): ?>
                             <tr>
-                                <td class="text-center">
+                                <td class="text-center text-white">
                                     <span class="t-row-no"><?= $i + 1 ?></span>
                                 </td>
                                 <td>

@@ -5,7 +5,7 @@
         <a href="javascript:history.back()" class="btn-back">
             <i class="bi bi-arrow-left-circle-fill me-2"></i>ត្រឡប់ក្រោយ
         </a>
-        <div class="page-badge">
+        <div class="page-badge text-white">
             <i class="bi bi-award-fill me-2"></i>បញ្ជីសិស្សសញ្ញាបត្រ
         </div>
     </div>
@@ -87,8 +87,8 @@
 
             <!-- Header (hidden when printing) -->
             <div class="modal-header cert-modal-header no-print">
-                <h5 class="modal-title">
-                    <i class="bi bi-printer-fill me-2"></i>បោះពុម្ពសញ្ញាបត្រ
+                <h5 class="modal-title text-white">
+                    <i class="bi bi-printer-fill me-2 "></i>បោះពុម្ពសញ្ញាបត្រ
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -192,7 +192,7 @@
                 <button type="button" class="btn-cert-save" onclick="saveCourse()">
                     <i class="bi bi-bookmark-fill me-2"></i>រក្សាទុក Course
                 </button>
-                <button type="button" class="btn-cert-print" onclick="printCertificate()">
+                <button type="button" class="btn-cert-print text-white" onclick="printCertificate()">
                     <i class="bi bi-printer-fill me-2"></i>បោះពុម្ព
                 </button>
             </div>
@@ -260,7 +260,7 @@ function loadStudents(classId) {
 
                 return `
                 <tr>
-                    <td class="text-center"><span class="row-no">${s.id}</span></td>
+                    <td class="text-center"><span class="row-no text-white">${s.id}</span></td>
                     <td>
                         <div class="student-name">
                             <div class="student-avatar"><i class="bi bi-person-fill"></i></div>
@@ -276,7 +276,7 @@ function loadStudents(classId) {
                     </td>
                     <td>${course}</td>
                     <td class="text-center no-print">
-                        <button class="btn-print-cert"
+                        <button class="btn-print-cert text-white"
                             onclick="openCertificate('${escapeHtml(s.name)}', '${escapeHtml(course)}', '${escapeHtml(currentClass.teacher)}', '${escapeHtml(currentClass.time)}', ${score})">
                             <i class="bi bi-printer-fill"></i> Print
                         </button>
