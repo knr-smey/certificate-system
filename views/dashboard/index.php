@@ -2,7 +2,7 @@
     <div class="dashboard-header">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div>
-                <p class="dashboard-kicker">ទិដ្ឋភាពទូទៅ</p>
+                <p class="dashboard-kicker pb-2">ទិដ្ឋភាពទូទៅ</p>
                 <h1 class="dashboard-title">ផ្ទាំងគ្រប់គ្រង</h1>
             </div>
             <div class="d-flex align-items-center gap-2">

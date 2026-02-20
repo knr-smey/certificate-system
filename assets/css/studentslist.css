@@ -26,6 +26,7 @@
     color: var(--sidebar-text-white); padding: 8px 20px; border-radius: 8px;
     font-weight: 600; font-size: .88rem;
     box-shadow: 0 4px 14px rgba(45,46,129,.30);
+    color: white;
 }
 ─ */
 .info-card {
@@ -151,9 +152,10 @@
     display: inline-flex; align-items: center; gap: 6px;
     padding: 7px 15px; border-radius: 7px; font-size: .82rem;
     font-weight: 600; cursor: pointer; border: none;
-    background: var(--sidebar-bg);
-    color: var(--sidebar-text-white); transition: all .2s;
-    box-shadow: 0 3px 10px rgba(45,46,129,.25);
+    background: #16a34a;
+    color: #ffffff;  /* ✅ ស្រាប់ white ហើយ */
+    transition: all .2s;
+    box-shadow: 0 3px 10px rgba(22,163,74,.30);
 }
 .btn-print-cert:hover {
     background: var(--sidebar-active-bg);
