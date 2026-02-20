@@ -10,7 +10,7 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <script>
-const perPage = 10;
+const perPage = 9;
 let allData = [];
 let categoryPages = {};
 
@@ -71,7 +71,7 @@ function renderAllTables() {
                 <td>${item.time ?? '-'}</td>
                 <td>
                     <a href="<?= base_url('certificate/students') ?>?class_id=${item.id}&course=${encodeURIComponent(item.course)}&teacher=${encodeURIComponent(item.teacher_name ?? 'គ្មានគ្រូ')}&time=${encodeURIComponent(item.time ?? '-')}"
-                        class="btn btn-primary btn-sm">
+                        class="btn btn-primary  btn-sm">
                         <i class="bi bi-people-fill me-1"></i>មើលសិស្ស
                     </a>
                 </td>
@@ -93,8 +93,8 @@ function renderAllTables() {
 
         container.append(`
             <div class="card mb-4 shadow-sm">
-                <div class="card-header fs-5 bg-primary text-white fw-semibold">
-                    ${categoryName}
+                <div class="card-header fs-5 bg-category text-white fw-semibold">
+                    ប្រភេទវគ្គសិក្សារ ${categoryName}
                 </div>
                 <div class="card-body table-responsive">
                     <table class="table table-bordered text-center align-middle mb-2">

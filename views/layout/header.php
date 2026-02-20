@@ -11,6 +11,7 @@
     <link href="<?= base_url('assets/css/sidebar.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/css/dashboard.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/css/studentslist.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/css/teacherlist.css') ?>" rel="stylesheet">
 </head>
 <body>
     <div class="d-flex font-siemreap">
