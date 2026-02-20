@@ -21,7 +21,7 @@ spl_autoload_register(function ($class) {
 });
 
 // Config
-require __DIR__ . '/config.php';
+require __DIR__ . '/config.example.php';
 
 // Start session if you later need it
 if (session_status() === PHP_SESSION_NONE) {
