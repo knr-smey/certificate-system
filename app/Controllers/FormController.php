@@ -1,33 +1,32 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controllers;
 
 use App\Core\Controller;
-use App\Core\Database;
-use PDO;
 
 final class FormController extends Controller
 {
+    // Show the class-free form
     public function index(): void
     {
-        $courses = $this->getCourses();
-
-        // Generate CSRF token
         $csrfToken = $_SESSION['csrf_token'] ?? bin2hex(random_bytes(32));
         $_SESSION['csrf_token'] = $csrfToken;
 
         $this->view('Form/class-free-form', [
-            'courses' => $courses,
             'csrfToken' => $csrfToken,
-            'message' => '', 
+            'errors' => [],
+            'old' => []
         ]);
     }
 
+    // Handle form submission
     public function submit(): void
     {
         $studentName = trim($_POST['student_name'] ?? '');
         $course      = trim($_POST['course'] ?? '');
+        $endDate     = trim($_POST['end_date'] ?? '');
         $token       = $_POST['csrf_token'] ?? '';
 
         // CSRF validation
@@ -36,94 +35,43 @@ final class FormController extends Controller
             return;
         }
 
-        // Validation errors array
         $errors = [];
+        if ($studentName === '') $errors['student_name'] = 'Full Name is required!';
+        if ($course === '') $errors['course'] = 'Course is required!';
+        if ($endDate === '') $errors['end_date'] = 'End Date is required!';
 
-        // Input validation
-        if ($studentName === '') {
-            $errors['student_name'] = 'Full Name is required!';
-        }
-        if ($course === '') {
-            $errors['course'] = 'Course is required!';
-        }
-
-        // If there are validation errors, show form with errors
         if (!empty($errors)) {
-            $courses = $this->getCourses();
             $csrfToken = $_SESSION['csrf_token'] ?? bin2hex(random_bytes(32));
             $_SESSION['csrf_token'] = $csrfToken;
 
             $this->view('Form/class-free-form', [
-                'courses' => $courses,
                 'csrfToken' => $csrfToken,
                 'errors' => $errors,
                 'old' => [
                     'student_name' => $studentName,
-                    'course' => $course
+                    'course' => $course,
+                    'end_date' => $endDate
                 ]
             ]);
             return;
         }
 
-        try {
-            $pdo = Database::pdo();
-            $pdo->beginTransaction();
-
-            // Get class info
-            $stmt = $pdo->prepare(
-                "SELECT id, user_id 
-                 FROM classes 
-                 WHERE course = :course 
-                 LIMIT 1"
-            );
-            $stmt->execute(['course' => $course]);
-            $class = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if (!$class) {
-                $pdo->rollBack();
-                $this->redirectWithMessage('form', 'Selected course not found!');
-                return;
-            }
-
-            $classId = (int) $class['id'];
-            $userId  = (int) $class['user_id'];
-
-            // Insert student
-            $stmt = $pdo->prepare(
-                "INSERT INTO students (name, user_id, class_id)
-                 VALUES (:name, :user_id, :class_id)"
-            );
-            $stmt->execute([
-                'name'     => $studentName,
-                'user_id'  => $userId,
-                'class_id' => $classId
-            ]);
-
-            $pdo->commit();
-
-            $this->redirectWithMessage('form', 'Student registered successfully!');
-
-        } catch (\Throwable $e) {
-            if ($pdo->inTransaction()) {
-                $pdo->rollBack();
-            }
-            $this->redirectWithMessage('form', 'Error occurred while inserting student.');
-        }
+        // Validation passed - redirect to thank you page
+        header("Location: /form/thankyou", true, 302);
+        exit;
     }
 
-    private function getCourses(): array
+    // Show thank you page
+    public function thankyou(): void
     {
-        $pdo = Database::pdo();
-        $stmt = $pdo->query("SELECT DISTINCT course FROM classes ORDER BY course");
-        $courses = $stmt->fetchAll(PDO::FETCH_COLUMN);
-        return $courses ?: [];
+        $this->view('Form/thankyou');
     }
 
+    // Redirect with message
     private function redirectWithMessage(string $route, string $message): void
     {
-        // Simple approach: store message in session and redirect
         $_SESSION['form_message'] = $message;
-        header("Location: /$route");
+        header("Location: /{$route}", true, 302);
         exit;
     }
 }

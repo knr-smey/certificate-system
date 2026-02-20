@@ -17,6 +17,7 @@ $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->get('/certificate', [CertificateController::class, 'index']);
 $router->get('/teacher', [TeacherController::class, 'index']);
 $router->get('/form', [FormController::class, 'index']);
+$router->get('/form/thankyou', [FormController::class, 'thankyou']);
 $router->post('/form/submit', [FormController::class, 'submit']);
 
 // API Routes

@@ -133,4 +133,3 @@ CREATE TABLE IF NOT EXISTS end_class_students (
         
     UNIQUE KEY uk_end_class_student (end_class_id, student_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-

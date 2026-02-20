@@ -15,6 +15,12 @@ final class CertificateController extends Controller
     {
         $type = $_GET['type'] ?? 'normal';
 
+        // If type is 'free', redirect to the form
+        if ($type === 'free') {
+            header('Location: /form');
+            exit;
+        }
+
         // Decide which view to load based on type
         if ($type === 'normal') {
             // Default is showing teachers table
