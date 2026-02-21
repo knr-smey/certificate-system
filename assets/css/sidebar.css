@@ -98,6 +98,10 @@
     transform: rotate(180deg);
 }
 
+.dropdown-toggle::after {
+    display: none !important;
+}
+
 .nav-submenu {
     margin-top: 0.25rem;
     padding-left: 0.5rem;
