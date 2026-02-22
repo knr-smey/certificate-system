@@ -1,4 +1,4 @@
-<?php if ($type === 'normal'): ?>
+<?php if ($type === 'normal' || $type === 'free'): ?>
 
     <?php if ($title === 'Certificate'): ?>
         <?php include './views/components/tables/table_teacher.php'; ?>

@@ -23,7 +23,7 @@ function loadClasses() {
     container.html('<p>កំពុងផ្ទុក...</p>');
 
     const urlParams = new URLSearchParams(window.location.search);
-    const type = urlParams.get('type') || 'normal';
+    const type = urlParams.get('type') || 'free';
 
     $.ajax({
         url: "<?= base_url('api/classes') ?>",

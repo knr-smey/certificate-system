@@ -2,6 +2,7 @@
 -- CLEAR OLD DATA (OPTIONAL - BE CAREFUL!)
 -- =======================================
 SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE certificate_class_free;
 TRUNCATE TABLE end_class_students;
 TRUNCATE TABLE end_class;
 TRUNCATE TABLE students;
@@ -40,7 +41,8 @@ INSERT INTO classes (course, category, type, time, teacher_id, user_id, status) 
 ('Vue',     'Web Frontend', 'normal', '10:30 - 12:00', 1, 1, 'active'),
 ('NodeJS',  'Web Backend',  'normal', '13:00 - 14:30', 2, 2, 'active'),
 ('Flutter', 'Mobile App',   'normal', '14:30 - 16:00', 2, 2, 'active'),
-('Laravel', 'Web Backend',  'normal', '16:00 - 17:30', 3, 3, 'active');
+('Laravel', 'Web Backend',  'normal', '16:00 - 17:30', 3, 3, 'active'),
+('Class Free', 'Certificate', 'free', 'N/A', NULL, NULL, 'active');
 
 
 -- =======================================
@@ -142,3 +144,17 @@ INSERT INTO end_class_students (end_class_id, student_id, grade) VALUES
 -- Laravel (end_class_id = 5)
 (5,41,'A'),(5,42,'B'),(5,43,'A'),(5,44,'B'),(5,45,'A'),
 (5,46,'B'),(5,47,'A'),(5,48,'C'),(5,49,'B'),(5,50,'A');
+
+
+-- =======================================
+-- INSERT CERTIFICATE CLASS FREE
+-- =======================================
+INSERT INTO certificate_class_free (student_name, course, end_date, status) VALUES
+('SOK SREYMOM', 'Graphic Design', '2024-12-15', 'approved'),
+('CHEA VANNARY', 'Web Development', '2024-11-20', 'approved'),
+('HENG SOKHA', 'English Communication', '2024-10-10', 'pending'),
+('LIM SREYNA', 'Digital Marketing', '2024-09-05', 'approved'),
+('TOK SOKHEANG', 'Photography', '2024-08-22', 'pending'),
+('ORN SOPHARA', 'Video Editing', '2024-12-01', 'approved'),
+('SUN SOVANN', 'UI/UX Design', '2024-11-15', 'approved'),
+('TRY RATHA', 'Mobile App Development', '2024-10-30', 'pending');
