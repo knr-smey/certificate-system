@@ -120,17 +120,9 @@ final class FormController extends Controller
         $totalCount = $this->certificateClassFreeModel->getCount();
         $totalPages = ceil($totalCount / 5);
 
-        // Show form with success message and updated table
-        $this->view('Form/class-free-form', [
-            'csrfToken' => $csrfToken,
-            'errors' => [],
-            'old' => [],
-            'certificates' => $certificates,
-            'currentPage' => 1,
-            'totalPages' => $totalPages,
-            'totalCount' => $totalCount,
-            'message' => 'Certificate request submitted successfully!'
-        ]);
+        // Redirect to certificate page with type=free
+        header("Location: /certificate?type=free", true, 302);
+        exit;
     }
 
     // Redirect with message
