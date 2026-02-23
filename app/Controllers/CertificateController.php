@@ -18,8 +18,8 @@ final class CertificateController extends Controller
 
         // If type is 'free', show the free form
         if ($type === 'free') {
-            $csrfToken = $_SESSION['csrf_token'] ?? bin2hex(random_bytes(32));
-            $_SESSION['csrf_token'] = $csrfToken;
+            // $csrfToken = $_SESSION['csrf_token'] ?? bin2hex(random_bytes(32));
+            // $_SESSION['csrf_token'] = $csrfToken;
 
             // Pagination settings
             $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
@@ -32,7 +32,7 @@ final class CertificateController extends Controller
             $totalPages = ceil($totalCount / $limit);
 
             $this->view('Form/class-free-form', [
-                'csrfToken' => $csrfToken,
+                // 'csrfToken' => $csrfToken,
                 'errors' => [],
                 'old' => [],
                 'certificates' => $certificates,
@@ -43,8 +43,8 @@ final class CertificateController extends Controller
             return;
         }
 
-        // If type is 'normal', show the teachers table
-        if ($type === 'normal') {
+        // If type is 'normal' or 'scholarship', show the teachers table
+        if ($type === 'normal' || $type === 'scholarship') {
             $this->view('components/tables/table_teacher', [
                 'title' => 'Certificate',
                 'type' => $type

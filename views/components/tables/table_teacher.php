@@ -13,6 +13,7 @@
 const perPage = 9;
 let allData = [];
 let categoryPages = {};
+let currentType = 'normal';
 
 $(document).ready(function() {
     loadClasses();
@@ -23,7 +24,8 @@ function loadClasses() {
     container.html('<p>កំពុងផ្ទុក...</p>');
 
     const urlParams = new URLSearchParams(window.location.search);
-    const type = urlParams.get('type') || 'free';
+    currentType = urlParams.get('type') || 'normal';
+    const type = currentType;
 
     $.ajax({
         url: "<?= base_url('api/classes') ?>",
@@ -69,8 +71,9 @@ function renderAllTables() {
                 <td>${item.teacher_name ?? '<span class="badge bg-danger">គ្មានគ្រូ</span>'}</td>
                 <td>${item.course ?? '-'}</td>
                 <td>${item.time ?? '-'}</td>
+                <td>${item.class_type_name ?? '-'}</td>
                 <td>
-                    <a href="<?= base_url('certificate/students') ?>?class_id=${item.id}&course=${encodeURIComponent(item.course)}&teacher=${encodeURIComponent(item.teacher_name ?? 'គ្មានគ្រូ')}&time=${encodeURIComponent(item.time ?? '-')}"
+                    <a href="<?= base_url('certificate/students') ?>?class_id=${item.id}&course=${encodeURIComponent(item.course)}&teacher=${encodeURIComponent(item.teacher_name ?? 'គ្មានគ្រូ')}&time=${encodeURIComponent(item.time ?? '-')}&type=${encodeURIComponent(currentType)}"
                         class="btn btn-primary  btn-sm">
                         <i class="bi bi-people-fill me-1"></i>មើលសិស្ស
                     </a>
@@ -104,6 +107,7 @@ function renderAllTables() {
                                 <th>គ្រូបង្រៀន</th>
                                 <th>មុខវិជ្ជា</th>
                                 <th>ម៉ោង</th>
+                                <th>Class Type</th>
                                 <th>សិស្ស</th>
                             </tr>
                         </thead>
