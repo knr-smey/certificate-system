@@ -1,17 +1,17 @@
     /* Custom styles to match the image UI exactly */
     .scholarship-card {
         border: 1px solid #dee2e6;
-        border-radius: 4px;
+        border-radius: 8px;
         background-color: #fff;
     }
     .scholarship-header {
         background-color: #313384 !important; /* Dark Blue header matches image */
         color: white;
-        padding: 12px 20px;
+        padding: 10px 20px;
         font-weight: bold;
         font-size: 1.1rem;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
     }
     .scholarship-table { 
         margin-bottom: 0;
@@ -20,7 +20,7 @@
     }
     /* Explicitly adding padding to table cells for the spacious look */
     .scholarship-table th, .scholarship-table td {
-        padding: 5px 5px !important; 
+        padding: 8px 8px !important; 
         vertical-align: middle;
         border: 1px solid #c8ccd0; /* Light borders between cells */
     }

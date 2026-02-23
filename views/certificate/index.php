@@ -1,13 +1,12 @@
-<?php if ($type === 'normal'): ?>
+<?php if ($type === 'normal' || $type === 'free' || $type === 'scholarship'): ?>
 
-    <?php include './views/components/tables/table_teacher.php'; ?>
-
-<?php elseif ($type === 'scholarship'): ?>
-
-    <?php include './views/certificate/scholarship.php'; ?>
-
-<?php else : ?>
-
+    <?php if ($title === 'Certificate'): ?>
+        <?php include './views/components/tables/table_teacher.php'; ?>
+    <?php elseif ($title === 'liststudents'): ?>
+        <?php include './views/components/tables/table_student.php'; ?>
+    <?php elseif ($title === 'Certificate'): ?>
+        <?php include './views/certificate/scholarship.php'; ?>
+    <?php endif; ?>
     <p>Invalid certificate type.</p>
     
 <?php endif; ?>

@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href="<?= base_url('assets/css/scholarship.css') ?>">
 
 <div class="container py-2">
     <h2 class="mb-4 text-center fw-bold">តារាង សញ្ញាបត្រអាហារូបករណ៍</h2>
@@ -98,8 +97,8 @@ function renderAllTables() {
 
         container.append(`
             <div class="scholarship-card mb-4 shadow-sm">
-                <div class="scholarship-header">
-                    ${categoryName}
+                <div class="scholarship-header fs-5">
+                   ប្រភេទវគ្គសិក្សារ ${categoryName}
                 </div>
                 
                 <div class="table-responsive p-3">
