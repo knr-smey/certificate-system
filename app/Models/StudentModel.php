@@ -20,8 +20,16 @@ final class StudentModel
         $st = $this->pdo->prepare("
             SELECT 
                 s.id,
-                s.name
+                s.full_name AS name,
+                s.gender,
+                s.tel,
+                COALESCE(s.total, 0) AS score,
+                COALESCE(co.course, '-') AS course
             FROM students s
+            INNER JOIN classes c
+                ON c.id = s.class_id
+            LEFT JOIN courses co
+                ON co.id = c.course_id
             WHERE s.class_id = ?
             ORDER BY s.id ASC
         ");
