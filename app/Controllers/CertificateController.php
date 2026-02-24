@@ -49,14 +49,31 @@ final class CertificateController extends Controller
                 'title' => 'Certificate',
                 'type' => $type
             ]);
+        } elseif ($type === 'scholarship') { 
+            $this->view('certificate/scholarship', [
+                'title' => 'Certificate',
+                'type' => $type
+            ]);
         } else {
             $this->view('certificate/error', [
                 'message' => 'Invalid certificate type.'
             ]);
         }
     }
-
-    // Return JSON of finished classes
+    public function getscholarship()
+    {
+        $type = $_GET['type'] ?? 'scholarship';
+        if($type == 'scholarship') {
+            $this->view('certificate/scholarship', [
+                'title' => 'Certificate',
+                'type' => $type
+            ]);
+        } else {
+            $this->view('certificate/error', [
+                'message' => 'Invalid certificate type.'
+            ]);
+        }
+    }
     public function getClasses(): void
     {
         try {
@@ -67,7 +84,6 @@ final class CertificateController extends Controller
             $classes = $model->getFinishedClasses($type, $course);
 
             $this->jsonResponse(true, $classes);
-
         } catch (\Throwable $e) {
             $this->jsonResponse(false, [], $e->getMessage(), 500);
         }
@@ -93,10 +109,10 @@ final class CertificateController extends Controller
 
     // Show the students table page
     public function students(): void
-{
-    $this->view('certificate/index', [
-        'title' => 'liststudents',
-        'type'  => $_GET['type'] ?? 'free'
-    ]);
-}
+    {
+        $this->view('certificate/index', [
+            'title' => 'liststudents',
+            'type'  => $_GET['type'] ?? 'free'
+        ]);
+    }
 }
