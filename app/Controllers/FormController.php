@@ -89,9 +89,7 @@ final class FormController extends Controller
         $csrfToken = $_SESSION['csrf_token'] ?? bin2hex(random_bytes(32));
         $_SESSION['csrf_token'] = $csrfToken;
 
-        // Save to certificate_class_free table
-        // Student name, course, and end_date are all saved to the database
-        // Course is also saved to localStorage via JavaScript
+      
         $result = $this->certificateClassFreeModel->create(
             strtoupper($studentName),
             $course,
@@ -125,7 +123,7 @@ final class FormController extends Controller
         exit;
     }
 
-    // Redirect with message
+    // Redirect
     private function redirectWithMessage(string $route, string $message): void
     {
         $_SESSION['form_message'] = $message;
