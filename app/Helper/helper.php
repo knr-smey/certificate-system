@@ -50,3 +50,13 @@ function printCertificateDate($format = 'd.m.Y', $baseDate = null)
     $certificateDate = getCertificateDate(10, 15, 'Asia/Phnom_Penh', true, $baseDate);
     return $certificateDate->format($format);
 }
+
+/**
+ * Generate a unique certificate ID
+ * Format: 10-digit number + ' ETEC' (e.g., "1234567890 ETEC")
+ */
+function generateId(): string
+{
+    $num = strval(floor(mt_rand(1000000000, 9999999999)));
+    return $num . ' ETEC';
+}

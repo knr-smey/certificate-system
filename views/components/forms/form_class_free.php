@@ -87,18 +87,10 @@ const fields = ['student_name', 'course', 'end_date'];
 // Clear localStorage on page load to start fresh
 localStorage.removeItem('certificate_course');
 
-// Save course to localStorage when form is submitted
-form.addEventListener('submit', function(e) {
-    const courseInput = document.getElementById('course');
-    if (courseInput.value.trim() !== '') {
-        // Save course to localStorage
-        localStorage.setItem('certificate_course', courseInput.value.trim());
-    }
-});
-
-form.addEventListener('submit', function(e) {
+// Function to validate form and show errors under inputs
+function validateForm() {
     let isValid = true;
-
+    
     fields.forEach(id => {
         const input = document.getElementById(id);
         input.classList.remove('error');
@@ -116,13 +108,38 @@ form.addEventListener('submit', function(e) {
             if(id === 'course') errorMsg.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>Course is required!';
             if(id === 'end_date') errorMsg.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>End Date is required!';
 
-            // Append to form-group, not input-wrapper, to keep icon position stable
             formGroup.appendChild(errorMsg);
         }
     });
+    
+    return isValid;
+}
 
-    if (!isValid) e.preventDefault();
-});
+// ============================================
+// Print button click handler with validation
+// ============================================
+const printBtn = document.getElementById('btnPrintCertificate');
+if (printBtn) {
+    printBtn.addEventListener('click', function(e) {
+        // Validate form before printing
+        const isValid = validateForm();
+        
+        if (!isValid) {
+            // Prevent printing if validation fails
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+        
+        // Store validation state for certificate handler
+        printBtn.dataset.validated = 'true';
+    });
+}
+
+// Expose validation for certificate handler
+window.validateBeforePrint = function() {
+    return validateForm();
+};
 
 // Clear errors on input/change
 fields.forEach(id => {
@@ -136,6 +153,73 @@ fields.forEach(id => {
             if (oldError) oldError.remove();
         }
     });
+});
+
+// ============================================
+// Auto-update certificate preview on input
+// ============================================
+
+// Format date to match helper function logic (e.g., "March 15,2026")
+// Uses the selected date's month/year but always uses day 15
+function formatDate(dateString) {
+    if (!dateString) return '';
+    const selectedDate = new Date(dateString);
+    if (isNaN(selectedDate.getTime())) return dateString;
+    
+    // Get the day from the selected date (same as PHP helper logic)
+    const selectedDay = selectedDate.getDate();
+    const cutoffDay = 10;
+    
+    let year = selectedDate.getFullYear();
+    let month = selectedDate.getMonth(); // 0-11
+    
+    // If selected day <= cutoff day, go back one month from selected date
+    if (selectedDay <= cutoffDay) {
+        month--;
+        if (month < 0) {
+            month = 11;
+            year--;
+        }
+    }
+    
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                    'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthName = months[month];
+    const certificateDay = 15;
+    
+    return `${monthName} ${certificateDay},${year}`;
+}
+
+// Wait for DOM to be fully loaded before setting up auto-update
+document.addEventListener('DOMContentLoaded', function() {
+    // Get certificate elements
+    const certStudentName = document.getElementById('cert_student_name');
+    const certCourse = document.getElementById('cert_course');
+    const certTime = document.getElementById('cert_time');
+
+    // Student Name - auto update on input
+    const studentNameInput = document.getElementById('student_name');
+    if (studentNameInput && certStudentName) {
+        studentNameInput.addEventListener('input', function(e) {
+            certStudentName.textContent = e.target.value.toUpperCase() || 'PHEAROM RATHA';
+        });
+    }
+
+    // Course - auto update on input
+    const courseInput = document.getElementById('course');
+    if (courseInput && certCourse) {
+        courseInput.addEventListener('input', function(e) {
+            certCourse.textContent = e.target.value.toUpperCase() || 'FREE HTML CSS TAILWIND';
+        });
+    }
+
+    // End Date - auto update on change
+    const endDateInput = document.getElementById('end_date');
+    if (endDateInput && certTime) {
+        endDateInput.addEventListener('change', function(e) {
+            certTime.textContent = formatDate(e.target.value) || 'Auguest 15,2025';
+        });
+    }
 });
 </script>
 

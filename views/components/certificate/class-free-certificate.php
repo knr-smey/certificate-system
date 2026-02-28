@@ -60,7 +60,7 @@
                             </div>
 
                             <div class="cert-free-id-bottom">
-                               <font color="black">ID: </font> <span id="cert_id_val"><?php echo ! empty($displayId) ? htmlspecialchars($displayId) : '0987654' ?></span>
+                               <font color="black">ID: </font> <span id="cert_id_val"><?php echo ! empty($displayId) ? htmlspecialchars($displayId) : (!empty($generatedId) ? htmlspecialchars($generatedId) : '0987654321 ETEC') ?></span>
                             </div>
 
                         </div>
@@ -74,6 +74,12 @@
 </div>
 
 <script>
+// Generate unique certificate ID (PHP-style)
+function generateCertificateId() {
+    const num = String(Math.floor(Math.random() * 9000000000) + 1000000000).substring(0, 10);
+    return num + ' ETEC';
+}
+
 // Print Certificate Function - A4 Landscape
 document.addEventListener('DOMContentLoaded', function() {
     const printBtn = document.getElementById('btnPrintCertificate');
@@ -82,8 +88,24 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    printBtn.addEventListener('click', function() {
+    printBtn.addEventListener('click', function(e) {
         console.log('Print button clicked');
+        
+        // Check if validation passes (call the validation function from form)
+        if (typeof window.validateBeforePrint === 'function') {
+            const isValid = window.validateBeforePrint();
+            if (!isValid) {
+                console.log('Validation failed, preventing print');
+                e.preventDefault();
+                return;
+            }
+        }
+
+        // Generate a new unique ID for this certificate
+        const certIdElement = document.getElementById('cert_id_val');
+        if (certIdElement) {
+            certIdElement.textContent = generateCertificateId();
+        }
 
         // Get certificate element
         const certificate = document.getElementById('printable-certificate-free');
@@ -109,16 +131,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log('Base URL:', baseUrl);
 
-        // Build the print document with A4 Landscape - Same styles as screen
+        // Build the print document - Using SAME structure and classes as screen display
         const printContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Certificate of Completion</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link href="${cssUrl}" rel="stylesheet">
 <style>
 * {
     margin: 0;
@@ -138,162 +160,224 @@ html, body {
     print-color-adjust: exact !important;
 }
 
-/* ===== MAIN A4 PAGE ===== */
-.a4-page {
+/* ===== A4 PAGE LAYOUT - Same as screen ===== */
+.certificate-free-wrapper {
     width: 297mm;
     height: 210mm;
     overflow: hidden;
     background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    box-shadow: none;
 }
 
-/* ===== BORDERS (NO HEIGHT 100%) ===== */
-.outer-border {
-    border: 20px solid #20215f;
-    padding: 4px;
+.certificate-free-wrap {
+    width: 297mm;
+    height: 210mm;
+}
+
+.certificate-free {
+    background: #fff;
     width: 100%;
     height: 100%;
 }
 
-.inner-border {
-    border: 10px solid #5e5f65b2;
-    padding: 35px 40px 30px;
-    width: 100%;
-    height: calc(100% - 0px); /* safe */
+/* ===== BORDERS - Same as screen ===== */
+.cert-free-outer-border {
+    border: 20px solid #20215f;
+    padding: 4px;
+    height: 100%;
 }
 
-/* ===== HEADER ===== */
-.header {
+.cert-free-inner-border {
+    border: 10px solid #5e5f65b2;
+    padding: 35px 40px 30px;
+    background: #fff;
+    height: calc(100% - 8px);
+}
+
+/* ===== HEADER - Same as screen ===== */
+.cert-free-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 20px;
 }
 
-.logo-box {
-    width: 132px;
-    height: 132px;
+.cert-free-header-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.logo-box img {
+.cert-free-header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.cert-free-logo-box {
+    width: 132px;
+    height: 132px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.cert-free-logo-box img {
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
-.motto {
+.cert-free-motto {
     font-size: .84rem;
+    color: #333;
+    margin-top: 4px;
     font-weight: bold;
     font-family: Arial, sans-serif;
-    margin-top: 4px;
-    text-align: center;
 }
 
-.kingdom {
+.cert-free-kingdom {
     text-align: center;
     font-size: .90rem;
     font-weight: 700;
     letter-spacing: .22em;
+    color: #222;
     line-height: 2;
     text-transform: uppercase;
     font-family: 'Courier New', monospace;
+    white-space: nowrap;
 }
 
-.kingdom img {
+.cert-free-kingdom img {
     display: block;
     max-width: 132px;
+    height: auto;
     margin: 8px auto 0;
+    object-fit: contain;
 }
 
-/* ===== TITLE ===== */
-.title {
+/* ===== TITLE - Same as screen ===== */
+.cert-free-title {
     text-align: center;
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Dancing Script', 'Brush Script MT', cursive;
     font-size: 4.2rem;
-    font-weight: 700;
+    font-weight: 900;
     color: #20215f;
     margin: 8px 0 18px;
+    white-space: nowrap;
 }
 
-/* ===== CONTENT ===== */
-.center {
+/* ===== CONTENT - Same as screen ===== */
+.cert-free-certify {
     text-align: center;
-}
-
-.certify {
     font-size: 1.2rem;
+    color: #20215f;
     letter-spacing: .12em;
-    font-weight: bold;
     margin-bottom: 16px;
     font-family: 'Courier New', monospace;
+    font-weight: bold;
+    white-space: nowrap;
 }
 
-.student-name {
+.cert-free-student-name {
+    text-align: center;
     font-size: 1.74rem;
     font-weight: 700;
+    color: #111;
+    letter-spacing: .1em;
     text-transform: uppercase;
     margin-bottom: 20px;
     font-family: 'Courier New', monospace;
+    font-weight: bold;
+    white-space: nowrap;
 }
 
-.description {
+.cert-free-desc {
+    text-align: center;
     font-size: 1.2rem;
+    color: #20215f;
     line-height: 2;
     margin-bottom: 14px;
     font-family: Arial, sans-serif;
+    letter-spacing: .01em;
+    white-space: nowrap;
 }
 
-.course {
+.cert-free-course {
+    text-align: center;
     font-size: 1.8rem;
-    font-weight: 900;
+    color: black;
+    letter-spacing: .07em;
     margin-bottom: 20px;
     font-family: 'Courier New', monospace;
+    font-weight: 900;
+    white-space: nowrap;
 }
 
-.granted {
+.cert-free-granted {
+    text-align: center;
     font-size: 1.2rem;
     font-weight: 700;
+    color: #2d2e81;
+    letter-spacing: .05em;
     margin-bottom: 36px;
     font-family: Arial, sans-serif;
+    white-space: nowrap;
 }
 
-/* ===== FOOTER ===== */
-.footer {
-    position: absolute;
-    bottom: 80px;
-    right: 60px;
+/* ===== FOOTER - Same as screen ===== */
+.cert-free-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-top: 8px;
+    position: relative;
+}
+
+.cert-free-signature {
     text-align: right;
+    margin-left: auto;
 }
 
-.signature-line {
-     width: 160px; 
+.cert-free-sig-line {
     height: 1px;
     background: #cea324;
+    width: 160px;
+    margin-left: auto;
     margin-bottom: 4px;
 }
 
-.sig-name {
+.cert-free-sig-name {
     font-size: .936rem;
     font-weight: 900;
+    color: #111;
     font-family: 'Courier New', monospace;
+    letter-spacing: .05em;
+    white-space: nowrap;
 }
 
-.sig-role {
+.cert-free-sig-role {
     font-size: .888rem;
-    text-align:center;
-    margin-top:10px;
+    color: #333;
     font-family: 'Courier New', monospace;
+    letter-spacing: .07em;
+    white-space: nowrap;
 }
 
-/* ===== CERT ID ===== */
-.cert-id {
-    position: absolute;
-    bottom: 20px;
-    left: 0;
-    width: 100%;
+.cert-free-id-bottom {
     text-align: center;
     font-size: .672rem;
-    letter-spacing: .04em;
+    color: red;
     font-family: 'Courier New', monospace;
+    letter-spacing: .04em;
+    margin-top: 20px;
+    white-space: nowrap;
 }
 
 </style>
@@ -301,52 +385,71 @@ html, body {
 
 <body>
 
-<div class="a4-page">
-    <div class="outer-border">
-        <div class="inner-border">
+<div class="certificate-free-wrapper">
+    <div class="certificate-free-wrap">
+        <div class="certificate-free">
+            <div class="cert-free-outer-border">
+                <div class="cert-free-inner-border">
 
-            <div class="header">
-                <div style="display:flex;flex-direction:column;align-items:center;">
-                    <div class="logo-box">
-                        <img src="${logoUrl}">
+                    <!-- Header: Logo Left, Kingdom Right -->
+                    <div class="cert-free-header">
+                        <div class="cert-free-header-left">
+                            <div class="cert-free-logo-box">
+                                <img src="${logoUrl}" alt="">
+                            </div>
+                            <div class="cert-free-motto">"Build your IT Skill"</div>
+                        </div>
+                        <div class="cert-free-header-right">
+                            <div class="cert-free-kingdom">
+                                <div>KINGDOM OF CAMBODIA</div>
+                                <div>NATION&nbsp; RELIGION &nbsp;KING</div>
+                                <img src="${borderUrl}" alt="">
+                            </div>
+                        </div>
                     </div>
-                    <div class="motto">"Build your IT Skill"</div>
+
+                    <div class="cert-free-title">
+                        Certificate of Completion
+                    </div>
+
+                    <div class="cert-free-certify">
+                        This is to certify that
+                    </div>
+
+                    <div class="cert-free-student-name">
+                        ${studentName}
+                    </div>
+
+                    <div class="cert-free-desc">
+                        has successfully completed all requirements for completion of the  <br> I.T Training Courses in
+                    </div>
+
+                    <div class="cert-free-course">
+                        ${courseName}
+                    </div>
+
+                    <div class="cert-free-granted">
+                        Granted: ${grantedDate}
+                    </div>
+
+                    <div class="cert-free-footer">
+                        <div class="cert-free-signature">
+                            <div class="cert-free-sig-line"></div>
+                            <div class="cert-free-sig-name">
+                                Mr. Heng Pheakna
+                            </div>
+                            <div class="cert-free-sig-role">
+                                Director
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cert-free-id-bottom">
+                       <font color="black">ID: </font> ${certId}
+                    </div>
+
                 </div>
-
-                <div class="kingdom">
-                    <div>KINGDOM OF CAMBODIA</div>
-                    <div>NATION RELIGION KING</div>
-                    <img src="${borderUrl}">
-                </div>
             </div>
-
-            <div class="title">Certificate of Completion</div>
-
-            <div class="center certify">This is to certify that</div>
-
-            <div class="center student-name">${studentName}</div>
-
-            <div class="center description">
-                has successfully completed all requirements for completion of the <br>
-                I.T Training Courses in
-            </div>
-
-            <div class="center course">${courseName}</div>
-
-            <div class="center granted">
-                Granted: ${grantedDate}
-            </div>
-
-            <div class="footer">
-                <div class="signature-line"></div>
-                <div class="sig-name">Mr. Heng Pheakna</div>
-                <div class="sig-role">Director</div>
-            </div>
-
-            <div class="cert-id">
-                ID: ${certId}
-            </div>
-
         </div>
     </div>
 </div>

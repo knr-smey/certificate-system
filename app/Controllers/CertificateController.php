@@ -31,6 +31,9 @@ final class CertificateController extends Controller
             $totalCount = $certificateModel->getCount();
             $totalPages = ceil($totalCount / $limit);
 
+            // Generate certificate ID for display
+            $generatedId = generateId();
+
             $this->view('Form/class-free-form', [
                 'csrfToken' => $csrfToken,
                 'errors' => [],
@@ -38,7 +41,8 @@ final class CertificateController extends Controller
                 'certificates' => $certificates,
                 'currentPage' => $page,
                 'totalPages' => $totalPages,
-                'totalCount' => $totalCount
+                'totalCount' => $totalCount,
+                'generatedId' => $generatedId
             ]);
             return;
         }

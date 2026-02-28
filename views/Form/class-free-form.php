@@ -5,6 +5,7 @@
     $certificates = $certificates ?? [];
     $showCertificate = $showCertificate ?? false;
     $certificateData = $certificateData ?? null;
+    $generatedId = $generatedId ?? '';
     unset($_SESSION['form_message']);
     
     // Get display data - use submitted data if available, otherwise use old input or defaults
