@@ -46,16 +46,16 @@ $isDashboard   = str_contains($path, 'dashboard');
             </a>
 
             <div class="collapse <?= $isCertSection ? 'show' : '' ?>" id="certMenu">
-                <div class="nav-submenu">
-                    <a class="nav-link <?= $isNormal ? 'active' : '' ?>"
-                       href="<?= base_url('certificate?type=normal') ?>">
-                        <i class="bi bi-file-earmark-text nav-icon"></i>
-                        <span>សញ្ញាបត្រធម្មតា</span>
-                    </a>
+                <div class="nav-submenu">          
                     <a class="nav-link <?= $isFree ? 'active' : '' ?>"
                        href="<?= base_url('certificate?type=free') ?>">
                         <i class="bi bi-gift nav-icon"></i>
-                        <span>សញ្ញាបត្រឥតគិតថ្លៃ</span>
+                        <span>សញ្ញាបត្រថ្នាក់ Free</span>
+                    </a>
+                    <a class="nav-link <?= $isNormal ? 'active' : '' ?>"
+                       href="<?= base_url('certificate?type=normal') ?>">
+                        <i class="bi bi-file-earmark-text nav-icon"></i>
+                        <span>សញ្ញាបត្រថ្នាក់ធម្មតា</span>
                     </a>
                     <a class="nav-link <?= $isScholarship ? 'active' : '' ?>"
                        href="<?= base_url('certificate?type=scholarship') ?>">

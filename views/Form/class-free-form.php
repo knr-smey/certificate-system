@@ -7,7 +7,8 @@
 ?>
 
 <!-- Include Form Component -->
-<?php include 'views/components/forms/form_class_free.php'; ?>
+<?php // include 'views/components/forms/form_class_free.php'; ?>
+<?php include 'views/components/forms/form_class_free_copy.php'; ?>
 
 <!-- Include Table Component -->
-<?php include 'views/components/tables/table_class_free.php'; ?>
+<?php // include 'views/components/tables/table_class_free.php'; ?>
