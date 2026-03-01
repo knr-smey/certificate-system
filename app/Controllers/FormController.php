@@ -19,9 +19,6 @@ final class FormController extends Controller
     // Show the class-free form
     public function index(): void
     {
-        $csrfToken = $_SESSION['csrf_token'] ?? bin2hex(random_bytes(32));
-        $_SESSION['csrf_token'] = $csrfToken;
-
         // Pagination settings
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $limit = 5; // 5 students per page
@@ -32,13 +29,15 @@ final class FormController extends Controller
         $totalPages = ceil($totalCount / $limit);
 
         $this->view('Form/class-free-form', [
-            'csrfToken' => $csrfToken,
             'errors' => [],
             'old' => [],
+            'message' => '',
             'certificates' => $certificates,
             'currentPage' => $page,
             'totalPages' => $totalPages,
-            'totalCount' => $totalCount
+            'totalCount' => $totalCount,
+            'showCertificate' => false,
+            'certificateData' => null
         ]);
     }
 
@@ -48,13 +47,6 @@ final class FormController extends Controller
         $studentName = trim($_POST['student_name'] ?? '');
         $course      = trim($_POST['course'] ?? '');
         $endDate     = trim($_POST['end_date'] ?? '');
-        $token       = $_POST['csrf_token'] ?? '';
-
-        // CSRF validation
-        if (!hash_equals($_SESSION['csrf_token'] ?? '', $token)) {
-            $this->redirectWithMessage('form', 'Invalid CSRF token!');
-            return;
-        }
 
         $errors = [];
         if ($studentName === '') $errors['student_name'] = 'Full Name is required!';
@@ -66,32 +58,25 @@ final class FormController extends Controller
         $totalPages = ceil($totalCount / 5);
 
         if (!empty($errors)) {
-            $csrfToken = $_SESSION['csrf_token'] ?? bin2hex(random_bytes(32));
-            $_SESSION['csrf_token'] = $csrfToken;
-
             $this->view('Form/class-free-form', [
-                'csrfToken' => $csrfToken,
                 'errors' => $errors,
                 'old' => [
                     'student_name' => $studentName,
                     'course' => $course,
                     'end_date' => $endDate
                 ],
+                'message' => '',
                 'certificates' => $certificates,
                 'currentPage' => 1,
                 'totalPages' => $totalPages,
-                'totalCount' => $totalCount
+                'totalCount' => $totalCount,
+                'showCertificate' => false,
+                'certificateData' => null
             ]);
             return;
         }
 
         // Validation passed - save to database
-        $csrfToken = $_SESSION['csrf_token'] ?? bin2hex(random_bytes(32));
-        $_SESSION['csrf_token'] = $csrfToken;
-
-        // Save to certificate_class_free table
-        // Student name, course, and end_date are all saved to the database
-        // Course is also saved to localStorage via JavaScript
         $result = $this->certificateClassFreeModel->create(
             strtoupper($studentName),
             $course,
@@ -100,17 +85,19 @@ final class FormController extends Controller
 
         if ($result === false) {
             $this->view('Form/class-free-form', [
-                'csrfToken' => $csrfToken,
                 'errors' => ['general' => 'Failed to save certificate request!'],
                 'old' => [
                     'student_name' => $studentName,
                     'course' => $course,
                     'end_date' => $endDate
                 ],
+                'message' => '',
                 'certificates' => $certificates,
                 'currentPage' => 1,
                 'totalPages' => $totalPages,
-                'totalCount' => $totalCount
+                'totalCount' => $totalCount,
+                'showCertificate' => false,
+                'certificateData' => null
             ]);
             return;
         }
@@ -120,17 +107,32 @@ final class FormController extends Controller
         $totalCount = $this->certificateClassFreeModel->getCount();
         $totalPages = ceil($totalCount / 5);
 
-        // Redirect to certificate page with type=free
-        header("Location: /certificate?type=free", true, 302);
+        // Get the latest certificate for display
+        $latestCertificate = $this->certificateClassFreeModel->getLatest();
+
+        // Show form with success message and certificate displayed below
+        $this->view('Form/class-free-form', [
+            'message' => 'Certificate request submitted successfully!',
+            'errors' => [],
+            'old' => [],
+            'certificates' => $certificates,
+            'currentPage' => 1,
+            'totalPages' => $totalPages,
+            'totalCount' => $totalCount,
+            'showCertificate' => true,
+            'certificateData' => $latestCertificate
+        ]);
+    }
+
+    // Redirect
+    private function redirectWithMessage(string $route, string $message): void
+    {
+        header("Location: /{$route}", true, 302);
         exit;
     }
 
-    // Redirect with message
-    private function redirectWithMessage(string $route, string $message): void
-    {
-        $_SESSION['form_message'] = $message;
-        header("Location: /{$route}", true, 302);
-        exit;
+    public function showCertificate(){
+        return $this->view("components.certificate.class-free-certificate");
     }
 
 }

@@ -14,6 +14,9 @@
     <link href="<?= base_url('assets/css/teacherlist.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/css/class-free-form.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/css/table-class-free.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/css/table-class-scholarship.css')?>" rel="stylesheet" >
+    <link href="<?= base_url('assets/css/certificate-class-free.css') ?>" rel="stylesheet">
+
 </head>
 <body>
     <div class="d-flex font-siemreap">
