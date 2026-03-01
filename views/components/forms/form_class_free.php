@@ -194,13 +194,13 @@ const fields = ['student_name', 'course', 'end_date'];
 document.addEventListener('DOMContentLoaded', function() {
     // Set certificate ID from hidden input
     const certIdInput = document.getElementById('generated_cert_id');
-    const certIdVal = document.getElementById('cert_id_val');
+    const certIdVal = document.getElementById('cert_id_val_free');
     if (certIdInput && certIdVal) {
         certIdVal.textContent = certIdInput.value;
     }
     
     const courseInput = document.getElementById('course');
-    const certCourse = document.getElementById('cert_course');
+    const certCourse = document.getElementById('cert_course_free');
     
     // Load saved course from localStorage
     const savedCourse = CertificateStorage.getCourse();
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load saved end_date from localStorage
     const savedEndDate = CertificateStorage.getEndDate();
     const endDateInput = document.getElementById('end_date');
-    const certTime = document.getElementById('cert_time');
+    const certTime = document.getElementById('cert_time_free');
     
     if (savedEndDate && endDateInput) {
         endDateInput.value = savedEndDate;
@@ -259,9 +259,9 @@ function formatDate(dateString) {
 // Wait for DOM to be fully loaded before setting up auto-update
 document.addEventListener('DOMContentLoaded', function() {
     // Get certificate elements
-    const certStudentName = document.getElementById('cert_student_name');
-    const certCourse = document.getElementById('cert_course');
-    const certTime = document.getElementById('cert_time');
+    const certStudentName = document.getElementById('cert_student_name_free');
+    const certCourse = document.getElementById('cert_course_free');
+    const certTime = document.getElementById('cert_time_free');
 
     // Student Name - auto update on input
     const studentNameInput = document.getElementById('student_name');
@@ -294,4 +294,3 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-

@@ -1,5 +1,6 @@
 <!-- ==================== CERTIFICATE COMPONENT ==================== -->
-<div class="certificate-free-wrapper certificate-preview">
+<!-- ADD id="class-free-cert" to the wrapper so JS can find it -->
+<div class="certificate-free-wrapper certificate-preview" id="class-free-cert">
     <div class="certificate-free-wrap" id="printable-certificate-free">
         <div class="certificate-free">
             <div class="cert-free-outer-border">
@@ -30,7 +31,7 @@
                         This is to certify that
                     </div>
 
-                    <div class="cert-free-student-name" id="cert_student_name">
+                    <div class="cert-free-student-name" id="cert_student_name_free">
                       <?php echo ! empty($displayName) ? htmlspecialchars($displayName) : 'PHEAROM RATHA' ?>
                     </div>
 
@@ -38,12 +39,12 @@
                         has successfully completed all requirements for completion of the  <br> I.T Training Courses in
                     </div>
 
-                    <div class="cert-free-course" id="cert_course">
+                    <div class="cert-free-course" id="cert_course_free">
                         <?php echo ! empty($displayCourse) ? htmlspecialchars($displayCourse) : '' ?>
                     </div>
 
                     <div class="cert-free-granted">
-                        Granted: <span id="cert_time"><?php echo ! empty($displayDate) ? htmlspecialchars($displayDate) : '' ?></span>
+                        Granted: <span id="cert_time_free"><?php echo ! empty($displayDate) ? htmlspecialchars($displayDate) : '' ?></span>
                     </div>
 
                     <div class="cert-free-footer">
@@ -59,7 +60,7 @@
                     </div>
 
                     <div class="cert-free-id-bottom">
-                       <font color="black">ID:</font> <span id="cert_id_val"><?php echo ! empty($generatedId) ? htmlspecialchars($generatedId) : '' ?></span>
+                       <font color="black">ID:</font> <span id="cert_id_val_free"><?php echo ! empty($generatedId) ? htmlspecialchars($generatedId) : '' ?></span>
                     </div>
 
                 </div>
@@ -101,16 +102,14 @@ function formatCertDate(dateString) {
 // Load saved data from localStorage on page load
 function loadSavedData() {
     try {
-        // Load course from localStorage
         const savedCourse = localStorage.getItem('certificate_course');
-        const certCourse = document.getElementById('cert_course');
+        const certCourse = document.getElementById('cert_course_free');
         if (savedCourse && certCourse) {
             certCourse.textContent = savedCourse.toUpperCase();
         }
 
-        // Load end_date from localStorage
         const savedEndDate = localStorage.getItem('certificate_end_date');
-        const certTime = document.getElementById('cert_time');
+        const certTime = document.getElementById('cert_time_free');
         if (savedEndDate && certTime) {
             certTime.textContent = formatCertDate(savedEndDate);
         }
@@ -119,24 +118,64 @@ function loadSavedData() {
     }
 }
 
-// Generate a unique certificate ID - matches PHP generateCertificateId() format
+// Generate a unique certificate ID
 function generateCertificateId() {
     const year = new Date().getFullYear();
     const random4 = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
     return year + random4 + 'ETEC';
 }
 
-// Common function to prepare certificate for print/PDF
+// Prepare certificate before print
 function prepareCertificate() {
-    // Generate a new unique ID using the correct format
-    const certIdElement = document.getElementById('cert_id_val');
+    const certIdElement = document.getElementById('cert_id_val_free');
     if (certIdElement) {
         certIdElement.textContent = generateCertificateId();
     }
     return true;
 }
 
-// Direct print handler function
+// ─── Print using CSS isolation (cleaner approach) ───────────
+function printOnlyFreeCert() {
+    const certWrapper = document.getElementById('class-free-cert');
+    if (!certWrapper) { window.print(); return; }
+
+    // ✅ Create a temporary <style> tag that hides EVERYTHING except our cert
+    const style = document.createElement('style');
+    style.id = 'print-isolation-style';
+    style.innerHTML = `
+        @media print {
+            body > * { display: none !important; }
+            #class-free-cert { 
+                display: block !important; 
+                visibility: visible !important;
+                position: fixed !important;
+                top: 0 !important; left: 0 !important;
+                width: 297mm !important;
+                height: 210mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                z-index: 9999 !important;
+            }
+            #class-free-cert * { visibility: visible !important; }
+            #class-free-cert.certificate-preview .certificate-free-wrap {
+                transform: none !important;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Remove preview scale
+    certWrapper.classList.remove('certificate-preview');
+
+    setTimeout(() => {
+        window.print();
+        // Cleanup after print
+        const s = document.getElementById('print-isolation-style');
+        if (s) s.remove();
+        certWrapper.classList.add('certificate-preview');
+    }, 200);
+}
+// Direct print handler
 function handlePrint() {
     console.log('handlePrint called');
 
@@ -150,36 +189,17 @@ function handlePrint() {
 
     prepareCertificate();
 
-    // Remove preview class for print to ensure correct scale
-    const certWrapper = document.querySelector('.certificate-free-wrapper');
-    if (certWrapper) {
-        certWrapper.classList.remove('certificate-preview');
-    }
-
-    // Reset any zoom/transform that browser may apply
-    document.body.style.zoom = '1';
-    document.documentElement.style.zoom = '1';
-    document.body.style.transform = 'none';
-    document.body.style.margin = '0';
-    document.body.style.padding = '0';
-
     setTimeout(() => {
-        window.print();
-        // Restore preview class after print dialog closes
-        if (certWrapper) {
-            certWrapper.classList.add('certificate-preview');
-        }
-        document.body.style.zoom = '';
-        document.documentElement.style.zoom = '';
+        printOnlyFreeCert();
     }, 150);
 
     console.log('Print dialog opened');
 }
-// Save as PDF handler function
+
+// Save as PDF handler
 function handleSavePDF() {
     console.log('handleSavePDF called');
 
-    // Check if validation passes
     if (typeof window.validateBeforePrint === 'function') {
         const isValid = window.validateBeforePrint();
         if (!isValid) {
@@ -188,22 +208,10 @@ function handleSavePDF() {
         }
     }
 
-    // Prepare certificate
     prepareCertificate();
 
-    // Remove preview class for PDF to ensure correct scale
-    const certWrapper = document.querySelector('.certificate-free-wrapper');
-    if (certWrapper) {
-        certWrapper.classList.remove('certificate-preview');
-    }
-
-    // Print directly - user can choose Save as PDF in print dialog
     setTimeout(() => {
-        window.print();
-        // Restore preview class after print dialog closes
-        if (certWrapper) {
-            certWrapper.classList.add('certificate-preview');
-        }
+        printOnlyFreeCert();
     }, 150);
 
     console.log('Print dialog opened for PDF save');
@@ -213,7 +221,6 @@ function handleSavePDF() {
 document.addEventListener('DOMContentLoaded', function() {
     loadSavedData();
 
-    // Set up event listeners
     const printBtn = document.getElementById('btnPrintCertificate');
     if (printBtn) {
         printBtn.addEventListener('click', handlePrint);

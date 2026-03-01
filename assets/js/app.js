@@ -58,8 +58,16 @@ function regenId() {
     const certId = document.getElementById('cert_id_val');
     
     if (idInput && certId) {
-        // Generate random 7-digit ID
-        const newId = Math.floor(1000000 + Math.random() * 9000000).toString();
+        // Get current year
+        const year = new Date().getFullYear();
+
+        // Generate a 4-digit random number, padded with leading zeros
+        const random4 = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+
+        // Combine into certificate ID
+        const newId = year + random4 + 'ETEC';
+
+        // Set values
         idInput.value = newId;
         certId.textContent = newId;
     }
@@ -72,12 +80,22 @@ function regenId() {
 function printCertificate() {
     console.log('Print button clicked');
     
+    // Check if certificate element exists first
     const certificate = document.getElementById('printable-certificate-free');
     if (!certificate) {
-        console.error('Certificate element not found');
-        alert('Certificate element not found');
+        // Try the alternate certificate ID used in table_student
+        const altCertificate = document.querySelector('.certificate-free-wrapper');
+        if (!altCertificate) {
+            console.error('Certificate element not found');
+            alert('Certificate element not found');
+            return;
+        }
+        // If alternate exists, just print directly
+        window.print();
         return;
     }
+    
+    // Original certificate printing logic for class-free-certificate
 
     // Get the base URL - try multiple approaches
     let baseUrl = window.location.origin + '/';
@@ -288,3 +306,43 @@ async function fetchStudents(classId) {
 // Example Usage:
 // fetchClasses('normal').then(classes => console.log(classes));
 // fetchStudents(1).then(students => console.log(students));
+
+// ==================== OPEN CERTIFICATE FREE FUNCTION ====================
+// This function is called from table_class_free.php when clicking the print button
+// It populates the certificate with student data and opens the print dialog
+
+function openCertificateFree(studentName, course, endDate) {
+    console.log('openCertificateFree called:', studentName, course, endDate);
+
+    const certStudentName = document.getElementById('cert_student_name_free');
+    const certCourse = document.getElementById('cert_course_free');
+    const certTime = document.getElementById('cert_time_free');
+    const certIdElement = document.getElementById('cert_id_val_free');
+
+    if (certStudentName && studentName) {
+        certStudentName.textContent = studentName.toUpperCase();
+    }
+    if (certCourse && course) {
+        certCourse.textContent = course.toUpperCase();
+    }
+    if (certTime && endDate) {
+        certTime.textContent = formatCertificateDate(endDate);
+    }
+    if (certIdElement) {
+        const year = new Date().getFullYear();
+        const random4 = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+        certIdElement.textContent = year + random4 + 'ETEC';
+    }
+
+    if (course) localStorage.setItem('certificate_course', course);
+    if (endDate) localStorage.setItem('certificate_end_date', endDate);
+
+    // ✅ Small delay to ensure DOM updates, then use ONLY printOnlyFreeCert
+    setTimeout(function() {
+        if (typeof printOnlyFreeCert === 'function') {
+            printOnlyFreeCert();   // ← uses the correct isolated print function
+        } else {
+            window.print();        // last resort fallback
+        }
+    }, 200);
+}

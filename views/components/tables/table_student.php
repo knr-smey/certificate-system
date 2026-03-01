@@ -121,7 +121,7 @@
                         <label class="cert-field-label">លេខ ID</label>
                         <div class="d-flex gap-2">
                             <input type="text" id="edit_id" class="cert-field-input" placeholder="Auto-generated">
-                            <button class="cert-btn-regen" onclick="regenId()" title="Generate new ID">
+                            <button class="cert-btn-regen" onclick="regenId()" title="Generate new ID" type="button">
                                 <i class="bi bi-arrow-clockwise"></i>
                             </button>
                         </div>
@@ -137,7 +137,7 @@
                 </div>
 
                 <!-- RIGHT: Certificate Preview (this is what prints) -->
-                <div class="cert-preview-panel" id="printable-certificate-free">
+                <div class="cert-preview-panel" id="printable-certificate">
                     <div class="cert-preview-label">PREVIEW</div>
                     <div id="certificate_content">
                         <div class="certificate-wrap">
@@ -156,23 +156,23 @@
                                                 <i class="bi bi-award-fill"></i>
                                             </div>
                                         </div>
-                                        <div class="cert-school-kh">បច្ចេកវិទ្យាព័ត៌មាននិងអេឡិចត្រូនិច វិទ្យាល័យបច្ចេក</div>
-                                        <div class="cert-school-en">Engineering of Technology and Electronic Center</div>
+                                        <div class="cert-school-kh">មជ្ឈមណ្ឌលវិស្វកម្មបច្ចេកវិទ្យា និង<span class=" text-black">អេឡិចត្រូនិក</span></div>
+                                        <div class="cert-school-en"><span class=" text-black">Engineering</span> of Technology and Electronic Center</div>
                                         <div class="cert-title">Certificate of Completion</div>
                                         <div class="cert-certify">This is to certify that</div>
-                                        <div class="cert-student-name" id="cert_student_name">—</div>
+                                        <h1 class="cert-student-name" id="cert_student_name">—</h1>
                                         <div class="cert-desc">
                                             has successfully completed all requirements for completion<br>
                                             of the Computer Training Courses in
                                         </div>
-                                        <div class="cert-course" id="cert_course">—</div>
+                                        <h4 class="cert-course" id="cert_course">—</h4>
                                         <div class="cert-granted">Granted: <span id="cert_time">—</span></div>
                                         <div class="cert-footer">
                                             <div class="cert-id">ID : <span id="cert_id_val">—</span></div>
                                             <div class="cert-signature">
                                                 <div class="cert-sig-line"></div>
-                                                <div class="cert-sig-name" id="cert_sign_teacher">Mr. Heng Pheakna</div>
-                                                <div class="cert-sig-role">Director</div>
+                                                <div class="cert-sig-name text-center" id="cert_sign_teacher">Mr. Heng Pheakna</div>
+                                                <div class="cert-sig-role text-center">Director</div>
                                             </div>
                                         </div>
                                     </div>
@@ -306,21 +306,15 @@ function openCertificate(name, course, teacher, time, score) {
     const granted = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
     $('#edit_granted').val(granted);
    
-    $('#edit_id').val(generateId());
+    $('#edit_id').val(generateId()); // ← already calls your new generateId()
 
-    // Check if this course has a saved version in localStorage
     const saved = getSavedCourse(course);
     if (saved) {
         $('#edit_course').val(saved);
     }
 
-    
     updatePreview();
-
-    // Load saved courses list
     renderSavedCourses();
-
-    // Open modal
     new bootstrap.Modal(document.getElementById('certModal')).show();
 }
 
@@ -343,9 +337,11 @@ function updatePreview() {
 }
 
 function generateId() {
-    const num = String(Math.floor(Math.random() * 9000000000) + 1000000000).substring(0, 10);
-    return num + ' ETEC';
+    const year = new Date().getFullYear();
+    const random4 = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+    return year + random4 + 'ETEC';
 }
+
 
 function regenId() {
     $('#edit_id').val(generateId());
