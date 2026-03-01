@@ -128,4 +128,19 @@ final class CertificateClassFreeModel
 
         return $stmt->execute();
     }
+
+    /**
+     * Get the latest certificate class-free request
+     */
+    public function getLatest(): array|false
+    {
+        try {
+            $sql = "SELECT * FROM certificate_class_free ORDER BY created_at DESC LIMIT 1";
+            $stmt = $this->db->query($sql);
+            return $stmt->fetch(PDO::FETCH_ASSOC) ?: false;
+        } catch (\PDOException $e) {
+            error_log("Error fetching latest certificate: " . $e->getMessage());
+            return false;
+        }
+    }
 }

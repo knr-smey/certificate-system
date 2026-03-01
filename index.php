@@ -23,6 +23,7 @@ $router->post('/form/submit', [FormController::class, 'submit']);
 // API Routes
 $router->get('/api/classes', [CertificateController::class, 'getClasses']);
 $router->get('/api/students', [CertificateController::class, 'getStudents']);
+$router->get('/api/certificate-date', [CertificateController::class, 'getCertificateDate']);
 // existing routes
 // index.php
 $router->get('/certificate/students', [CertificateController::class, 'students']);

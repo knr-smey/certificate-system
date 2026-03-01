@@ -31,6 +31,9 @@ final class CertificateController extends Controller
             $totalCount = $certificateModel->getCount();
             $totalPages = ceil($totalCount / $limit);
 
+            // Generate certificate ID for display
+            $generatedId = generateId();
+
             $this->view('Form/class-free-form', [
                 'csrfToken' => $csrfToken,
                 'errors' => [],
@@ -38,7 +41,8 @@ final class CertificateController extends Controller
                 'certificates' => $certificates,
                 'currentPage' => $page,
                 'totalPages' => $totalPages,
-                'totalCount' => $totalCount
+                'totalCount' => $totalCount,
+                'generatedId' => $generatedId
             ]);
             return;
         }
@@ -102,6 +106,26 @@ final class CertificateController extends Controller
             $students = $model->getStudentsByClassId($classId);
 
             $this->jsonResponse(true, $students);
+        } catch (\Throwable $e) {
+            $this->jsonResponse(false, [], $e->getMessage(), 500);
+        }
+    }
+
+    // Return certificate date based on end_date
+    public function getCertificateDate(): void
+    {
+        try {
+            $endDate = $_GET['end_date'] ?? null;
+            
+            if (empty($endDate)) {
+                throw new \RuntimeException('end_date is required');
+            }
+
+            // Use the helper function with the provided end_date
+            $certDateObj = getCertificateDate(10, 15, 'Asia/Phnom_Penh', true, $endDate);
+            $formattedDate = $certDateObj->format('F j, Y');
+
+            $this->jsonResponse(true, ['date' => $formattedDate]);
         } catch (\Throwable $e) {
             $this->jsonResponse(false, [], $e->getMessage(), 500);
         }

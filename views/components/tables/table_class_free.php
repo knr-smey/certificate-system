@@ -1,6 +1,9 @@
 <?php
 // Get certificates from controller
 $certificates = $certificates ?? [];
+
+// Get the default certificate date (15th of the month) using helper function
+$defaultCertDate = printCertificateDate('F j, Y');
 ?>
 
 <div class="table-card mt-4">
@@ -59,7 +62,7 @@ $certificates = $certificates ?? [];
                             </td>
                             <td class="text-center">
                                 <button class="btn-print-cert text-white" 
-                                    onclick="openCertificateFree('<?php echo htmlspecialchars($cert['student_name'] ?? ''); ?>', '<?php echo htmlspecialchars($cert['course'] ?? ''); ?>')">
+                                    onclick="openCertificateFree('<?php echo htmlspecialchars($cert['student_name'] ?? ''); ?>', '<?php echo htmlspecialchars($cert['course'] ?? ''); ?>', '<?php echo htmlspecialchars($cert['end_date'] ?? ''); ?>')">
                                     <i class="bi bi-printer-fill"></i> បោះពុម្ភ
                                 </button>
                             </td>
@@ -253,15 +256,33 @@ $certificates = $certificates ?? [];
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-function openCertificateFree(name, course) {
+function openCertificateFree(name, course, endDate) {
     $('#edit_student_name').val(name);
     $('#edit_course').val(course);
    
-    const today = new Date();
-    const months = ['January','February','March','April','May','June',
-                    'July','August','September','October','November','December'];
-    const granted = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
-    $('#edit_granted').val(granted);
+    // Calculate certificate date based on end_date using PHP
+    let granted = '<?php echo $defaultCertDate; ?>';
+    if (endDate) {
+        // Pass end_date to PHP to calculate the certificate date
+        $.ajax({
+            url: '/api/certificate-date',
+            method: 'GET',
+            data: { end_date: endDate },
+            success: function(response) {
+                if (response.ok && response.data && response.data.date) {
+                    $('#edit_granted').val(response.data.date);
+                    $('#cert_time').text(response.data.date);
+                }
+            },
+            error: function() {
+                // Fallback to default
+                $('#edit_granted').val(granted);
+                $('#cert_time').text(granted);
+            }
+        });
+    } else {
+        $('#edit_granted').val(granted);
+    }
    
     $('#edit_id').val(generateId());
     
