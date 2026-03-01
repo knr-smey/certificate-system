@@ -7,6 +7,12 @@
     <?php elseif ($title === 'Certificate'): ?>
         <?php include './views/certificate/scholarship.php'; ?>
     <?php endif; ?>
+
+<?php else: ?>
     <p>Invalid certificate type.</p>
+<<<<<<< HEAD
     
 <?php endif; ?>
+=======
+<?php endif; ?>
+>>>>>>> dev
