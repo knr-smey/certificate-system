@@ -137,7 +137,7 @@
                 </div>
 
                 <!-- RIGHT: Certificate Preview (this is what prints) -->
-                <div class="cert-preview-panel" id="printable-certificate">
+                <div class="cert-preview-panel" id="printable-certificate-free">
                     <div class="cert-preview-label">PREVIEW</div>
                     <div id="certificate_content">
                         <div class="certificate-wrap">

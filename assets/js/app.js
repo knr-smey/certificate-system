@@ -124,13 +124,14 @@ function printCertificate() {
                 @page {
                     size: A4 landscape;
                     margin: 0;
+                    scale: 100%;
                 }
                 @media print {
                     body { 
                         margin: 0; 
                         padding: 0; 
                         width: 297mm;
-                        height: 210mm;
+                        height: 220mm;
                         -webkit-print-color-adjust: exact !important;
                         print-color-adjust: exact !important;
                     }
@@ -142,7 +143,8 @@ function printCertificate() {
                     }
                     .cert-free-preview-panel { 
                         padding: 0; 
-                        width: 100% !important;
+                        width: 297mm !important;
+                        height: 220mm !important;
                     }
                     .cert-free-outer-border {
                         width: 100% !important;

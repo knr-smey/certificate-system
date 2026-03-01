@@ -94,7 +94,7 @@
     width: 100%;
     max-width: 140px;
     padding: 0.75rem 1.25rem;
-    background: linear-gradient(135deg, #20215f 0%, #151545 100%);
+      background: #16a34a;
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -127,6 +127,31 @@
 /* Print button for dark text variant */
 .btn-cert-free-print.text-white {
     color: #fff;
+}
+
+/* PDF Button Styles */
+.btn-cert-free-pdf {
+    background: #dc3545;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+}
+
+.btn-cert-free-pdf:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.btn-cert-free-pdf i {
+    font-size: 1.1rem;
 }
 
 /* Responsive Print Button */
