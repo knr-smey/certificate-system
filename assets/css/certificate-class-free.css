@@ -15,7 +15,7 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    height: 600px !important;
+    height: 470px !important;
     padding: 20px;
     box-shadow: 0 4px 20px rgba(0,0,0,.1);
 }
@@ -70,8 +70,8 @@
 .cert-free-kingdom {
     text-align: center;
     margin-bottom: 12px;
-    font-size: .85rem;
-    font-weight: 700;
+    font-size: 1.2rem;
+    font-weight: bolder;
     letter-spacing: .22em;
     color: #222;
     line-height: 2;
@@ -81,15 +81,15 @@
 }
 .cert-free-kingdom img {
     display: block;
-    max-width: 100px;
+    max-width: 150px;
     height: auto;
     margin: 6px auto 0;
     object-fit: contain;
 }
 
 .cert-free-logo-box {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -103,7 +103,7 @@
 }
 
 .cert-free-motto {
-    font-size: .84rem;
+    font-size: 1.2rem;
     color: #333;
     margin-top: 4px;
     font-weight: bold;
@@ -114,7 +114,7 @@
 .cert-free-title {
     text-align: center;
     font-family: "UnifrakturCook", cursive;
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 700;
     color: #20215f;
     margin: 5px 0 12px;
@@ -123,7 +123,7 @@
 
 .cert-free-certify {
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 1.8rem;
     color: #20215f;
     letter-spacing: .12em;
     margin-bottom: 10px;
@@ -134,8 +134,8 @@
 
 .cert-free-student-name {
     text-align: center;
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 2.5rem;
+    font-weight: bolder;
     color: #111;
     letter-spacing: .1em;
     text-transform: uppercase;
@@ -193,13 +193,13 @@
 .cert-free-sig-line {
     height: 1px;
     background: #cea324;
-    width: 160px;
+    width: 200px;
     margin-left: auto;
     margin-bottom: 4px;
 }
 
 .cert-free-sig-name {
-    font-size: .936rem;
+    font-size: 1.2rem;
     font-weight: 900;
     color: #111;
     font-family: 'Courier New', monospace;
@@ -208,12 +208,13 @@
 }
 
 .cert-free-sig-role {
-    font-size: .888rem;
+    font-size: 1rem;
     color: #333;
     font-family: 'Courier New', monospace;
     letter-spacing: .07em;
     white-space: nowrap;
     text-align: center;
+    font-weight: bold;
 }
 
 /* Certificate Header - Logo Left, Kingdom Right */
@@ -243,7 +244,7 @@
     font-weight: bold;
     font-family: 'Courier New', monospace;
     letter-spacing: .04em;
-    margin-top: 20px;
+    margin-top: -20px;
     white-space: nowrap;
 }
 
