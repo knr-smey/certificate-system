@@ -25,15 +25,10 @@
 ?>
 
 <!-- Include Form Component -->
-<?php // include 'views/components/forms/form_class_free.php'; ?>
-<?php include 'views/components/forms/form_class_free_copy.php'; ?>
+<?php include 'views/components/forms/form_class_free.php'; ?> 
+<?php //include 'views/components/forms/form_class_free_copy.php'; ?>
 
-<<<<<<< HEAD
-<!-- Include Table Component -->
-<?php // include 'views/components/tables/table_class_free.php'; ?>
-=======
 <!-- Include Certificate Component -->
 <?php include 'views/components/certificate/class-free-certificate.php'; ?>
 
 
->>>>>>> dev

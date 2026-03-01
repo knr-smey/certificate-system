@@ -10,9 +10,4 @@
 
 <?php else: ?>
     <p>Invalid certificate type.</p>
-<<<<<<< HEAD
-    
 <?php endif; ?>
-=======
-<?php endif; ?>
->>>>>>> dev
