@@ -206,26 +206,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const savedCourse = CertificateStorage.getCourse();
     if (savedCourse && courseInput) {
         courseInput.value = savedCourse;
-        // Also update certificate preview
         if (certCourse) {
             certCourse.textContent = savedCourse.toUpperCase();
         }
     }
     
-    // Load saved end_date from localStorage
-    const savedEndDate = CertificateStorage.getEndDate();
+    // ── End Date: default to TODAY, user can still change ──
     const endDateInput = document.getElementById('end_date');
     const certTime = document.getElementById('cert_time_free');
-    
-    if (savedEndDate && endDateInput) {
-        endDateInput.value = savedEndDate;
-        // Also update certificate preview
-        if (certTime) {
-            certTime.textContent = formatCertificateDate(savedEndDate);
-        }
+
+    // Set today as default if no value already set (e.g. from PHP $old)
+    if (endDateInput && !endDateInput.value) {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        endDateInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    // Update certificate preview with whatever date is set
+    if (endDateInput && certTime) {
+        certTime.textContent = formatCertificateDate(endDateInput.value);
+        CertificateStorage.saveEndDate(endDateInput.value);
     }
 });
-
 // Function to validate form and show errors under inputs
 function validateForm() {
     return FormValidator.validateRequired(fields);
