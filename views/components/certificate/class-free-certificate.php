@@ -1,4 +1,13 @@
-<!-- ==================== CERTIFICATE COMPONENT ==================== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+        <link href="<?= base_url('assets/css/certificate-class-free.css') ?>" rel="stylesheet">
+</head>
+<body>
+    <!-- ==================== CERTIFICATE COMPONENT ==================== -->
 <!-- ADD id="class-free-cert" to the wrapper so JS can find it -->
 <div class="certificate-free-wrapper certificate-preview" id="class-free-cert">
     <div class="certificate-free-wrap" id="printable-certificate-free">
@@ -68,6 +77,8 @@
         </div>
     </div>
 </div>
+</body>
+</html>
 
 <script>
 

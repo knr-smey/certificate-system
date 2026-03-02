@@ -252,7 +252,7 @@
 @media print {
 
     /* ចាំ fix this cher */
-    /* @page {
+    @page {
         size: A4 landscape;
         margin: 0;
     }
@@ -263,7 +263,7 @@
         margin: 0 !important;
         padding: 0 !important;
         overflow: hidden !important;
-    } */
+    }
 
     #class-free-cert {
         position: fixed !important;
