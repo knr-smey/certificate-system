@@ -192,7 +192,7 @@
                 <button type="button" class="btn-cert-save" onclick="saveCourse()">
                     <i class="bi bi-bookmark-fill me-2"></i>រក្សាទុក Course
                 </button>
-                <button type="button" class="btn-cert-print text-white" onclick="printCertificate()">
+                <button type="button" class="btn-cert-print text-white" onclick="printCertificateStudent()">
                     <i class="bi bi-printer-fill me-2"></i>បោះពុម្ព
                 </button>
             </div>
@@ -414,7 +414,7 @@ function deleteSavedCourse(idx) {
     renderSavedCourses();
 }
 
-function printCertificate() {
+function printCertificateStudent() {
     window.print();
 }
 
