@@ -7,7 +7,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans+Deva:wght@100..800&display=swap');
 .certificate-free-wrapper {
     background: var(--app-card-bg);
     border-radius: 12px;
@@ -69,10 +69,10 @@
 
 .cert-free-kingdom {
     text-align: center;
-    margin-bottom: 12px;
+    /* margin-bottom: 6px; */
     font-size: 1.2rem;
     font-weight: bolder;
-    letter-spacing: .22em;
+    letter-spacing: .08em;
     color: #222;
     line-height: 2;
     text-transform: uppercase;
@@ -83,13 +83,13 @@
     display: block;
     max-width: 150px;
     height: auto;
-    margin: 6px auto 0;
+    margin: 4px auto 0;
     object-fit: contain;
 }
 
 .cert-free-logo-box {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -99,13 +99,13 @@
 .cert-free-logo-box img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
 }
 
 .cert-free-motto {
     font-size: 1.2rem;
     color: #333;
-    margin-top: 4px;
+    /* margin-top: 4px; */
     font-weight: bold;
     font-family: Arial, sans-serif;
     white-space: nowrap;
@@ -114,10 +114,9 @@
 .cert-free-title {
     text-align: center;
     font-family: "UnifrakturCook", cursive;
-    font-size: 3rem;
+    font-size: 4.2rem;
     font-weight: 700;
     color: #20215f;
-    margin: 5px 0 12px;
     white-space: nowrap;
 }
 
@@ -125,8 +124,6 @@
     text-align: center;
     font-size: 1.8rem;
     color: #20215f;
-    letter-spacing: .12em;
-    margin-bottom: 10px;
     font-family: 'Courier New', monospace;
     font-weight: bold;
     white-space: nowrap;
@@ -134,28 +131,34 @@
 
 .cert-free-student-name {
     text-align: center;
-    font-size: 2.5rem;
-    font-weight: bolder;
-    color: #111;
-    letter-spacing: .1em;
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: #1b2a6b;
+    letter-spacing: .05em;
     text-transform: uppercase;
-    margin-bottom: 12px;
-    font-family: 'Courier New', monospace;
-    white-space: nowrap;
+    margin-bottom: 8px;
+    font-family: "Playpen Sans Deva", cursive;
+    font-style: italic;
+
+    /* outline effect like your screenshot */
+    -webkit-text-stroke: 1px black;
 }
 
 .cert-free-desc {
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     color: #20215f;
-    line-height: 1.8;
+    /* line-height: 1.8; */
     margin-bottom: 10px;
-    font-family: Arial, sans-serif;
+    font-family: 'Times New Roman', Times, serif;
     letter-spacing: .01em;
     white-space: nowrap;
 }
 
 .cert-free-course {
+    margin: auto;
+    width: 600px;
+    /* background-color: rgba(0, 0, 0, 0.392); */
     text-align: center;
     font-size: 1.5rem;
     color: black;
@@ -163,7 +166,9 @@
     margin-bottom: 12px;
     font-family: 'Courier New', monospace;
     font-weight: 900;
-    white-space: nowrap;
+
+    white-space: normal;   /* allow new line */
+    word-wrap: break-word; /* break long text */
 }
 
 .cert-free-granted {
@@ -222,7 +227,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
 }
 
 .cert-free-header-left {
@@ -239,12 +244,11 @@
 
 .cert-free-id-bottom {
     text-align: center;
-    font-size: .672rem;
+    font-size: 1rem;
     color: red;
     font-weight: bold;
     font-family: 'Courier New', monospace;
     letter-spacing: .04em;
-    margin-top: -20px;
     white-space: nowrap;
 }
 
