@@ -231,15 +231,5 @@ function handleSavePDF() {
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', function() {
     loadSavedData();
-
-    const printBtn = document.getElementById('btnPrintCertificate');
-    if (printBtn) {
-        printBtn.addEventListener('click', handlePrint);
-    }
-
-    const pdfBtn = document.getElementById('btnSavePDF');
-    if (pdfBtn) {
-        pdfBtn.addEventListener('click', handleSavePDF);
-    }
 });
 </script>
