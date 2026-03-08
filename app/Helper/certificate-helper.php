@@ -55,8 +55,15 @@ function printCertificateDate($format = 'd.m.Y', $baseDate = null)
  * Generate a unique certificate ID
  * Format: 10-digit number + ' ETEC' (e.g., "1234567890 ETEC")
  */
-function generateId(): string
-{
-    $num = strval(floor(mt_rand(1000000000, 9999999999)));
-    return $num . ' ETEC';
+function generateCertificateId() {
+    $year = date('Y'); // current year
+    $random4 = str_pad(random_int(0, 9999), 4, '0', STR_PAD_LEFT); // 4 digit random
+    return $year . $random4 . 'ETEC';
+}
+
+/**
+ * Generate a unique certificate ID (shorthand)
+ */
+function generateId() {
+    return generateCertificateId();
 }

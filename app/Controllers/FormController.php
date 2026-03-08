@@ -19,6 +19,9 @@ final class FormController extends Controller
     // Show the class-free form
     public function index(): void
     {
+        // Generate certificate ID for display
+        $generatedId = generateId();
+
         // Pagination settings
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $limit = 5; // 5 students per page
@@ -37,13 +40,17 @@ final class FormController extends Controller
             'totalPages' => $totalPages,
             'totalCount' => $totalCount,
             'showCertificate' => false,
-            'certificateData' => null
+            'certificateData' => null,
+            'generatedId' => $generatedId
         ]);
     }
 
     // Handle form submission
     public function submit(): void
     {
+        // Generate certificate ID for display
+        $generatedId = generateId();
+        
         $studentName = trim($_POST['student_name'] ?? '');
         $course      = trim($_POST['course'] ?? '');
         $endDate     = trim($_POST['end_date'] ?? '');
@@ -71,7 +78,8 @@ final class FormController extends Controller
                 'totalPages' => $totalPages,
                 'totalCount' => $totalCount,
                 'showCertificate' => false,
-                'certificateData' => null
+                'certificateData' => null,
+                'generatedId' => $generatedId
             ]);
             return;
         }
@@ -97,7 +105,8 @@ final class FormController extends Controller
                 'totalPages' => $totalPages,
                 'totalCount' => $totalCount,
                 'showCertificate' => false,
-                'certificateData' => null
+                'certificateData' => null,
+                'generatedId' => $generatedId
             ]);
             return;
         }
@@ -120,7 +129,8 @@ final class FormController extends Controller
             'totalPages' => $totalPages,
             'totalCount' => $totalCount,
             'showCertificate' => true,
-            'certificateData' => $latestCertificate
+            'certificateData' => $latestCertificate,
+            'generatedId' => $generatedId
         ]);
     }
 

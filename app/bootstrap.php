@@ -32,4 +32,4 @@ if (session_status() === PHP_SESSION_NONE) {
 require __DIR__ . '/helpers.php';
 
 // Helper functions for certificates
-require __DIR__ . '/Helper/helper.php';
+require __DIR__ . '/Helper/certificate-helper.php';
