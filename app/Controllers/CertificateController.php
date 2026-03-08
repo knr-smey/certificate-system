@@ -31,6 +31,9 @@ final class CertificateController extends Controller
             $totalCount = $certificateModel->getCount();
             $totalPages = ceil($totalCount / $limit);
 
+            // Generate certificate ID for display
+            $generatedId = generateId();
+
             $this->view('Form/class-free-form', [
                 'csrfToken' => $csrfToken,
                 'errors' => [],
@@ -38,7 +41,8 @@ final class CertificateController extends Controller
                 'certificates' => $certificates,
                 'currentPage' => $page,
                 'totalPages' => $totalPages,
-                'totalCount' => $totalCount
+                'totalCount' => $totalCount,
+                'generatedId' => $generatedId
             ]);
             return;
         }
@@ -49,6 +53,11 @@ final class CertificateController extends Controller
                 'title' => 'Certificate',
                 'type' => $type
             ]);
+        } elseif ($type === 'scholarship') { 
+            $this->view('certificate/scholarship', [
+                'title' => 'Certificate',
+                'type' => $type
+            ]);
         } else {
             $this->view('certificate/error', [
                 'message' => 'Invalid certificate type.'
@@ -56,7 +65,20 @@ final class CertificateController extends Controller
         }
     }
 
-    // Return JSON of finished classes
+    public function getscholarship()
+    {
+        $type = $_GET['type'] ?? 'scholarship';
+        if($type == 'scholarship') {
+            $this->view('certificate/scholarship', [
+                'title' => 'Certificate',
+                'type' => $type
+            ]);
+        } else {
+            $this->view('certificate/error', [
+                'message' => 'Invalid certificate type.'
+            ]);
+        }
+    }
     public function getClasses(): void
     {
         try {
@@ -67,7 +89,6 @@ final class CertificateController extends Controller
             $classes = $model->getFinishedClasses($type, $course);
 
             $this->jsonResponse(true, $classes);
-
         } catch (\Throwable $e) {
             $this->jsonResponse(false, [], $e->getMessage(), 500);
         }
@@ -91,12 +112,32 @@ final class CertificateController extends Controller
         }
     }
 
+    // Return certificate date based on end_date
+    public function getCertificateDate(): void
+    {
+        try {
+            $endDate = $_GET['end_date'] ?? null;
+            
+            if (empty($endDate)) {
+                throw new \RuntimeException('end_date is required');
+            }
+
+            // Use the helper function with the provided end_date
+            $certDateObj = getCertificateDate(10, 15, 'Asia/Phnom_Penh', true, $endDate);
+            $formattedDate = $certDateObj->format('F j, Y');
+
+            $this->jsonResponse(true, ['date' => $formattedDate]);
+        } catch (\Throwable $e) {
+            $this->jsonResponse(false, [], $e->getMessage(), 500);
+        }
+    }
+
     // Show the students table page
     public function students(): void
-{
-    $this->view('certificate/index', [
-        'title' => 'liststudents',
-        'type'  => $_GET['type'] ?? 'free'
-    ]);
-}
+    {
+        $this->view('certificate/index', [
+            'title' => 'liststudents',
+            'type'  => $_GET['type'] ?? 'free'
+        ]);
+    }
 }

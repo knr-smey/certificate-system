@@ -1,13 +1,11 @@
+<?php
+// Use generatedId passed from controller, or generate one if not provided
+if (!isset($generatedId) || empty($generatedId)) {
+    require_once __DIR__ . '/../../../app/Helper/certificate-helper.php';
+    $generatedId = generateCertificateId();
+}
+?>
 <div class="form-card">
-    <div class="form-card-header">
-        <div class="form-card-icon">
-            <i class="bi bi-award-fill"></i>
-        </div>
-        <div>
-            <div class="form-card-title">ទម្រង់ស្នើរសុំសញ្ញាប័ត្រ</div>
-            <div class="form-card-subtitle">Certificate Request Form</div>
-        </div>
-    </div>
 
     <?php if (! empty($message)): ?>
         <div class="form-message">
@@ -17,7 +15,8 @@
     <?php endif; ?>
 
     <form method="POST" action="/form/submit" novalidate id="classFreeForm" class="modern-form">
-        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrfToken) ?>">
+
+        <input type="hidden" id="generated_cert_id" value="<?php echo htmlspecialchars($generatedId) ?>">
 
         <div class="form-row">
             <div class="form-group">
@@ -82,57 +81,164 @@
 
             <div class="form-group form-group-btn">
                 <label>&nbsp;</label>
-                <button type="submit" class="submit-btn">
-                 បញ្ជូន
-                </button>
+                <div class="d-flex gap-2">
+                   <button type="button" class="btn-cert-free-print text-white" id="btnPrintCertificate" onclick="handlePrint()">
+                        <i class="bi bi-printer-fill me-2"></i> បោះពុម្ព
+                    </button>
+              
+                </div>
+             
             </div>
         </div>
     </form>
 </div>
 
 <script>
+// ============================================
+// Certificate Helper Functions (inline)
+// ============================================
+
+/**
+ * Format date for certificate display
+ * Matches the PHP getCertificateDate() logic
+ */
+function formatCertificateDate(dateString, cutoffDay = 10, certificateDay = 15) {
+    if (!dateString) return '';
+    
+    const selectedDate = new Date(dateString);
+    if (isNaN(selectedDate.getTime())) return dateString;
+    
+    const selectedDay = selectedDate.getDate();
+    let year = selectedDate.getFullYear();
+    let month = selectedDate.getMonth();
+    
+    if (selectedDay <= cutoffDay) {
+        month--;
+        if (month < 0) {
+            month = 11;
+            year--;
+        }
+    }
+    
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                    'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthName = months[month];
+    
+    return `${monthName} ${certificateDay},${year}`;
+}
+
+/**
+ * Local Storage helpers for certificate data persistence
+ */
+const CertificateStorage = {
+    saveCourse: function(course) {
+        localStorage.setItem('certificate_course', course);
+    },
+    getCourse: function() {
+        return localStorage.getItem('certificate_course');
+    },
+    saveEndDate: function(date) {
+        localStorage.setItem('certificate_end_date', date);
+    },
+    getEndDate: function() {
+        return localStorage.getItem('certificate_end_date');
+    }
+};
+
+/**
+ * Form validation helpers
+ */
+const FormValidator = {
+    validateRequired: function(fieldIds) {
+        let isValid = true;
+        
+        fieldIds.forEach(id => {
+            const input = document.getElementById(id);
+            if (!input) return;
+            
+            input.classList.remove('error');
+            const formGroup = input.closest('.form-group');
+            const oldError = formGroup ? formGroup.querySelector('.error-message') : null;
+            if (oldError) oldError.remove();
+
+            if (input.value.trim() === '') {
+                isValid = false;
+                input.classList.add('error');
+                
+                if (formGroup) {
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'error-message';
+                    const fieldNames = {
+                        'student_name': 'Full Name is required!',
+                        'course': 'Course is required!',
+                        'end_date': 'End Date is required!'
+                    };
+                    errorMsg.innerHTML = `<i class="bi bi-exclamation-circle-fill me-1"></i>${fieldNames[id] || 'This field is required!'}`;
+                    formGroup.appendChild(errorMsg);
+                }
+            }
+        });
+        
+        return isValid;
+    }
+};
+
 const form = document.getElementById('classFreeForm');
 const fields = ['student_name', 'course', 'end_date'];
 
-// Clear localStorage on page load to start fresh
-localStorage.removeItem('certificate_course');
+// ============================================
+// Local Storage for Course - Persist across sessions
+// ============================================
 
-// Save course to localStorage when form is submitted
-form.addEventListener('submit', function(e) {
+// Load course from localStorage on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Set certificate ID from hidden input
+    const certIdInput = document.getElementById('generated_cert_id');
+    const certIdVal = document.getElementById('cert_id_val_free');
+    if (certIdInput && certIdVal) {
+        certIdVal.textContent = certIdInput.value;
+    }
+    
     const courseInput = document.getElementById('course');
-    if (courseInput.value.trim() !== '') {
-        // Save course to localStorage
-        localStorage.setItem('certificate_course', courseInput.value.trim());
+    const certCourse = document.getElementById('cert_course_free');
+    
+    // Load saved course from localStorage
+    const savedCourse = CertificateStorage.getCourse();
+    if (savedCourse && courseInput) {
+        courseInput.value = savedCourse;
+        if (certCourse) {
+            certCourse.textContent = savedCourse.toUpperCase();
+        }
+    }
+    
+    // ── End Date: default to TODAY, user can still change ──
+    const endDateInput = document.getElementById('end_date');
+    const certTime = document.getElementById('cert_time_free');
+
+    // Set today as default if no value already set (e.g. from PHP $old)
+    if (endDateInput && !endDateInput.value) {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        endDateInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    // Update certificate preview with whatever date is set
+    if (endDateInput && certTime) {
+        certTime.textContent = formatCertificateDate(endDateInput.value);
+        CertificateStorage.saveEndDate(endDateInput.value);
     }
 });
+// Function to validate form and show errors under inputs
+function validateForm() {
+    return FormValidator.validateRequired(fields);
+}
 
-form.addEventListener('submit', function(e) {
-    let isValid = true;
-
-    fields.forEach(id => {
-        const input = document.getElementById(id);
-        input.classList.remove('error');
-        const formGroup = input.closest('.form-group');
-        const oldError = formGroup.querySelector('.error-message');
-        if (oldError) oldError.remove();
-
-        if (input.value.trim() === '') {
-            isValid = false;
-            input.classList.add('error');
-            const errorMsg = document.createElement('div');
-            errorMsg.className = 'error-message';
-
-            if(id === 'student_name') errorMsg.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>Full Name is required!';
-            if(id === 'course') errorMsg.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>Course is required!';
-            if(id === 'end_date') errorMsg.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>End Date is required!';
-
-            // Append to form-group, not input-wrapper, to keep icon position stable
-            formGroup.appendChild(errorMsg);
-        }
-    });
-
-    if (!isValid) e.preventDefault();
-});
+// Expose validation for certificate handler
+window.validateBeforePrint = function() {
+    return validateForm();
+};
 
 // Clear errors on input/change
 fields.forEach(id => {
@@ -146,5 +252,49 @@ fields.forEach(id => {
             if (oldError) oldError.remove();
         }
     });
+});
+
+// Wrapper function to match the existing formatDate usage
+// Uses the helper function with default parameters matching PHP helper
+function formatDate(dateString) {
+    return formatCertificateDate(dateString);
+}
+
+// Wait for DOM to be fully loaded before setting up auto-update
+document.addEventListener('DOMContentLoaded', function() {
+    // Get certificate elements
+    const certStudentName = document.getElementById('cert_student_name_free');
+    const certCourse = document.getElementById('cert_course_free');
+    const certTime = document.getElementById('cert_time_free');
+
+    // Student Name - auto update on input
+    const studentNameInput = document.getElementById('student_name');
+    if (studentNameInput && certStudentName) {
+        studentNameInput.addEventListener('input', function(e) {
+            certStudentName.textContent = e.target.value.toUpperCase();
+        });
+    }
+
+    // Course - auto update on input and save to localStorage
+    const courseInput = document.getElementById('course');
+    if (courseInput && certCourse) {
+        courseInput.addEventListener('input', function(e) {
+            const courseValue = e.target.value;
+            certCourse.textContent = courseValue.toUpperCase();
+            // Save course to localStorage for next session
+            CertificateStorage.saveCourse(courseValue);
+        });
+    }
+
+    // End Date - auto update on change and save to localStorage
+    const endDateInput = document.getElementById('end_date');
+    if (endDateInput && certTime) {
+        endDateInput.addEventListener('change', function(e) {
+            const dateValue = e.target.value;
+            certTime.textContent = formatCertificateDate(dateValue);
+            // Save end_date to localStorage for next session
+            CertificateStorage.saveEndDate(dateValue);
+        });
+    }
 });
 </script>

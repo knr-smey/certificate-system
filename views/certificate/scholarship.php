@@ -1,24 +1,22 @@
 <div class="container py-2">
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-12 col-md-5">
+            <h2 class="fw-bold mb-0">តារាង សញ្ញាបត្រអាហារូបករណ៍</h2>
+        </div>
 
-    <!-- title and button -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0 fw-bold">តារាង សញ្ញាបត្រធម្មតា</h2>
-
-        <!-- select and button -->
-        <div class="d-flex gap-2 col-6">
-            <select class="form-select shadow-none" id="categoryCourse">
+        <div class="col-12 col-md-7 d-flex justify-content-md-end justify-content-start gap-2">
+            <select id="categoryFilter" class="form-select" style="max-width: 400px;">
                 <option value="all">ទាំងអស់</option>
             </select>
-            <button class="btn btn-primary fw-bold py-2 col-4" id="btnPrintCertificate">
-                <i class="bi bi-award-fill me-2"></i>
-                បង្កើតវិញ្ញាបនបត្រ
+
+            <button class="btn-top-action text-nowrap" id="btnPrintCertificate">
+                <i class="bi bi-award-fill me-0"></i>
+                ​ បង្កើតវិញ្ញាបនបត្រ
             </button>
         </div>
     </div>
 
-    <!-- table list -->
     <div id="tables_container"></div>
-
 </div>
 
 <!-- ==================== PRINT CERTIFICATE MODAL ==================== -->
@@ -142,22 +140,20 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const perPage = 9;
+    const perPage = 10;
     let allData = [];
     let categoryPages = {};
 
     $(document).ready(function() {
         loadClasses();
-        loadSavedCourses();
 
-        $('#categoryCourse').on('change', function() {
-            renderAllTables($(this).val());
+        // Trigger render when filter changes
+        $('#categoryFilter').on('change', function() {
+            renderAllTables();
         });
-
         // Live preview updates
         $('#edit_student_name').on('input', function() {
             $('#cert_student_name').text($(this).val() || '—');
@@ -178,22 +174,14 @@
         });
     });
 
-    // ==================== LOAD CLASSES ====================
     function loadClasses() {
         const container = $('#tables_container');
-        container.html(`
-        <div class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p class="mt-3 mb-0 text-muted">កំពុងផ្ទុកវគ្គសិក្សា...</p>
-        </div>
-    `);
+        container.html('<p class="text-center mt-4">Loading...</p>');
 
         const urlParams = new URLSearchParams(window.location.search);
-        const type = urlParams.get('type') || 'free';
+        const type = urlParams.get('type') || 'scholarship';
 
-        $.ajax({
+         $.ajax({
             url: "<?= base_url('api/classes') ?>",
             method: "GET",
             data: {
@@ -216,7 +204,7 @@
                 const categories = [...new Set(allData.map(item => item.category))];
                 categories.forEach(cat => categoryPages[cat] = 1);
 
-                const select = $('#categoryCourse');
+                const select = $('#categoryFilter');
                 select.find('option:not([value="all"])').remove();
                 categories.forEach(cat => select.append(`<option value="${cat}">${cat}</option>`));
 
@@ -233,93 +221,6 @@
         });
     }
 
-    // ==================== RENDER TABLES ====================
-    function renderAllTables(filterCategory = 'all') {
-        const container = $('#tables_container');
-        container.html('');
-        let anyData = false;
-
-        const filteredCategories = filterCategory === 'all' ?
-            Object.keys(categoryPages) : [filterCategory];
-
-        filteredCategories.forEach(categoryName => {
-            const page = categoryPages[categoryName];
-            const categoryData = allData.filter(item => item.category === categoryName);
-            if (!categoryData.length) return;
-            anyData = true;
-
-            const pageData = categoryData.slice((page - 1) * perPage, page * perPage);
-
-            const rows = pageData.map(item => {
-                const safeCourse = (item.course ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-                const safeTeacher = (item.teacher_name ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-                return `
-            <tr>
-                <td>${item.id}</td>
-                <td>${item.teacher_name ?? '<span class="badge bg-danger">គ្មានគ្រូ</span>'}</td>
-                <td>${item.course ?? '-'}</td>
-                <td>${item.time ?? '-'}</td>
-                <td>${item.category ?? '-'}</td>
-                <td>
-                    <div class="d-flex gap-2 justify-content-center">
-                        <a href="<?= base_url('certificate/students') ?>?class_id=${item.id}&course=${encodeURIComponent(item.course)}&teacher=${encodeURIComponent(item.teacher_name ?? 'គ្មានគ្រូ')}&time=${encodeURIComponent(item.time ?? '-')}">
-                            <button class="btn btn-primary btn-sm">
-                                <i class="bi bi-people-fill me-1"></i>មើលសិស្ស
-                            </button>
-                        </a>
-                    </div>
-                </td>
-            </tr>`;
-            }).join('');
-
-            const totalPages = Math.ceil(categoryData.length / perPage);
-            let buttons = '';
-            if (page > 1) buttons += `<button class="btn btn-outline-primary me-2" onclick="changeCategoryPage('${categoryName}', ${page-1})">មុន</button>`;
-            for (let i = 1; i <= totalPages; i++) {
-                buttons += `<button class="btn ${i===page?'btn-primary':'btn-outline-primary'} me-2" onclick="changeCategoryPage('${categoryName}', ${i})">${i}</button>`;
-            }
-            if (page < totalPages) buttons += `<button class="btn btn-outline-primary" onclick="changeCategoryPage('${categoryName}', ${page+1})">បន្ទាប់</button>`;
-
-            container.append(`
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header fs-5 bg-category text-white fw-semibold">
-                    ប្រភេទវគ្គសិក្សារ ${categoryName}
-                </div>
-                <div class="card-body table-responsive">
-                    <table class="table table-bordered text-center align-middle mb-2">
-                        <thead class="table-primary">
-                            <tr>
-                                <th>ID</th>
-                                <th>គ្រូបង្រៀន</th>
-                                <th>មុខវិជ្ជា</th>
-                                <th>ម៉ោង</th>
-                                <th>ប្រភេទ ថ្នាក់</th>
-                                <th>សកម្មភាព</th>
-                            </tr>
-                        </thead>
-                        <tbody>${rows}</tbody>
-                    </table>
-                    <div class="d-flex justify-content-center mt-2">${buttons}</div>
-                </div>
-            </div>
-        `);
-        });
-
-        if (!anyData) {
-            container.html(`
-            <div class="text-center py-5 text-muted">
-                <i class="bi bi-exclamation-circle display-4"></i>
-                <p class="mt-3">មិនមានវគ្គសិក្សាតាមប្រភេទនេះទេ</p>
-            </div>
-        `);
-        }
-    }
-
-    function changeCategoryPage(categoryName, page) {
-        categoryPages[categoryName] = page;
-        renderAllTables($('#categoryCourse').val());
-    }
-
     // ==================== OPEN CERT MODAL ====================
     function openCertModal(studentName, course, teacher) {
         $('#edit_student_name').val(studentName || '').trigger('input');
@@ -334,13 +235,13 @@
         $('#certModal').modal('show');
     }
 
-    // ==================== REGENERATE ID ====================
+     // ==================== REGENERATE ID ====================
     function regenId() {
         const newId = Math.floor(Math.random() * 10000);
         $('#edit_id').val(newId).trigger('input');
     }
 
-    // ==================== SAVE / LOAD / DELETE COURSES ====================
+     // ==================== SAVE / LOAD / DELETE COURSES ====================
     function saveCourseTeacher() {
         const course = $('#edit_course').val().trim();
         if (!course) {
@@ -353,27 +254,6 @@
             localStorage.setItem('saved_courses', JSON.stringify(saved));
         }
         loadSavedCourses();
-    }
-
-    function loadSavedCourses() {
-        const saved = JSON.parse(localStorage.getItem('saved_courses') || '[]');
-        const wrap = $('#saved_courses_wrap');
-        const list = $('#saved_courses_list');
-        list.html('');
-        if (!saved.length) {
-            wrap.hide();
-            return;
-        }
-        wrap.show();
-        saved.forEach(c => {
-            list.append(`
-            <div class="cert-saved-item" onclick="applySavedCourse('${c.replace(/'/g,"\\'")}')">
-                <span class="cert-saved-item-name">${c}</span>
-                <button class="cert-saved-item-del" onclick="event.stopPropagation();deleteSavedCourse('${c.replace(/'/g,"\\'")}')">
-                    <i class="bi bi-trash-fill"></i>
-                </button>
-            </div>`);
-        });
     }
 
     function applySavedCourse(c) {
@@ -389,5 +269,96 @@
     // ==================== PRINT ====================
     function printCertificateTeacher() {
         window.print();
+    }
+
+    function renderAllTables() {
+        const container = $('#tables_container');
+        container.html('');
+
+        const selectedCategory = $('#categoryFilter').val();
+        let categoriesToRender = Object.keys(categoryPages);
+
+        if (selectedCategory !== 'all') {
+            categoriesToRender = [selectedCategory];
+        }
+
+        categoriesToRender.forEach(categoryName => {
+            const page = categoryPages[categoryName];
+            const categoryData = allData.filter(item => item.category === categoryName);
+
+            const start = (page - 1) * perPage;
+            const end = start + perPage;
+            const pageData = categoryData.slice(start, end);
+
+            // Map exact 6 columns from the new images
+            const rows = pageData.map(item => `
+            <tr>
+                <td>${item.id}</td>
+                <td>${item.teacher_name ?? '<span class="badge bg-danger">No Teacher</span>'}</td>
+                <td>${item.course ?? '-'}</td>
+                <td>${item.time ?? '-'}</td>
+                <td>${item.category ?? '-'}</td>
+                <td>
+                    <a href="<?= base_url('certificate/students') ?>?class_id=${item.id}&course=${encodeURIComponent(item.course)}&teacher=${encodeURIComponent(item.teacher_name ?? 'គ្មានគ្រូ')}&time=${encodeURIComponent(item.time ?? '-')}" class="btn-view-student">
+                        <i class="fas fa-users"></i> មើលសិស្ស
+                    </a>
+                </td>
+            </tr>
+        `).join('');
+
+            // Pagination buttons
+            const totalPages = Math.ceil(categoryData.length / perPage);
+            let buttons = '';
+
+            if (page > 1) {
+                buttons += `<button class="page-btn" onclick="changeCategoryPage('${categoryName}', ${page-1})">ត្រឡប់</button>`;
+            }
+            for (let i = 1; i <= totalPages; i++) {
+                let activeClass = i === page ? 'active' : '';
+                buttons += `<button class="page-btn ${activeClass}" onclick="changeCategoryPage('${categoryName}', ${i})">${i}</button>`;
+            }
+            if (page < totalPages) {
+                buttons += `<button class="page-btn" onclick="changeCategoryPage('${categoryName}', ${page+1})">បន្ទាប់</button>`;
+            }
+
+            if (pageData.length > 0) {
+                container.append(`
+                <div class="custom-card">
+                    <div class="custom-card-header">
+                        ប្រភេទវគ្គសិក្សារ ${categoryName}
+                    </div>
+                    
+                    <div class="custom-card-body">
+                        <div class="table-responsive">
+                            <table class="table custom-table text-center mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 8%;">ID</th>
+                                        <th style="width: 17%;">គ្រូបង្រៀន</th>
+                                        <th style="width: 20%;">មុខវិជ្ជា</th>
+                                        <th style="width: 20%;">ម៉ោង</th>
+                                        <th style="width: 20%;">ប្រភេទ ថ្នាក់</th>
+                                        <th style="width: 15%;">សកម្មភាព</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${rows}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="custom-pagination">
+                            ${buttons}
+                        </div>
+                    </div>
+                </div>
+            `);
+            }
+        });
+    }
+
+    function changeCategoryPage(categoryName, page) {
+        categoryPages[categoryName] = page;
+        renderAllTables();
     }
 </script>

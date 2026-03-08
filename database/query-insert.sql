@@ -40,6 +40,8 @@ INSERT INTO classes (course, category, type, time, teacher_id, user_id, status) 
 ('React',   'Web Frontend', 'normal', '09:00 - 10:30', 1, 1, 'active'),
 ('Vue',     'Web Frontend', 'normal', '10:30 - 12:00', 1, 1, 'active'),
 ('NodeJS',  'Web Backend',  'normal', '13:00 - 14:30', 2, 2, 'active'),
+('Laravel',  'Web Backend',  'scholarship', '10:00 - 12:00', 2, 2, 'active'),
+('Laravel',  'Web Backend',  'scholarship', '16:00 - 17:30', 2, 2, 'active'),
 ('Flutter', 'Mobile App',   'normal', '14:30 - 16:00', 2, 2, 'active'),
 ('Laravel', 'Web Backend',  'normal', '16:00 - 17:30', 3, 3, 'active'),
 ('Class Free', 'Certificate', 'free', 'N/A', NULL, NULL, 'active');
