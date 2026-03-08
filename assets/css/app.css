@@ -1,6 +1,67 @@
-body{
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+/* ============================================
+   Certificate System - Global Styles
+   ============================================ */
+
+/* Font Imports */
+@font-face {
+    font-family: 'Siemreap-Regular';
+    src: url('../fonts/Siemreap-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Battambang-Regular';
+    src: url('../fonts/Battambang-Regular.ttf') format('truetype');
+}
+
+/* CSS Variables - Design System */
+:root {
+    /* Colors - Base */
+    --app-bg-color: #f8f9fb;
+    --app-card-bg: #ffffff;
+    --app-card-border: #e5e7f2;
+    --app-text-main: #000;
+    --app-text-muted: #6d7393;
+
+    /* Colors - Primary */
+    --app-primary: #2d2e81;
+    --app-primary-dark: #232469;
+    --app-primary-light: #3d3ea1;
+
+    /* Colors - Status */
+    --app-success: #1f9d65;
+    --app-warning: #f59e0b;
+    --app-danger: #dc3545;
+    --app-info: #3b82f6;
+
+    /* Sidebar */
+    --sidebar-bg: #2d2e81;
+    --sidebar-border: #24256b;
+    --sidebar-active-bg: #1f2060;
+    --sidebar-text-main: #f5f6ff;
+    --sidebar-text-muted: #d9dcff;
+    --sidebar-hover: #3a3c99;
+
+     --sidebar-text-white: #ffffff;           
+    --sidebar-text-sub: rgba(255,255,255,0.6); 
+    --sidebar-logo-bg: rgba(255,255,255,0.15); 
+    --sidebar-logo-icon: #cfd2ff;  
+}
+
+/* Base Styles */
+body {
+    font-family: 'Siemreap-Regular', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--app-bg-color);
+    color: var(--app-text-main);
     margin: 0;
     padding: 0;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+.font-battambang{
+    font-family: 'Battambang-Regular',sans-serif;
+}
+
+.font-siemreap{
+    font-family: 'Siemreap-Regular',sans-serif;
 }

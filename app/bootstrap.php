@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+// Start output buffering to prevent "headers already sent" errors
+ob_start();
+
 // Basic error reporting (dev). On production you can lower this.
 ini_set('display_errors', '1');
 error_reporting(E_ALL);

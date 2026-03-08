@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate of Completion</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Noto+Serif+Khmer:wght@400;700&family=Courier+Prime:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier Prime', monospace;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* A4 Paper sizing */
+        .certificate-container {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            margin: 0 auto;
+            padding: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* Outer border - dark blue */
+        .border-outer {
+            border: 10px solid #1e3a8a;
+            padding: 10mm;
+            position: relative;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Middle border - gold */
+        .border-middle {
+            border: 3px solid #d4af37;
+            padding: 8mm;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Inner border - gray */
+        .border-inner {
+            border: 2px solid #9ca3af;
+            padding: 15mm 20mm;
+            background: #fafafa;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .certificate-header {
+            text-align: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .header-text {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            color: #1f2937;
+            margin-bottom: 0.15rem;
+            font-weight: 400;
+        }
+
+        /* Logo and Institution */
+        .institution {
+            text-align: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 0.8rem;
+            background: #1e3a8a;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-inner {
+            width: 85%;
+            height: 85%;
+            border: 2.5px solid #d4af37;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            line-height: 0.8;
+            margin-bottom: 0.2rem;
+        }
+
+        .logo-subtext {
+            font-size: 0.45rem;
+            letter-spacing: 0.1em;
+        }
+
+        .institution-name-kh {
+            font-family: 'Noto Serif Khmer', serif;
+            font-size: 0.95rem;
+            color: #1f2937;
+            margin-bottom: 0.2rem;
+            font-weight: 700;
+        }
+
+        .institution-name-en {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.75rem;
+            color: #374151;
+            letter-spacing: 0.05em;
+        }
+
+        /* Certificate Title */
+        .certificate-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 2.2rem;
+            font-style: italic;
+            text-align: center;
+            color: #1e3a8a;
+            margin-bottom: 1.2rem;
+            font-weight: 400;
+        }
+
+        /* Content */
+        .certificate-content {
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .certify-text {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.8rem;
+            color: #4b5563;
+            margin-bottom: 1.2rem;
+        }
+
+        .recipient-name {
+            font-family: 'Courier Prime', monospace;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin: 1.2rem 0;
+            letter-spacing: 0.15em;
+        }
+
+        .completion-text {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.75rem;
+            color: #374151;
+            line-height: 1.7;
+            margin-bottom: 1.2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .course-name {
+            font-family: 'Courier Prime', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 1.2rem 0;
+            letter-spacing: 0.05em;
+        }
+
+        .date-granted {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin: 1.5rem 0;
+        }
+
+        /* Signature Section */
+        .signature-section {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .signature-box {
+            text-align: right;
+        }
+
+        .signature-line {
+            width: 180px;
+            border-top: 2px solid #1f2937;
+            margin-bottom: 0.4rem;
+            margin-left: auto;
+        }
+
+        .signature-name {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.75rem;
+            color: #1f2937;
+            margin-bottom: 0.2rem;
+        }
+
+        .signature-title {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.75rem;
+            color: #1f2937;
+        }
+
+        .stamp-placeholder {
+            width: 70px;
+            height: 70px;
+            border: 2px dashed #9ca3af;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.55rem;
+            color: #9ca3af;
+            text-align: center;
+            margin-bottom: 0.4rem;
+        }
+
+        /* Decorative corners */
+        .border-outer::before,
+        .border-outer::after,
+        .border-inner::before,
+        .border-inner::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d4af37;
+        }
+
+        .border-outer::before {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .border-outer::after {
+            top: 10px;
+            right: 10px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .border-inner::before {
+            bottom: 10px;
+            left: 10px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .border-inner::after {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                margin: 0;
+                padding: 0;
+            }
+
+            .certificate-container {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 20mm;
+                box-shadow: none;
+                page-break-after: avoid;
+            }
+
+            @page {
+                size: A4;
+                margin: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .certificate-container {
+                width: 100%;
+                height: auto;
+                padding: 15mm;
+            }
+
+            .border-outer {
+                border-width: 8px;
+                padding: 8mm;
+            }
+
+            .border-inner {
+                padding: 10mm 15mm;
+            }
+
+            .certificate-title {
+                font-size: 1.8rem;
+            }
+
+            .recipient-name {
+                font-size: 1.4rem;
+            }
+
+            .logo {
+                width: 70px;
+                height: 70px;
+            }
+
+            .signature-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .signature-box {
+                text-align: center;
+            }
+
+            .signature-line {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate-container">
+        <div class="border-outer">
+            <div class="border-middle">
+                <div class="border-inner">
+                    <!-- Header -->
+                    <div class="certificate-header">
+                        <div class="header-text">KINGDOM OF CAMBODIA</div>
+                        <div class="header-text">NATION &nbsp; RELIGION &nbsp; KING</div>
+                    </div>
+
+                    <!-- Institution -->
+                    <div class="institution">
+                        <div class="logo">
+                            <div class="logo-inner">
+                                <div class="logo-text">ETC</div>
+                                <div class="logo-subtext">CENTER</div>
+                            </div>
+                        </div>
+                        <div class="institution-name-kh">មជ្ឈមណ្ឌលបណ្តុះបណ្តាលធុរកិច្ច និងអេឡិចត្រូនិក</div>
+                        <div class="institution-name-en">Engineering of Technology and Electronic Center</div>
+                    </div>
+
+                    <!-- Title -->
+                    <h1 class="certificate-title">Certificate of Completion</h1>
+
+                    <!-- Content -->
+                    <div class="certificate-content">
+                        <p class="certify-text">This is to certify that</p>
+
+                        <h2 class="recipient-name">LY SEYKA</h2>
+
+                        <p class="completion-text">
+                            has successfully completed all requirements for completion<br>
+                            of the Computer Training Courses in
+                        </p>
+
+                        <div class="course-name">Ms. Word, Excel, Power Point</div>
+
+                        <div class="date-granted">Granted: January 15, 2026</div>
+
+                        <!-- Signature Section -->
+                        <div class="signature-section">
+                            <div class="stamp-placeholder">
+                                OFFICIAL<br>STAMP
+                            </div>
+                            <div class="signature-box">
+                                <div class="signature-line"></div>
+                                <div class="signature-name">Mr. Heng Pheakna</div>
+                                <div class="signature-title">Director</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,312 @@
+/* Table Class Free - Matching Student Table Style */
+
+/* Import the main studentslist.css for consistent styling */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&display=swap');
+
+/* Table Card */
+.table-card {
+    background: var(--app-card-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--app-card-border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.table-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text-main);
+}
+
+.table-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--sidebar-logo-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--sidebar-logo-icon);
+}
+
+.table-title {
+    font-weight: 700;
+    font-size: .95rem;
+    color: var(--sidebar-text-white);
+}
+
+.table-sub {
+    font-size: .72rem;
+    color: var(--sidebar-text-sub);
+}
+
+.count-badge {
+    background: var(--sidebar-active-bg);
+    border: 1.5px solid var(--sidebar-border);
+    color: var(--sidebar-text-white);
+    padding: 5px 16px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: .9rem;
+    min-width: 76px;
+    text-align: center;
+}
+
+/* Table Styles - Matching student-table exactly */
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.student-table thead tr {
+    background: #eeeef8;
+}
+
+.student-table th {
+    padding: 12px 16px;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #000000;
+    border-bottom: 2px solid var(--app-card-border);
+    white-space: nowrap;
+}
+
+.student-table tbody tr {
+    border-bottom: 1px solid #f0f0f8;
+    transition: background .15s;
+}
+
+.student-table tbody tr:hover {
+    background: #f5f5fc;
+}
+
+.student-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.student-table td {
+    padding: 13px 16px;
+    font-size: .88rem;
+    color: #000000;
+    vertical-align: middle;
+}
+
+/* Column Widths - Equal width for all columns */
+.col-no {
+    width: 20%;
+    text-align: center;
+}
+
+.col-name {
+    width: 20%;
+}
+
+.col-course {
+    width: 20%;
+}
+
+.col-date {
+    width: 20%;
+}
+
+.col-action {
+    width: 20%;
+    text-align: center;
+}
+
+/* Row Number */
+.row-no {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text-white);
+    font-weight: 700;
+    font-size: .78rem;
+}
+
+/* Student Name */
+.student-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.student-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #eeeef8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--app-primary);
+    font-size: .95rem;
+}
+
+.student-name-text {
+    font-weight: 600;
+    color: #000000;
+}
+
+/* Course Badge */
+.course-badge {
+    display: inline-block;
+    padding: 3px 11px;
+    border-radius: 6px;
+    font-size: .8rem;
+    font-weight: 600;
+    background: #e8e8f8;
+    color: #000000;
+}
+
+/* Date Badge */
+.date-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 11px;
+    border-radius: 6px;
+    font-size: .8rem;
+    font-weight: 600;
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* Print Certificate Button */
+.btn-print-cert {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: .8rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: #16a34a;
+    color: #ffffff;
+    transition: all .2s;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, .25);
+}
+
+.btn-print-cert:hover {
+    background: #15803d;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 12px rgba(22, 163, 74, .35);
+}
+
+/* Empty State */
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: #000000;
+}
+
+.py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.d-block {
+    display: block;
+}
+
+.mb-2 {
+    margin-bottom: .5rem;
+}
+
+.opacity-25 {
+    opacity: .25;
+}
+
+.fs-2 {
+    font-size: 2rem;
+}
+
+.me-1 {
+    margin-right: .25rem;
+}
+
+.me-2 {
+    margin-right: .5rem;
+}
+
+/* Utility */
+.mt-4 {
+    margin-top: 1rem;
+}
+
+/* Pagination Styles */
+.pagination-wrapper {
+    padding: 16px 24px;
+    background: #fafafa;
+    border-top: 1px solid var(--app-card-border);
+}
+
+.pagination {
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.pagination .page-item .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 6px;
+    font-size: .85rem;
+    font-weight: 600;
+    color: #374151;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    text-decoration: none;
+    transition: all .15s;
+}
+
+.pagination .page-item .page-link:hover:not(.disabled) {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+    color: #111827;
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--sidebar-bg);
+    border-color: var(--sidebar-bg);
+    color: var(--sidebar-text-white);
+}
+
+.pagination .page-item.disabled .page-link {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.pagination-info {
+    text-align: center;
+    font-size: .8rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* Bootstrap 5 overrides for Khmer */
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.justify-content-center {
+    justify-content: center !important;
+}
