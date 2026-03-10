@@ -198,15 +198,56 @@ function handlePrint() {
         }
     }
 
-    prepareCertificate();
+    const courseInput = document.getElementById('course');
+    const courseName = courseInput ? courseInput.value.trim() : '';
 
-    setTimeout(() => {
-        printOnlyFreeCert();
-    }, 150);
+    if (courseName.length >= 2) {
 
-    console.log('Print dialog opened');
+        fetch('/certificate-sys/api/course/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                course_name: courseName
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            console.log('Course saved:', data);
+
+            // ✅ refresh dropdown immediately
+            if (typeof refreshCourseDropdown === 'function') {
+                refreshCourseDropdown(courseName);
+            }
+
+            prepareCertificate();
+
+            setTimeout(() => {
+                printOnlyFreeCert();
+            }, 150);
+
+        })
+        .catch(err => {
+            console.error('Save failed:', err);
+
+            prepareCertificate();
+
+            setTimeout(() => {
+                printOnlyFreeCert();
+            }, 150);
+        });
+
+    } else {
+
+        prepareCertificate();
+
+        setTimeout(() => {
+            printOnlyFreeCert();
+        }, 150);
+    }
 }
-
 // Save as PDF handler
 function handleSavePDF() {
     console.log('handleSavePDF called');

@@ -323,3 +323,32 @@
         print-color-adjust: exact !important;
     }
 }
+
+/* Remove default select arrow */
+#course_filter {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: none !important;
+}
+
+/* Hide arrow for old Edge/IE */
+#course_filter::-ms-expand {
+    display: none;
+}
+
+/* Fix spacing after removing arrow */
+#course_filter {
+    padding-right: 10px;
+}
+
+.input-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: none !important;
+}
+
+.input-wrapper select::-ms-expand {
+    display: none;
+}

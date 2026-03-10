@@ -7,10 +7,15 @@ use App\Core\Controller;
 
 final class DashboardController extends Controller
 {
-    public function index(): void
+    // public function index(): void
+    // {
+    //     $this->view('dashboard/index', [
+    //         'title' => 'Dashboard',
+    //     ]);
+    // }
+   public function index(): void
     {
-        $this->view('dashboard/index', [
-            'title' => 'Dashboard',
-        ]);
+        header("Location: /certificate-sys/certificate?type=free");
+        exit;
     }
 }

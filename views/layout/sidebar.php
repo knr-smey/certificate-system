@@ -24,13 +24,13 @@ $isDashboard   = str_contains($path, 'dashboard');
     <ul class="list-unstyled sidebar-nav">
 
         <!-- Dashboard -->
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link <?= $isDashboard ? 'active' : '' ?>"
                href="<?= base_url('dashboard') ?>">
                 <i class="bi bi-speedometer2 nav-icon"></i>
                 <span>ផ្ទាំងគ្រប់គ្រង</span>
             </a>
-        </li>
+        </li> -->
 
         <!-- Certificates -->
         <li class="nav-item nav-dropdown">
