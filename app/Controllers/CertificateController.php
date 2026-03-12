@@ -18,30 +18,52 @@ final class CertificateController extends Controller
     {
         $type = $_GET['type'] ?? 'free';
 
-        switch ($type) {
+        // If type is 'free', show the free form
+        if ($type === 'free') {
+            // $csrfToken = $_SESSION['csrf_token'] ?? bin2hex(random_bytes(32));
+            // $_SESSION['csrf_token'] = $csrfToken;
 
-            case 'free':
-                $this->showFreeCertificate();
-                break;
+            // Pagination settings
+            $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+            $limit = 5; // 5 students per page
 
-            case 'normal':
-                $this->view('components/tables/table_teacher', [
-                    'title' => 'Certificate',
-                    'type'  => 'normal'
-                ]);
-                break;
+            // Get certificates from database
+            $certificateModel = new CertificateClassFreeModel();
+            $certificates = $certificateModel->getAllPaginated($page, $limit);
+            $totalCount = $certificateModel->getCount();
+            $totalPages = ceil($totalCount / $limit);
 
-            case 'scholarship':
-                $this->view('certificate/scholarship', [
-                    'title' => 'Certificate',
-                    'type'  => 'scholarship'
-                ]);
-                break;
+            // Generate certificate ID for display
+            $generatedId = generateId();
 
-            default:
-                $this->view('certificate/error', [
-                    'message' => 'Invalid certificate type.'
-                ]);
+            $this->view('Pages/class-free-form', [
+                'csrfToken' => $csrfToken,
+                'errors' => [],
+                'old' => [],
+                'certificates' => $certificates,
+                'currentPage' => $page,
+                'totalPages' => $totalPages,
+                'totalCount' => $totalCount,
+                'generatedId' => $generatedId
+            ]);
+            return;
+        }
+
+        // If type is 'normal' or 'scholarship', show the teachers table
+        if ($type === 'normal' || $type === 'scholarship') {
+            $this->view('components/tables/table_teacher', [
+                'title' => 'Certificate',
+                'type' => $type
+            ]);
+        } elseif ($type === 'scholarship') { 
+            $this->view('certificate/scholarship', [
+                'title' => 'Certificate',
+                'type' => $type
+            ]);
+        } else {
+            $this->view('certificate/error', [
+                'message' => 'Invalid certificate type.'
+            ]);
         }
     }
 
