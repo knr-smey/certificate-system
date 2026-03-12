@@ -123,7 +123,7 @@ final class CertificateClassFreeController extends Controller
         );
 
         if ($result === false) {
-            $this->view('Form/class-free-form', [
+            $this->view('Pages/class-free-form', [
                 'errors' => ['general' => 'Failed to save certificate request!'],
                 'old' => [
                     'student_name' => $studentName,
@@ -161,7 +161,7 @@ final class CertificateClassFreeController extends Controller
         $latestCertificate = $this->certificateClassFreeModel->getLatest();
 
         // Show form with success message and certificate displayed below
-        $this->view('Form/class-free-form', [
+        $this->view('Pages/class-free-form', [
             'message' => 'Certificate request submitted successfully!',
             'errors' => [],
             'old' => [],

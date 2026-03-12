@@ -395,5 +395,103 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Refresh course dropdown on load
     refreshCourseDropdown(courseInput ? courseInput.value : null);
+
+    // Handle Print button click - Save to DB first, then print
+    window.handlePrint = function() {
+        // Validate required fields
+        const studentName = document.getElementById('student_name');
+        const course = document.getElementById('course');
+        const endDate = document.getElementById('end_date');
+        
+        let isValid = true;
+        
+        // Check student_name
+        if (!studentName || studentName.value.trim() === '') {
+            isValid = false;
+            studentName.classList.add('error');
+            if (studentName.closest('.form-group')) {
+                let errorDiv = studentName.closest('.form-group').querySelector('.error-message');
+                if (!errorDiv) {
+                    errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>Full Name is required!';
+                    studentName.closest('.form-group').appendChild(errorDiv);
+                }
+            }
+        }
+        
+        // Check course
+        if (!course || course.value.trim() === '') {
+            isValid = false;
+            course.classList.add('error');
+            if (course.closest('.form-group')) {
+                let errorDiv = course.closest('.form-group').querySelector('.error-message');
+                if (!errorDiv) {
+                    errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>Course is required!';
+                    course.closest('.form-group').appendChild(errorDiv);
+                }
+            }
+        }
+        
+        // Check end_date
+        if (!endDate || endDate.value.trim() === '') {
+            isValid = false;
+            endDate.classList.add('error');
+            if (endDate.closest('.form-group')) {
+                let errorDiv = endDate.closest('.form-group').querySelector('.error-message');
+                if (!errorDiv) {
+                    errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>End Date is required!';
+                    endDate.closest('.form-group').appendChild(errorDiv);
+                }
+            }
+        }
+        
+        if (!isValid) {
+            return false;
+        }
+        
+        // Submit form data via AJAX first
+        const formData = new FormData();
+        formData.append('student_name', studentName.value.trim());
+        formData.append('course', course.value.trim());
+        formData.append('end_date', endDate.value);
+        
+        // Show loading indicator
+        const printBtn = document.getElementById('btnPrintCertificate');
+        const originalText = printBtn.innerHTML;
+        printBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i> កំពុងរក្សាទុក...​';
+        printBtn.disabled = true;
+        
+        fetch('/form/submit', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.text())
+        .then(html => {
+            // After successful save, trigger print
+            printBtn.innerHTML = originalText;
+            printBtn.disabled = false;
+            
+            // Call the print function from app.js
+            if (typeof printCertificate === 'function') {
+                printCertificate();
+            } else {
+                // Fallback to window.print()
+                window.print();
+            }
+        })
+        .catch(err => {
+            console.error('Error saving certificate:', err);
+            printBtn.innerHTML = originalText;
+            printBtn.disabled = false;
+            alert('Error saving certificate. Please try again.');
+        });
+        
+        return false;
+    };
 });
 </script>
