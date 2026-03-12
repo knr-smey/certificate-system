@@ -59,7 +59,7 @@ final class CertificateController extends Controller
         $totalCount   = $certificateModel->getCount();
         $totalPages   = ceil($totalCount / $limit);
 
-        $generatedId = generateId();
+        $generatedId = generateId(); // id
 
         $this->view('Pages/class-free-form', [
             'errors'       => [],
