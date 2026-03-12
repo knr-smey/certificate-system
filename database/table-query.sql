@@ -147,5 +147,19 @@ CREATE TABLE IF NOT EXISTS certificate_class_free (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_status (status),
-    INDEX idx_created (created_at)
+    INDEX idx_created (created_at),
+    INDEX idx_course (course)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- ================================
+-- COURSE CUSTOM TABLE
+-- ================================
+CREATE TABLE IF NOT EXISTS course_custom (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    INDEX idx_course_name (course_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

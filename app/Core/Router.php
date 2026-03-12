@@ -25,21 +25,27 @@ final class Router
 
         // Remove query string
         $path = parse_url($uri, PHP_URL_PATH) ?: '/';
-        $path = $this->normalize($path);
-
-        // In case app is inside a subfolder (InfinityFree)
+        
+        // In case app is inside a subfolder (InfinityFree, XAMPP, etc.)
         $scriptDir = rtrim(str_replace('\\','/', dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
         if ($scriptDir !== '' && $scriptDir !== '/') {
+            // Remove the script directory from the path
             if (str_starts_with($path, $scriptDir)) {
-                $path = $this->normalize(substr($path, strlen($scriptDir)));
+                $path = substr($path, strlen($scriptDir));
             }
         }
+        
+        $path = $this->normalize($path);
 
         $routes = ($method === 'POST') ? $this->postRoutes : $this->getRoutes;
 
+        // Debug: log the path being matched
+        error_log('Router: Looking for path: ' . $path);
+        error_log('Router: Available routes: ' . implode(', ', array_keys($routes)));
+
         if (!isset($routes[$path])) {
             http_response_code(404);
-            echo "404 Not Found";
+            echo "404 Not Found - Path: " . $path;
             return;
         }
 

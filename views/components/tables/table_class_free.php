@@ -1,6 +1,8 @@
 <?php
 // Get certificates from controller
 $certificates = $certificates ?? [];
+$courses = $courses ?? [];
+$courseFilter = $courseFilter ?? '';
 
 // Get the default certificate date (15th of the month) using helper function
 $defaultCertDate = printCertificateDate('F j, Y');
@@ -15,6 +17,26 @@ $defaultCertDate = printCertificateDate('F j, Y');
                 <div class="table-sub">Certificate Request List</div>
             </div>
         </div>
+        
+        <!-- Course Filter Dropdown -->
+        <?php if (!empty($courses)): ?>
+        <div class="course-filter-wrapper">
+            <form method="GET" action="" class="d-flex align-items-center gap-2">
+                <label for="course_filter" class="filter-label">វគ្គសិក្សា:</label>
+                <select name="course_filter" id="course_filter" class="form-select form-select-sm course-filter-select" onchange="this.form.submit()">
+                    <option value="">-- ទាំងអស់ --</option>
+                    <?php foreach ($courses as $course): ?>
+                        <option value="<?php echo htmlspecialchars($course); ?>" 
+                            <?php echo ($courseFilter === $course) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($course); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <noscript><button type="submit" class="btn btn-sm btn-primary">ចាក់ទុក</button></noscript>
+            </form>
+        </div>
+        <?php endif; ?>
+        
         <span class="count-badge">
             <?php echo $totalCount ?? count($certificates); ?> នាក់
         </span>
@@ -75,6 +97,7 @@ $defaultCertDate = printCertificateDate('F j, Y');
 
     <?php if (isset($totalPages) && $totalPages > 1): ?>
     <?php $currentType = $_GET['type'] ?? ''; ?>
+    <?php $currentCourseFilter = $courseFilter ?? ''; ?>
     <div class="pagination-wrapper">
         <nav aria-label="Table pagination">
             <ul class="pagination justify-content-center mb-0">
@@ -83,7 +106,7 @@ $defaultCertDate = printCertificateDate('F j, Y');
                 <!-- Previous Page Link -->
                 <?php if ($currentPage > 1): ?>
                     <li class="page-item">
-                        <a class="page-link" href="?type=<?php echo $currentType; ?>&page=<?php echo $currentPage - 1; ?>">
+                        <a class="page-link" href="?type=<?php echo $currentType; ?>&course_filter=<?php echo urlencode($currentCourseFilter); ?>&page=<?php echo $currentPage - 1; ?>">
                             <i class="bi bi-chevron-left"></i>
                         </a>
                     </li>
@@ -101,7 +124,7 @@ $defaultCertDate = printCertificateDate('F j, Y');
                         </li>
                     <?php elseif ($i <= 3 || $i > $totalPages - 2 || abs($i - $currentPage) <= 1): ?>
                         <li class="page-item">
-                            <a class="page-link" href="?type=<?php echo $currentType; ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                            <a class="page-link" href="?type=<?php echo $currentType; ?>&course_filter=<?php echo urlencode($currentCourseFilter); ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
                         </li>
                     <?php elseif ($i == 4 && $currentPage > 4): ?>
                         <li class="page-item disabled">
@@ -117,7 +140,7 @@ $defaultCertDate = printCertificateDate('F j, Y');
                 <!-- Next Page Link -->
                 <?php if ($currentPage < $totalPages): ?>
                     <li class="page-item">
-                        <a class="page-link" href="?type=<?php echo $currentType; ?>&page=<?php echo $currentPage + 1; ?>">
+                        <a class="page-link" href="?type=<?php echo $currentType; ?>&course_filter=<?php echo urlencode($currentCourseFilter); ?>&page=<?php echo $currentPage + 1; ?>">
                             <i class="bi bi-chevron-right"></i>
                         </a>
                     </li>

@@ -7,7 +7,7 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Models\CertificateClassFreeModel;
 
-final class FormController extends Controller
+final class CertificateClassFreeController extends Controller
 {
     private CertificateClassFreeModel $certificateClassFreeModel;
 
@@ -26,12 +26,24 @@ final class FormController extends Controller
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $limit = 5; // 5 students per page
 
-        // Get paginated certificates from database
-        $certificates = $this->certificateClassFreeModel->getAllPaginated($page, $limit);
-        $totalCount = $this->certificateClassFreeModel->getCount();
+        // Get course filter from GET parameter
+        $courseFilter = isset($_GET['course_filter']) ? trim($_GET['course_filter']) : null;
+
+        // Load courses for dropdown filter
+        $courses = $this->certificateClassFreeModel->getAllCourses();
+
+        // Get paginated certificates from database (with optional filter)
+        if ($courseFilter !== null && $courseFilter !== '') {
+            $certificates = $this->certificateClassFreeModel->getAllPaginatedWithFilter($page, $limit, $courseFilter);
+            $totalCount = $this->certificateClassFreeModel->getCountWithFilter($courseFilter);
+        } else {
+            $certificates = $this->certificateClassFreeModel->getAllPaginated($page, $limit);
+            $totalCount = $this->certificateClassFreeModel->getCount();
+        }
+        
         $totalPages = ceil($totalCount / $limit);
 
-        $this->view('Form/class-free-form', [
+        $this->view('Pages/class-free-form', [
             'errors' => [],
             'old' => [],
             'message' => '',
@@ -41,7 +53,9 @@ final class FormController extends Controller
             'totalCount' => $totalCount,
             'showCertificate' => false,
             'certificateData' => null,
-            'generatedId' => $generatedId
+            'generatedId' => $generatedId,
+            'courses' => $courses,
+            'courseFilter' => $courseFilter
         ]);
     }
 
@@ -60,12 +74,24 @@ final class FormController extends Controller
         if ($course === '') $errors['course'] = 'Course is required!';
         if ($endDate === '') $errors['end_date'] = 'End Date is required!';
 
-        $certificates = $this->certificateClassFreeModel->getAllPaginated(1, 5);
-        $totalCount = $this->certificateClassFreeModel->getCount();
+        // Load courses for dropdown filter
+        $courses = $this->certificateClassFreeModel->getAllCourses();
+
+        // Get course filter from GET parameter
+        $courseFilter = isset($_GET['course_filter']) ? trim($_GET['course_filter']) : null;
+
+        // Get paginated certificates (with optional filter)
+        if ($courseFilter !== null && $courseFilter !== '') {
+            $certificates = $this->certificateClassFreeModel->getAllPaginatedWithFilter(1, 5, $courseFilter);
+            $totalCount = $this->certificateClassFreeModel->getCountWithFilter($courseFilter);
+        } else {
+            $certificates = $this->certificateClassFreeModel->getAllPaginated(1, 5);
+            $totalCount = $this->certificateClassFreeModel->getCount();
+        }
         $totalPages = ceil($totalCount / 5);
 
         if (!empty($errors)) {
-            $this->view('Form/class-free-form', [
+            $this->view('Pages/class-free-form', [
                 'errors' => $errors,
                 'old' => [
                     'student_name' => $studentName,
@@ -79,10 +105,15 @@ final class FormController extends Controller
                 'totalCount' => $totalCount,
                 'showCertificate' => false,
                 'certificateData' => null,
-                'generatedId' => $generatedId
+                'generatedId' => $generatedId,
+                'courses' => $courses,
+                'courseFilter' => $courseFilter
             ]);
             return;
         }
+
+        // Save custom course to course_custom table before creating certificate
+        $this->certificateClassFreeModel->saveCustomCourse($course);
 
         // Validation passed - save to database
         $result = $this->certificateClassFreeModel->create(
@@ -106,14 +137,24 @@ final class FormController extends Controller
                 'totalCount' => $totalCount,
                 'showCertificate' => false,
                 'certificateData' => null,
-                'generatedId' => $generatedId
+                'generatedId' => $generatedId,
+                'courses' => $courses,
+                'courseFilter' => $courseFilter
             ]);
             return;
         }
 
+        // Reload courses after submission (in case new course was added)
+        $courses = $this->certificateClassFreeModel->getAllCourses();
+
         // Get updated certificates from database
-        $certificates = $this->certificateClassFreeModel->getAllPaginated(1, 5);
-        $totalCount = $this->certificateClassFreeModel->getCount();
+        if ($courseFilter !== null && $courseFilter !== '') {
+            $certificates = $this->certificateClassFreeModel->getAllPaginatedWithFilter(1, 5, $courseFilter);
+            $totalCount = $this->certificateClassFreeModel->getCountWithFilter($courseFilter);
+        } else {
+            $certificates = $this->certificateClassFreeModel->getAllPaginated(1, 5);
+            $totalCount = $this->certificateClassFreeModel->getCount();
+        }
         $totalPages = ceil($totalCount / 5);
 
         // Get the latest certificate for display
@@ -130,7 +171,9 @@ final class FormController extends Controller
             'totalCount' => $totalCount,
             'showCertificate' => true,
             'certificateData' => $latestCertificate,
-            'generatedId' => $generatedId
+            'generatedId' => $generatedId,
+            'courses' => $courses,
+            'courseFilter' => $courseFilter
         ]);
     }
 

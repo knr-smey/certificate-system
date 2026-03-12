@@ -143,4 +143,93 @@ final class CertificateClassFreeModel
             return false;
         }
     }
+
+    /**
+     * Save a custom course to course_custom table
+     * Uses INSERT IGNORE to avoid duplicates
+     */
+    public function saveCustomCourse(string $courseName): bool
+    {
+        try {
+            $stmt = $this->db->prepare(
+                "INSERT IGNORE INTO course_custom (course_name) VALUES (:course_name)"
+            );
+            $stmt->bindValue(':course_name', trim($courseName), PDO::PARAM_STR);
+            return $stmt->execute();
+        } catch (\PDOException $e) {
+            error_log("Error saving custom course: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Get all custom courses ordered alphabetically
+     */
+    public function getAllCourses(): array
+    {
+        try {
+            $sql = "SELECT course_name FROM course_custom ORDER BY course_name ASC";
+            $stmt = $this->db->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        } catch (\PDOException $e) {
+            error_log("Error fetching courses: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Get paginated certificate class-free requests with optional course filter
+     */
+    public function getAllPaginatedWithFilter(int $page = 1, int $limit = 5, ?string $courseFilter = null): array
+    {
+        try {
+            $offset = ($page - 1) * $limit;
+            
+            if ($courseFilter !== null && $courseFilter !== '') {
+                $sql = "SELECT * FROM certificate_class_free 
+                        WHERE course = :course 
+                        ORDER BY created_at DESC 
+                        LIMIT :limit OFFSET :offset";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindValue(':course', $courseFilter, PDO::PARAM_STR);
+                $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+                $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            } else {
+                $sql = "SELECT * FROM certificate_class_free ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+                $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            }
+            
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        } catch (\PDOException $e) {
+            error_log("Error fetching paginated certificates with filter: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Get total count of certificate class-free requests with optional course filter
+     */
+    public function getCountWithFilter(?string $courseFilter = null): int
+    {
+        try {
+            if ($courseFilter !== null && $courseFilter !== '') {
+                $sql = "SELECT COUNT(*) as total FROM certificate_class_free WHERE course = :course";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindValue(':course', $courseFilter, PDO::PARAM_STR);
+                $stmt->execute();
+            } else {
+                $sql = "SELECT COUNT(*) as total FROM certificate_class_free";
+                $stmt = $this->db->query($sql);
+            }
+            
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return (int) ($result['total'] ?? 0);
+        } catch (\PDOException $e) {
+            error_log("Error counting certificates with filter: " . $e->getMessage());
+            return 0;
+        }
+    }
 }

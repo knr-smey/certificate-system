@@ -1,5 +1,5 @@
 <?php
-
+use App\Core\Database;
 
 function getCertificateDate($cutoffDay = 10, $certificateDay = 15, $timezone = 'Asia/Phnom_Penh', $returnObject = false, $baseDate = null)
 {
@@ -55,15 +55,30 @@ function printCertificateDate($format = 'd.m.Y', $baseDate = null)
  * Generate a unique certificate ID
  * Format: 10-digit number + ' ETEC' (e.g., "1234567890 ETEC")
  */
-function generateCertificateId() {
-    $year = date('Y'); // current year
-    $random4 = str_pad(random_int(0, 9999), 4, '0', STR_PAD_LEFT); // 4 digit random
-    return $year . $random4 . 'ETEC';
+function generateCertificateId()
+{
+    $pdo = Database::pdo();
+
+    $yearMonth = date('ym'); // YYMM
+
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*) 
+        FROM certificate_class_free
+        WHERE DATE_FORMAT(created_at,'%y%m') = ?
+    ");
+
+    $stmt->execute([$yearMonth]);
+
+    $count = (int)$stmt->fetchColumn() + 1;
+
+    $sequence = str_pad($count, 3, '0', STR_PAD_LEFT);
+
+    return $yearMonth . $sequence . 'ETEC';
 }
 
 /**
  * Generate a unique certificate ID (shorthand)
  */
-function generateId() {
+function generateId(){
     return generateCertificateId();
 }

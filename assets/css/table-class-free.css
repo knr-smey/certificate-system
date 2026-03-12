@@ -56,6 +56,43 @@
     text-align: center;
 }
 
+/* Course Filter */
+.course-filter-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.filter-label {
+    color: var(--sidebar-text-sub);
+    font-size: .8rem;
+    margin-bottom: 0;
+    margin-right: 8px;
+    white-space: nowrap;
+}
+
+.course-filter-select {
+    min-width: 160px;
+    padding: 4px 8px;
+    font-size: .85rem;
+    border-radius: 6px;
+    border: 1px solid var(--sidebar-border);
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text-white);
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.course-filter-select:focus {
+    border-color: var(--sidebar-active-bg);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.course-filter-select option {
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text-white);
+}
+
 /* Table Styles - Matching student-table exactly */
 .student-table {
     width: 100%;
