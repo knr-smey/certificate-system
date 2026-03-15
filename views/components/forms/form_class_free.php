@@ -420,19 +420,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return window.confirm('Printed successfully?');
     };
 
-    const showSaveSuccess = async function() {
-        if (window.Swal && typeof window.Swal.fire === 'function') {
-            await window.Swal.fire({
-                icon: 'success',
-                title: 'Saved',
-                text: 'Saved to database successfully.'
-            });
-            return;
-        }
-
-        alert('Saved to database successfully.');
-    };
-
     const showSaveError = async function() {
         if (window.Swal && typeof window.Swal.fire === 'function') {
             await window.Swal.fire({
@@ -480,7 +467,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const savedCourse = pendingPrintPayload.course;
             pendingPrintPayload = null;
-            await showSaveSuccess();
             refreshCourseDropdown(savedCourse || null);
         } catch (err) {
             console.error('Error saving certificate:', err);

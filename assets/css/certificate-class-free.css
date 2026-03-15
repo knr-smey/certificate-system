@@ -62,7 +62,7 @@
 }
 
 .cert-free-inner-border {
-    border: 15px solid #5e5f65b2;
+    border: 15px solid #bec11ab2;
     padding: 15px 25px 15px;
     background: #fff;
     height: 100%;
@@ -158,8 +158,8 @@
 
 .cert-free-course {
     /* Keep horizontal centering only; auto vertical margins create random top gaps in print flex layout */
-    margin: 3px auto;
-    width: 600px;
+    margin: 10px auto;
+    width: 500px;
     /* background-color: rgba(0, 0, 0, 0.392); */
     text-align: center;
     font-size: 1.5rem;
@@ -171,7 +171,7 @@
     align-items: center;
     justify-content: center;
     font-family: 'Courier New', monospace;
-    font-weight: 900;
+    font-weight: bolder;
 
     /* white-space: normal;   allow new line */
     word-wrap: break-word; /* break long text */
