@@ -34,6 +34,9 @@ $router->post('/certificate-sys/api/course/save', [CourseApiController::class, '
 $router->get('/certificate-sys/api/course/list', [CourseApiController::class, 'list']);
 $router->post('/api/course/save', [CourseApiController::class, 'save']);
 $router->get('/api/course/list', [CourseApiController::class, 'list']);
+$router->post('/api/course/savenormal', [CourseApiController::class, 'savenormal']);
+$router->get('/api/course/listnormal', [CourseApiController::class, 'listcousrnormal']);
+$router->post('/api/course/delete', [CourseApiController::class, 'delete']);
 // existing routes
 // index.php
 $router->get('/certificate/students', [CertificateController::class, 'students']);

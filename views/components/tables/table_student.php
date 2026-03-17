@@ -60,7 +60,6 @@
                         <th class="col-name">ឈ្មោះសិស្ស</th>
                         <th class="col-gender">ភេទ</th>
                         <th class="col-tel">លេខទូរស័ព្ទ</th>
-                        <th class="col-score">ពិន្ទុ</th>
                         <th class="col-course">មុខវិជ្ជា</th>
                         <th class="col-action no-print">សកម្មភាព</th>
                     </tr>
@@ -130,7 +129,7 @@
                                 <option value="">-- ជ្រើសរើស Course --</option>
                             </select>
                             <button type="button"
-                                    class="cert-btn-regen"
+                                    class="btn btn-danger"
                                     onclick="deleteSelectedCourse()"
                                     title="លុប Course ដែលជ្រើស">
                                 <i class="bi bi-trash3-fill"></i>
@@ -309,9 +308,6 @@ function loadStudents(classId) {
                         <span class="gender-badge ${gClass}">${gender}</span>
                     </td>
                     <td>${s.tel || '-'}</td>
-                    <td class="text-center">
-                        <span class="score-pill ${sCls}">${score}</span>
-                    </td>
                     <td>${course}</td>
                     <td class="text-center no-print">
                         <button class="btn-print-cert text-white"
@@ -403,50 +399,103 @@ function getSavedCourses() {
 // Save course — បន្ថែម មិនជំនួស
 function saveCourse() {
     const custom = $('#edit_course').val().trim();
-    if (!custom) return;
+    // if (!custom) return;
 
-    let list   = getSavedCourses();
-    const exists = list.some(c => c.toLowerCase() === custom.toLowerCase());
+    // let list   = getSavedCourses();
+    // const exists = list.some(c => c.toLowerCase() === custom.toLowerCase());
 
-    if (!exists) {
-        list.push(custom);
-        localStorage.setItem(LS_KEY, JSON.stringify(list));
-    }
+    // if (!exists) {
+    //     list.push(custom);
+    //     localStorage.setItem(LS_KEY, JSON.stringify(list));
+    // }
 
-    renderSavedCourses();
+    // renderSavedCourses();
 
-    // Flash feedback
-    const btn = $('.btn-cert-save');
-    if (exists) {
-        btn.html('<i class="bi bi-exclamation-circle-fill me-2"></i>មានរួចហើយ!');
-    } else {
-        btn.html('<i class="bi bi-check-circle-fill me-2"></i>រក្សាទុករួច!');
-    }
-    setTimeout(() => btn.html('<i class="bi bi-bookmark-fill me-2"></i>រក្សាទុក Course'), 1800);
+    // // Flash feedback
+    // const btn = $('.btn-cert-save');
+    // if (exists) {
+    //     btn.html('<i class="bi bi-exclamation-circle-fill me-2"></i>មានរួចហើយ!');
+    // } else {
+    //     btn.html('<i class="bi bi-check-circle-fill me-2"></i>រក្សាទុករួច!');
+    // }
+    // setTimeout(() => btn.html('<i class="bi bi-bookmark-fill me-2"></i>រក្សាទុក Course'), 1800);
+
+    $.ajax({
+        url: "<?= base_url('api/course/savenormal') ?>",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ course_name: custom }),
+        success: function (result) {
+            if (result.success) {
+                renderSavedCourses();
+            } else {
+                alert('មានបញ្ហា៖ ' + (result.message || 'Unknown error'));
+            }
+        },
+        error: function () {
+            alert('Server error while saving course');
+        }
+    });
 }
 
 // Render dropdown
 function renderSavedCourses() {
-    const list = getSavedCourses();
+    // const list = getSavedCourses();
 
-    $('#saved_count').text(list.length);
+    // $('#saved_count').text(list.length);
 
-    if (list.length === 0) {
-        $('#saved_courses_wrap').hide();
-        return;
-    }
+    // if (list.length === 0) {
+    //     $('#saved_courses_wrap').hide();
+    //     return;
+    // }
 
-    $('#saved_courses_wrap').show();
+    // $('#saved_courses_wrap').show();
 
-    const currentVal = $('#edit_course').val().trim().toLowerCase();
+    // const currentVal = $('#edit_course').val().trim().toLowerCase();
 
-    let options = `<option value="">-- ជ្រើសរើស Course --</option>`;
-    options += list.map(c => {
-        const selected = c.toLowerCase() === currentVal ? 'selected' : '';
-        return `<option value="${escapeHtml(c)}" ${selected}>${escapeHtml(c)}</option>`;
-    }).join('');
+    // let options = `<option value="">-- ជ្រើសរើស Course --</option>`;
+    // options += list.map(c => {
+    //     const selected = c.toLowerCase() === currentVal ? 'selected' : '';
+    //     return `<option value="${escapeHtml(c)}" ${selected}>${escapeHtml(c)}</option>`;
+    // }).join('');
 
-    $('#saved_courses_select').html(options);
+    $.ajax({
+        url: "<?= base_url('api/course/listnormal') ?>",
+        method: "GET",
+        dataType: "json",
+        success: function (result) {
+            const courses = result.courses || [];
+            console.log('Fetched courses:', courses);
+            $('#saved_count').text(courses.length);
+            if (courses.length === 0) {
+                $('#saved_courses_wrap').hide();
+                return;
+            }
+            $('#saved_courses_wrap').show();
+
+            const currentVal = $('#edit_course').val().trim().toLowerCase();
+
+            let options = `<option value="">-- ជ្រើសរើស Course --</option>`;
+            options += courses.map(c => {
+                const courseName = typeof c === 'object' ? c.course_name : c;
+
+                const selected = courseName.toLowerCase() === currentVal
+                    ? 'selected'
+                    : '';
+
+                return `<option value="${escapeHtml(courseName)}" ${selected}>
+                            ${escapeHtml(courseName)}
+                        </option>`;
+            }).join('');
+
+            $('#saved_courses_select').html(options);
+        },
+        error: function () {
+            alert('Server error while fetching courses');
+        }
+    });
+
+    // $('#saved_courses_select').html(options); // Removed: 'options' is only defined in AJAX callback
 }
 
 // Apply selected course from dropdown
@@ -457,24 +506,61 @@ function applySavedCourseFromSelect(value) {
 }
 
 // Delete selected course from dropdown
+// function deleteSelectedCourse() {
+//     const val = $('#saved_courses_select').val();
+//     if (!val) {
+//         alert('សូមជ្រើសរើស Course មុនសិន!');
+//         return;
+//     }
+
+//     let list = getSavedCourses();
+//     list = list.filter(c => c.toLowerCase() !== val.toLowerCase());
+//     localStorage.setItem(LS_KEY, JSON.stringify(list));
+
+//     // Clear input if deleted course was active
+//     if ($('#edit_course').val().trim().toLowerCase() === val.toLowerCase()) {
+//         $('#edit_course').val('');
+//         updatePreview();
+//     }
+
+//     renderSavedCourses();
+// }
+
 function deleteSelectedCourse() {
     const val = $('#saved_courses_select').val();
+
     if (!val) {
         alert('សូមជ្រើសរើស Course មុនសិន!');
         return;
     }
 
-    let list = getSavedCourses();
-    list = list.filter(c => c.toLowerCase() !== val.toLowerCase());
-    localStorage.setItem(LS_KEY, JSON.stringify(list));
+    // confirm before delete (optional but good)
+    // if (!confirm('Are you sure to delete this course?')) return;
 
-    // Clear input if deleted course was active
-    if ($('#edit_course').val().trim().toLowerCase() === val.toLowerCase()) {
-        $('#edit_course').val('');
-        updatePreview();
-    }
+    $.ajax({
+        url: "<?= base_url('api/course/delete') ?>",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ course_name: val }),
 
-    renderSavedCourses();
+        success: function (res) {
+            if (res.success) {
+                // clear input if same
+                if ($('#edit_course').val().trim().toLowerCase() === val.toLowerCase()) {
+                    $('#edit_course').val('');
+                    updatePreview();
+                }
+
+                renderSavedCourses(); // refresh dropdown ✅
+            } else {
+                alert('Delete failed: ' + (res.message || 'Unknown error'));
+            }
+        },
+
+        error: function () {
+            alert('Server error while deleting course');
+        }
+    });
 }
 
 // ══════════════════════════════════════════

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Core\Database;
+use PDO;
 
 final class CertificateModel
 {
@@ -88,5 +89,46 @@ final class CertificateModel
         $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
 
         return $stmt->execute();
+    }
+
+    public function saveCustomNormalCourse(string $courseName): bool
+    {
+        try {
+            $stmt = $this->db->prepare(
+                "INSERT IGNORE INTO course_custom_normal (course_name) VALUES (:course_name)"
+            );
+            $stmt->bindValue(':course_name', trim($courseName), PDO::PARAM_STR);
+            return $stmt->execute();
+        } catch (\PDOException $e) {
+            error_log("Error saving custom course: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getAllNormalCourse(): array
+    {
+        try {
+            $sql = "SELECT course_name FROM course_custom_normal ORDER BY course_name ASC";
+            $stmt = $this->db->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        } catch (\PDOException $e) {
+            error_log("Error fetching courses: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function deleteNormalCourse(string $courseName): bool
+    {
+        try {
+            $stmt = $this->db->prepare(
+                "DELETE FROM course_custom_normal WHERE course_name = :course_name"
+            );
+            $stmt->bindValue(':course_name', trim($courseName), PDO::PARAM_STR);
+
+            return $stmt->execute();
+        } catch (\PDOException $e) {
+            error_log("Error deleting course: " . $e->getMessage());
+            return false;
+        }
     }
 }
