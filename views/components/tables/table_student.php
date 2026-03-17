@@ -1,6 +1,6 @@
 <div class="container-fluid py-4 px-4" id="print_area">
 
-    <!-- Back + Print Buttons (hidden when printing) -->
+    <!-- Back + Print Buttons -->
     <div class="d-flex justify-content-between align-items-center mb-4 no-print">
         <a href="javascript:history.back()" class="btn-back">
             <i class="bi bi-arrow-left-circle-fill me-2"></i>ត្រឡប់ក្រោយ
@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <!-- Class Info Card (hidden when printing) -->
+    <!-- Class Info Card -->
     <div class="info-card mb-4 no-print">
         <div class="info-card-header">
             <div class="header-icon"><i class="bi bi-mortarboard-fill"></i></div>
@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <!-- Student Table (hidden when printing) -->
+    <!-- Student Table -->
     <div class="table-card no-print">
         <div class="table-card-header">
             <div class="d-flex align-items-center gap-3">
@@ -80,63 +80,87 @@
     </div>
 </div>
 
-<!-- ==================== PRINT CERTIFICATE MODAL ==================== -->
+<!-- ==================== CERTIFICATE MODAL ==================== -->
 <div class="modal fade" id="certModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content cert-modal-content">
 
-            <!-- Header (hidden when printing) -->
+            <!-- Header -->
             <div class="modal-header cert-modal-header no-print">
                 <h5 class="modal-title text-white">
-                    <i class="bi bi-printer-fill me-2 "></i>បោះពុម្ពសញ្ញាបត្រ
+                    <i class="bi bi-printer-fill me-2"></i>បោះពុម្ពសញ្ញាបត្រ
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
 
-            <!-- Body: two panels (left edit panel is hidden when printing) -->
+            <!-- Body -->
             <div class="modal-body p-0 d-flex no-print" style="min-height:500px;">
 
-                <!-- LEFT: Edit Form (hidden when printing) -->
+                <!-- LEFT: Edit Form -->
                 <div class="cert-edit-panel">
                     <div class="cert-edit-title">
                         <i class="bi bi-pencil-square me-2"></i>កែប្រែព័ត៌មាន
                     </div>
 
+                    <!-- Student Name -->
                     <div class="cert-field-group">
                         <label class="cert-field-label">ឈ្មោះសិស្ស</label>
-                        <input type="text" id="edit_student_name" class="cert-field-input" placeholder="Student name...">
+                        <input type="text" id="edit_student_name" class="cert-field-input"
+                               placeholder="Student name...">
                     </div>
 
+                    <!-- Course Input -->
                     <div class="cert-field-group">
                         <label class="cert-field-label">មុខវិជ្ជា / Course</label>
-                        <input type="text" id="edit_course" class="cert-field-input" placeholder="Course name...">
+                        <input type="text" id="edit_course" class="cert-field-input"
+                               placeholder="Course name...">
                     </div>
 
+                    <!-- Saved Courses Dropdown -->
+                    <div class="cert-field-group" id="saved_courses_wrap" style="display:none;">
+                        <label class="cert-field-label">
+                            <i class="bi bi-bookmark-fill me-1 text-primary"></i>
+                            Course រក្សាទុក
+                            <span class="badge bg-primary ms-2" id="saved_count">0</span>
+                        </label>
+                        <div class="d-flex gap-2">
+                            <select id="saved_courses_select"
+                                    class="cert-field-input"
+                                    onchange="applySavedCourseFromSelect(this.value)">
+                                <option value="">-- ជ្រើសរើស Course --</option>
+                            </select>
+                            <button type="button"
+                                    class="cert-btn-regen"
+                                    onclick="deleteSelectedCourse()"
+                                    title="លុប Course ដែលជ្រើស">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Granted Date -->
                     <div class="cert-field-group">
                         <label class="cert-field-label">ថ្ងៃខែឆ្នាំ / Granted Date</label>
-                        <input type="text" id="edit_granted" class="cert-field-input" placeholder="e.g. February 17, 2026">
+                        <input type="text" id="edit_granted" class="cert-field-input"
+                               placeholder="e.g. February 17, 2026">
                     </div>
 
+                    <!-- ID -->
                     <div class="cert-field-group">
                         <label class="cert-field-label">លេខ ID</label>
                         <div class="d-flex gap-2">
-                            <input type="text" id="edit_id" class="cert-field-input" placeholder="Auto-generated">
-                            <button class="cert-btn-regen" onclick="regenId()" title="Generate new ID" type="button">
+                            <input type="text" id="edit_id" class="cert-field-input"
+                                   placeholder="Auto-generated">
+                            <button class="cert-btn-regen" onclick="regenId()"
+                                    title="Generate new ID" type="button">
                                 <i class="bi bi-arrow-clockwise"></i>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Saved courses from localStorage -->
-                    <div class="cert-saved-section" id="saved_courses_wrap" style="display:none">
-                        <div class="cert-saved-title">
-                            <i class="bi bi-bookmark-fill me-1"></i>Course រក្សាទុក
-                        </div>
-                        <div id="saved_courses_list"></div>
-                    </div>
                 </div>
 
-                <!-- RIGHT: Certificate Preview (this is what prints) -->
+                <!-- RIGHT: Certificate Preview -->
                 <div class="cert-preview-panel" id="printable-certificate">
                     <div class="cert-preview-label">PREVIEW</div>
                     <div id="certificate_content">
@@ -156,8 +180,8 @@
                                                 <i class="bi bi-award-fill"></i>
                                             </div>
                                         </div>
-                                        <div class="cert-school-kh">មជ្ឈមណ្ឌលវិស្វកម្មបច្ចេកវិទ្យា និង<span class=" text-black">អេឡិចត្រូនិក</span></div>
-                                        <div class="cert-school-en"><span class=" text-black">Engineering</span> of Technology and Electronic Center</div>
+                                        <div class="cert-school-kh">មជ្ឈមណ្ឌលវិស្វកម្មបច្ចេកវិទ្យា និង<span class="text-black">អេឡិចត្រូនិក</span></div>
+                                        <div class="cert-school-en"><span class="text-black">Engineering</span> of Technology and Electronic Center</div>
                                         <div class="cert-title">Certificate of Completion</div>
                                         <div class="cert-certify">This is to certify that</div>
                                         <h1 class="cert-student-name" id="cert_student_name">—</h1>
@@ -184,7 +208,7 @@
 
             </div>
 
-            <!-- Footer buttons (hidden when printing) -->
+            <!-- Footer -->
             <div class="modal-footer cert-modal-footer no-print">
                 <button type="button" class="btn-cert-close" data-bs-dismiss="modal">
                     <i class="bi bi-x-circle me-2"></i>បិទ
@@ -201,15 +225,24 @@
     </div>
 </div>
 
-
 <style>
+/* Select dropdown styling */
+#saved_courses_select {
+    cursor: pointer;
+}
+#saved_courses_select option {
+    padding: 8px;
+}
 </style>
-
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
 let currentClass = { course: '-', teacher: '-', time: '-' };
 
+// ── localStorage key ──
+const LS_KEY = 'cert_saved_courses_v2';
+
+// ══════════════════════════════════════════
 $(document).ready(function () {
     const params  = new URLSearchParams(window.location.search);
     const classId = parseInt(params.get('class_id')) || 0;
@@ -229,6 +262,9 @@ $(document).ready(function () {
     }
 });
 
+// ══════════════════════════════════════════
+//   Load Students
+// ══════════════════════════════════════════
 function loadStudents(classId) {
     $.ajax({
         url: "<?= base_url('api/students') ?>",
@@ -251,16 +287,18 @@ function loadStudents(classId) {
 
             $('#student_count').text(result.data.length + ' នាក់');
 
-            const rows = result.data.map((s, i) => {
-                const gender   = s.gender || 'Male';
-                const gClass   = gender === 'Female' ? 'gender-f' : 'gender-m';
-                const score    = parseInt(s.score) || 0;
-                const sCls     = score >= 70 ? 'score-high' : score >= 50 ? 'score-mid' : 'score-low';
-                const course   = s.course || currentClass.course;
+            const rows = result.data.map((s) => {
+                const gender = s.gender || 'Male';
+                const gClass = gender === 'Female' ? 'gender-f' : 'gender-m';
+                const score  = parseInt(s.score) || 0;
+                const sCls   = score >= 70 ? 'score-high' : score >= 50 ? 'score-mid' : 'score-low';
+                const course = s.course || currentClass.course;
 
                 return `
                 <tr>
-                    <td class="text-center"><span class="row-no text-white">${s.id}</span></td>
+                    <td class="text-center">
+                        <span class="row-no text-white">${s.id}</span>
+                    </td>
                     <td>
                         <div class="student-name">
                             <div class="student-avatar"><i class="bi bi-person-fill"></i></div>
@@ -277,7 +315,12 @@ function loadStudents(classId) {
                     <td>${course}</td>
                     <td class="text-center no-print">
                         <button class="btn-print-cert text-white"
-                            onclick="openCertificate('${escapeHtml(s.name)}', '${escapeHtml(course)}', '${escapeHtml(currentClass.teacher)}', '${escapeHtml(currentClass.time)}', ${score})">
+                            onclick="openCertificate(
+                                '${escapeHtml(s.name)}',
+                                '${escapeHtml(course)}',
+                                '${escapeHtml(currentClass.teacher)}',
+                                '${escapeHtml(currentClass.time)}',
+                                ${score})">
                             <i class="bi bi-printer-fill"></i> Print
                         </button>
                     </td>
@@ -295,129 +338,155 @@ function loadStudents(classId) {
     });
 }
 
+// ══════════════════════════════════════════
+//   Open Certificate Modal
+// ══════════════════════════════════════════
 function openCertificate(name, course, teacher, time, score) {
-    
     $('#edit_student_name').val(name);
     $('#edit_course').val(course);
-   
-    const today = new Date();
+
+    // Auto date
+    const today  = new Date();
     const months = ['January','February','March','April','May','June',
                     'July','August','September','October','November','December'];
     const granted = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
     $('#edit_granted').val(granted);
-   
-    $('#edit_id').val(generateId()); // ← already calls your new generateId()
 
-    const saved = getSavedCourse(course);
-    if (saved) {
-        $('#edit_course').val(saved);
-    }
+    // Auto ID
+    $('#edit_id').val(generateId());
 
     updatePreview();
     renderSavedCourses();
     new bootstrap.Modal(document.getElementById('certModal')).show();
 }
 
-// Live update preview as user types
-$(document).on('input', '#edit_student_name, #edit_course, #edit_granted, #edit_id', function() {
+// ── Live preview update ──
+$(document).on('input', '#edit_student_name, #edit_course, #edit_granted, #edit_id', function () {
     updatePreview();
+    // Re-render dropdown to update selected highlight
+    if ($(this).attr('id') === 'edit_course') {
+        renderSavedCourses();
+    }
 });
 
 function updatePreview() {
-    const name    = $('#edit_student_name').val() || '—';
-    const course  = $('#edit_course').val()        || '—';
-    const granted = $('#edit_granted').val()       || '—';
-    const id      = $('#edit_id').val()            || '—';
-
-    $('#cert_student_name').text(name);
-    $('#cert_course').text(course);
-    $('#cert_time').text(granted);
-    $('#cert_id_val').text(id);
+    $('#cert_student_name').text($('#edit_student_name').val() || '—');
+    $('#cert_course').text($('#edit_course').val()             || '—');
+    $('#cert_time').text($('#edit_granted').val()              || '—');
+    $('#cert_id_val').text($('#edit_id').val()                 || '—');
     $('#cert_sign_teacher').text('Mr. Heng Pheakna');
 }
 
+// ══════════════════════════════════════════
+//   ID Generator
+// ══════════════════════════════════════════
 function generateId() {
-    const year = new Date().getFullYear();
+    const year    = new Date().getFullYear();
     const random4 = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
     return year + random4 + 'ETEC';
 }
-
 
 function regenId() {
     $('#edit_id').val(generateId());
     updatePreview();
 }
 
-// ── localStorage helpers ──────────────────────
-const LS_KEY = 'cert_saved_courses';
+// ══════════════════════════════════════════
+//   localStorage — Course Management
+// ══════════════════════════════════════════
 
 function getSavedCourses() {
     try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
     catch(e) { return []; }
 }
 
-function getSavedCourse(courseName) {
-    const list = getSavedCourses();
-    const match = list.find(c => c.original === courseName);
-    return match ? match.custom : null;
-}
-
+// Save course — បន្ថែម មិនជំនួស
 function saveCourse() {
-    const original = currentClass.course;
-    const custom   = $('#edit_course').val().trim();
+    const custom = $('#edit_course').val().trim();
     if (!custom) return;
 
-    let list = getSavedCourses();
-    // Update if exists, otherwise add
-    const idx = list.findIndex(c => c.original === original);
-    if (idx >= 0) {
-        list[idx].custom = custom;
-    } else {
-        list.push({ original, custom });
+    let list   = getSavedCourses();
+    const exists = list.some(c => c.toLowerCase() === custom.toLowerCase());
+
+    if (!exists) {
+        list.push(custom);
+        localStorage.setItem(LS_KEY, JSON.stringify(list));
     }
-    localStorage.setItem(LS_KEY, JSON.stringify(list));
+
     renderSavedCourses();
 
-    // Flash saved hint
+    // Flash feedback
     const btn = $('.btn-cert-save');
-    btn.html('<i class="bi bi-check-circle-fill me-2"></i>រក្សាទុករួច!');
+    if (exists) {
+        btn.html('<i class="bi bi-exclamation-circle-fill me-2"></i>មានរួចហើយ!');
+    } else {
+        btn.html('<i class="bi bi-check-circle-fill me-2"></i>រក្សាទុករួច!');
+    }
     setTimeout(() => btn.html('<i class="bi bi-bookmark-fill me-2"></i>រក្សាទុក Course'), 1800);
 }
 
+// Render dropdown
 function renderSavedCourses() {
     const list = getSavedCourses();
+
+    $('#saved_count').text(list.length);
+
     if (list.length === 0) {
         $('#saved_courses_wrap').hide();
         return;
     }
+
     $('#saved_courses_wrap').show();
-    const html = list.map((c, i) => `
-        <div class="cert-saved-item" onclick="applySavedCourse('${escapeHtml(c.custom)}')">
-            <span class="cert-saved-item-name" title="${escapeHtml(c.custom)}">${escapeHtml(c.custom)}</span>
-            <button class="cert-saved-item-del" onclick="event.stopPropagation();deleteSavedCourse(${i})" title="Delete">
-                <i class="bi bi-x-lg"></i>
-            </button>
-        </div>
-    `).join('');
-    $('#saved_courses_list').html(html);
+
+    const currentVal = $('#edit_course').val().trim().toLowerCase();
+
+    let options = `<option value="">-- ជ្រើសរើស Course --</option>`;
+    options += list.map(c => {
+        const selected = c.toLowerCase() === currentVal ? 'selected' : '';
+        return `<option value="${escapeHtml(c)}" ${selected}>${escapeHtml(c)}</option>`;
+    }).join('');
+
+    $('#saved_courses_select').html(options);
 }
 
-function applySavedCourse(custom) {
-    $('#edit_course').val(custom);
+// Apply selected course from dropdown
+function applySavedCourseFromSelect(value) {
+    if (!value) return;
+    $('#edit_course').val(value);
     updatePreview();
 }
 
-function deleteSavedCourse(idx) {
+// Delete selected course from dropdown
+function deleteSelectedCourse() {
+    const val = $('#saved_courses_select').val();
+    if (!val) {
+        alert('សូមជ្រើសរើស Course មុនសិន!');
+        return;
+    }
+
     let list = getSavedCourses();
-    list.splice(idx, 1);
+    list = list.filter(c => c.toLowerCase() !== val.toLowerCase());
     localStorage.setItem(LS_KEY, JSON.stringify(list));
+
+    // Clear input if deleted course was active
+    if ($('#edit_course').val().trim().toLowerCase() === val.toLowerCase()) {
+        $('#edit_course').val('');
+        updatePreview();
+    }
+
     renderSavedCourses();
 }
 
+// ══════════════════════════════════════════
+//   Print
+// ══════════════════════════════════════════
 function printCertificateStudent() {
     window.print();
 }
 
+// ══════════════════════════════════════════
+//   Helpers
+// ══════════════════════════════════════════
 function showError(msg) {
     $('#student_list').html(`
         <tr><td colspan="7" class="text-center py-4 text-danger">
@@ -427,6 +496,11 @@ function showError(msg) {
 }
 
 function escapeHtml(str) {
-    return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 </script>
