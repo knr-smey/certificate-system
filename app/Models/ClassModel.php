@@ -14,34 +14,40 @@ final class ClassModel
     {
         $this->pdo = Database::pdo();
     }
+    public function getFinishedClasses(string $type = '', string $course = ''): array
+{
+    $sql = "
+        SELECT 
+            c.id,
+            c.course,
+            c.category,
+            c.time,
+            c.type,
+            COALESCE(u.name, t.teacher_name, 'គ្មានគ្រូ') AS teacher_name
+        FROM end_class ec
+        INNER JOIN classes c ON c.id = ec.class_id
+        LEFT JOIN users u ON u.id = c.user_id
+        LEFT JOIN teachers t ON t.id = c.teacher_id
+        WHERE 1 = 1
+    ";
 
- public function getFinishedClasses(string $type = '', string $course = ''): array
-    {
-        $sql = "
-            SELECT 
-                classes.id,
-                classes.course,
-                classes.category,
-                classes.time,
-                users.name AS teacher_name
-            FROM classes
-            LEFT JOIN users 
-                ON users.id = classes.user_id
-            WHERE classes.type = :type
-        ";
+    $params = [];
 
-        $params = ['type' => $type];
-
-        if ($course !== '') {
-            $sql .= " AND classes.course = :course";
-            $params['course'] = $course;
-        }
-
-        $sql .= " ORDER BY classes.category, classes.course, classes.id DESC";
-
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if ($type !== '') {
+        $sql .= " AND c.type = :type";
+        $params['type'] = $type;
     }
+
+    if ($course !== '') {
+        $sql .= " AND c.course = :course";
+        $params['course'] = $course;
+    }
+
+    $sql .= " ORDER BY c.category, c.course, c.id DESC";
+
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute($params);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }

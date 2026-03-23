@@ -165,3 +165,27 @@ CREATE TABLE IF NOT EXISTS course_custom (
     
     INDEX idx_course_name (course_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS course_custom_normal (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    INDEX idx_course_name (course_name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- student_certificate_normal
+CREATE TABLE IF NOT EXISTS student_certificate_normal (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    class_id INT NOT NULL,
+    student_name VARCHAR(100) NOT NULL,
+    course VARCHAR(100) NOT NULL,
+    granted_date VARCHAR(50) NOT NULL,
+    certificate_id VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_scn_student FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    CONSTRAINT fk_scn_class FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

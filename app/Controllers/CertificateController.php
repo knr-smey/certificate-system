@@ -8,6 +8,7 @@ use App\Core\Controller;
 use App\Models\ClassModel;
 use App\Models\StudentModel;
 use App\Models\CertificateClassFreeModel;
+use App\Core\Database; 
 
 final class CertificateController extends Controller
 {
@@ -178,4 +179,42 @@ final class CertificateController extends Controller
             $this->jsonResponse(false, [], $e->getMessage(), 500);
         }
     }
+
+public function saveCertificateNormal(): void
+{
+    try {
+        $body = json_decode(file_get_contents('php://input'), true);
+
+        $studentId   = (int)   ($body['student_id']     ?? 0);
+        $classId     = (int)   ($body['class_id']       ?? 0);
+        $studentName = (string)($body['student_name']   ?? '');
+        $course      = (string)($body['course']         ?? '');
+        $grantedDate = (string)($body['granted_date']   ?? '');
+        $certId      = (string)($body['certificate_id'] ?? '');
+
+        if ($studentId <= 0 || $classId <= 0 || !$studentName || !$course) {
+            throw new \RuntimeException('Missing required fields');
+        }
+
+        $stmt = Database::pdo()->prepare("
+            INSERT INTO student_certificate_normal
+                (student_id, class_id, student_name, course, granted_date, certificate_id)
+            VALUES
+                (:student_id, :class_id, :student_name, :course, :granted_date, :certificate_id)
+        ");
+        $stmt->execute([
+            'student_id'     => $studentId,
+            'class_id'       => $classId,
+            'student_name'   => $studentName,
+            'course'         => $course,
+            'granted_date'   => $grantedDate,
+            'certificate_id' => $certId,
+        ]);
+
+        $this->jsonResponse(true, [], 'Saved successfully');
+
+    } catch (\Throwable $e) {
+        $this->jsonResponse(false, [], $e->getMessage(), 500);
+    }
+}
 }

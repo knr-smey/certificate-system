@@ -20,7 +20,8 @@
 ?>
 
 <!-- Include Form Component -->
-<?php include 'views/components/forms/form_class_free.php'; ?>
+<?php include 'views/components/forms/form_class_free.php'; ?> 
+<?php //include 'views/components/forms/form_class_free_copy.php'; ?>
 
 <!-- Include Certificate Component (Embedded - no HTML wrapper) -->
 <?php include 'views/components/certificate/class-free-certificate.php'; ?>

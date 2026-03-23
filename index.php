@@ -8,7 +8,6 @@ use App\Core\Router;
 use App\Controllers\DashboardController;
 use App\Controllers\CertificateController;
 use App\Controllers\TeacherController;
-
 use App\Controllers\CourseApiController;
 
 $router = new Router();
@@ -29,19 +28,22 @@ $router->get('/form/fix-codes', [CertificateClassFreeController::class, 'fixCert
 $router->get('/api/classes', [CertificateController::class, 'getClasses']);
 $router->get('/api/students', [CertificateController::class, 'getStudents']);
 $router->get('/api/certificate-date', [CertificateController::class, 'getCertificateDate']);
+$router->get('/api/generate-id', [CertificateController::class, 'generateId']);
+
+// ✅ Certificate Normal Save
+$router->post('/api/certificate/savenormal', [CertificateController::class, 'saveCertificateNormal']);
+
 // Course API
 $router->post('/certificate-sys/api/course/save', [CourseApiController::class, 'save']);
 $router->get('/certificate-sys/api/course/list', [CourseApiController::class, 'list']);
 $router->post('/api/course/save', [CourseApiController::class, 'save']);
 $router->get('/api/course/list', [CourseApiController::class, 'list']);
-// existing routes
-// index.php
+$router->post('/api/course/savenormal', [CourseApiController::class, 'savenormal']);
+$router->get('/api/course/listnormal', [CourseApiController::class, 'listcousrnormal']);
+$router->post('/api/course/delete', [CourseApiController::class, 'delete']);
+
+// Student Certificate Page
 $router->get('/certificate/students', [CertificateController::class, 'students']);
-
-
-$router->get('/api/generate-id', [CertificateController::class, 'generateId']);
 
 // Dispatch
 $router->dispatch();
-
-
