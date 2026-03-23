@@ -26,7 +26,7 @@ final class ClassModel
                 u.name AS teacher_name,
                 c.class_type_id,
                 ct.name AS class_type_name
-            FROM end_class ec
+            FROM req_certificate ec
             INNER JOIN classes c
                 ON c.id = ec.class_id
             LEFT JOIN users u

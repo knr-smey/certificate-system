@@ -61,8 +61,26 @@
                         Granted: <span id="cert_time_free"><?php echo ! empty($displayDate) ? htmlspecialchars($displayDate) : '' ?></span>
                     </div>
 
-                    <div class="cert-free-footer">
+                    <!-- <div class="cert-free-footer">
                         <div class="cert-free-signature">
+                            <div class="cert-free-sig-line"></div>
+                            <div class="cert-free-sig-name">
+                                Mr. Heng Pheakna
+                            </div>
+                            <div class="cert-free-sig-role">
+                                Director
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                        <div style="width: 20%;"></div>
+
+                        <div style="width: 60%;" class="cert-free-id-bottom">
+                            <font color="black">ID:</font> <span id="cert_id_val_free"><?php echo ! empty($generatedId) ? htmlspecialchars($generatedId) : '' ?></span>
+                        </div>
+
+                        <div style="width: 20%;" class="cert-free-signatur">
                             <div class="cert-free-sig-line"></div>
                             <div class="cert-free-sig-name">
                                 Mr. Heng Pheakna
@@ -73,9 +91,7 @@
                         </div>
                     </div>
 
-                    <div class="cert-free-id-bottom">
-                       <font color="black">ID:</font> <span id="cert_id_val_free"><?php echo ! empty($generatedId) ? htmlspecialchars($generatedId) : '' ?></span>
-                    </div>
+                   
 
                 </div>
             </div>
