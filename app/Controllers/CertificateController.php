@@ -8,6 +8,7 @@ use App\Core\Controller;
 use App\Models\ClassModel;
 use App\Models\StudentModel;
 use App\Models\CertificateClassFreeModel;
+use App\Core\Database; 
 
 final class CertificateController extends Controller
 {
@@ -59,7 +60,7 @@ final class CertificateController extends Controller
         $totalCount   = $certificateModel->getCount();
         $totalPages   = ceil($totalCount / $limit);
 
-        $generatedId = generateId(); // id
+        $generatedId = generateId();
 
         $this->view('Pages/class-free-form', [
             'errors'       => [],
@@ -82,7 +83,7 @@ final class CertificateController extends Controller
             $type   = (string) ($_GET['type'] ?? 'free');
             $course = (string) ($_GET['course'] ?? '');
 
-            $model = new ClassModel();
+            $model   = new ClassModel();
             $classes = $model->getFinishedClasses($type, $course);
 
             $this->jsonResponse(true, $classes);
@@ -106,7 +107,7 @@ final class CertificateController extends Controller
                 throw new \RuntimeException('Invalid class_id');
             }
 
-            $model = new StudentModel();
+            $model    = new StudentModel();
             $students = $model->getStudentsByClassId($classId);
 
             $this->jsonResponse(true, $students);
@@ -160,4 +161,60 @@ final class CertificateController extends Controller
             'type'  => $_GET['type'] ?? 'free'
         ]);
     }
+
+    // ════════════════════════════════════════════════════
+    // ✅ METHOD ថ្មី — បង្កើត Certificate ID តាម AJAX
+    // URL: GET /api/generate-id
+    // ════════════════════════════════════════════════════
+    public function generateId(): void
+    {
+        try {
+
+            $id = generateId(); // ហៅពី app/Helper/certificate-helper.php
+
+            $this->jsonResponse(true, ['id' => $id]);
+
+        } catch (\Throwable $e) {
+
+            $this->jsonResponse(false, [], $e->getMessage(), 500);
+        }
+    }
+
+public function saveCertificateNormal(): void
+{
+    try {
+        $body = json_decode(file_get_contents('php://input'), true);
+
+        $studentId   = (int)   ($body['student_id']     ?? 0);
+        $classId     = (int)   ($body['class_id']       ?? 0);
+        $studentName = (string)($body['student_name']   ?? '');
+        $course      = (string)($body['course']         ?? '');
+        $grantedDate = (string)($body['granted_date']   ?? '');
+        $certId      = (string)($body['certificate_id'] ?? '');
+
+        if ($studentId <= 0 || $classId <= 0 || !$studentName || !$course) {
+            throw new \RuntimeException('Missing required fields');
+        }
+
+        $stmt = Database::pdo()->prepare("
+            INSERT INTO student_certificate_normal
+                (student_id, class_id, student_name, course, granted_date, certificate_id)
+            VALUES
+                (:student_id, :class_id, :student_name, :course, :granted_date, :certificate_id)
+        ");
+        $stmt->execute([
+            'student_id'     => $studentId,
+            'class_id'       => $classId,
+            'student_name'   => $studentName,
+            'course'         => $course,
+            'granted_date'   => $grantedDate,
+            'certificate_id' => $certId,
+        ]);
+
+        $this->jsonResponse(true, [], 'Saved successfully');
+
+    } catch (\Throwable $e) {
+        $this->jsonResponse(false, [], $e->getMessage(), 500);
+    }
+}
 }
