@@ -15,35 +15,45 @@ final class ClassModel
         $this->pdo = Database::pdo();
     }
     public function getFinishedClasses(string $type = '', string $course = ''): array
-{
-    $sql = "
-        SELECT 
-            c.id,
-            c.course,
-            c.category,
-            c.time,
-            c.type,
-            COALESCE(u.name, t.teacher_name, 'គ្មានគ្រូ') AS teacher_name
-        FROM end_class ec
-        INNER JOIN classes c ON c.id = ec.class_id
-        LEFT JOIN users u ON u.id = c.user_id
-        LEFT JOIN teachers t ON t.id = c.teacher_id
-        WHERE 1 = 1
-    ";
+    {
+        $sql = "
+            SELECT 
+                c.id,
+                co.course,
+                cat.category,
+                tm.time,
+                u.name AS teacher_name,
+                c.class_type_id,
+                ct.name AS class_type_name
+            FROM req_certificate ec
+            INNER JOIN classes c
+                ON c.id = ec.class_id
+            LEFT JOIN users u
+                ON u.id = c.instructor_id
+            LEFT JOIN courses co
+                ON co.id = c.course_id
+            LEFT JOIN categories cat
+                ON cat.id = co.category_id
+            LEFT JOIN times tm
+                ON tm.id = c.time_id
+            LEFT JOIN class_types ct
+                ON ct.id = c.class_type_id
+            WHERE 1 = 1
+        ";
 
     $params = [];
 
-    if ($type !== '') {
-        $sql .= " AND c.type = :type";
-        $params['type'] = $type;
-    }
+    // if ($type !== '') {
+    //     $sql .= " AND c.class_type_id = :type";
+    //     $params['type'] = $type;
+    // }
 
-    if ($course !== '') {
-        $sql .= " AND c.course = :course";
-        $params['course'] = $course;
-    }
+    // if ($course !== '') {
+    //     $sql .= " AND c.course_id = :course";
+    //     $params['course'] = $course;
+    // }
 
-    $sql .= " ORDER BY c.category, c.course, c.id DESC";
+    // $sql .= " ORDER BY cat.category, co.course, c.id DESC";
 
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute($params);
