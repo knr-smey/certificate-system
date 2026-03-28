@@ -1,11 +1,8 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Kdam+Thmor+Pro&family=Koulen&family=Moul&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=Permanent+Marker&family=Playwrite+AU+QLD:wght@100..400&family=Roboto:ital,wght@0,100..900;1,100..900&family=UnifrakturCook:wght@700&display=swap');
 
 
-
-
-
+/* ── General Layout ── */
 .container-fluid { background: var(--app-bg-color); min-height: 100vh; }
 
 .btn-back {
@@ -29,7 +26,8 @@
     box-shadow: 0 4px 14px rgba(45,46,129,.30);
     color: white;
 }
-─ */
+
+/* ── Info Card ── */
 .info-card {
     background: var(--app-card-bg); border-radius: var(--radius);
     border: 1px solid var(--app-card-border);
@@ -62,6 +60,7 @@
 .text-accent { color: var(--app-primary) !important; }
 
 
+/* ── Table Card ── */
 .table-card {
     background: var(--app-card-bg); border-radius: var(--radius);
     border: 1px solid var(--app-card-border);
@@ -90,7 +89,7 @@
     min-width: 76px; text-align: center;
 }
 
-
+/* ── Student Table ── */
 .student-table { width: 100%; border-collapse: collapse; }
 .student-table thead tr { background: #eeeef8; }
 .student-table th {
@@ -154,7 +153,7 @@
     padding: 7px 15px; border-radius: 7px; font-size: .82rem;
     font-weight: 600; cursor: pointer; border: none;
     background: #16a34a;
-    color: #ffffff;  /* ✅ ស្រាប់ white ហើយ */
+    color: #ffffff;
     transition: all .2s;
     box-shadow: 0 3px 10px rgba(22,163,74,.30);
 }
@@ -167,6 +166,8 @@
 .loading-cell { padding: 50px 0 !important; }
 .loading-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--app-text-muted); }
 
+
+/* ── Certificate Modal ── */
 .cert-modal-content {
     border: none; border-radius: 16px; overflow: hidden;
     box-shadow: 0 24px 64px rgba(0,0,0,.30);
@@ -198,6 +199,7 @@
 .btn-cert-print:hover { background: var(--sidebar-active-bg); transform: translateY(-1px); box-shadow: 0 7px 18px rgba(45,46,129,.38); }
 
 
+/* ── Certificate Edit Panel ── */
 .cert-edit-panel {
     width: 280px; min-width: 280px;
     padding: 24px 20px;
@@ -238,7 +240,6 @@
 }
 .cert-btn-regen:hover { background: var(--sidebar-active-bg); transform: rotate(180deg); }
 
-
 .cert-saved-section {
     margin-top: 20px; padding-top: 16px;
     border-top: 1px solid var(--app-card-border);
@@ -269,6 +270,7 @@
 .cert-saved-item-del:hover { color: #900; }
 
 
+/* ── Certificate Preview Panel ── */
 .cert-preview-panel {
     flex: 1; padding: 16px 20px;
     background: #e8e8e8;
@@ -290,7 +292,8 @@
 }
 .btn-cert-save:hover { background: var(--sidebar-bg); color: #fff; }
 
-/* ── Certificate Design ──────────────────────── */
+
+/* ── Certificate Design ── */
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
 
 .certificate-wrap {
@@ -298,20 +301,21 @@
     display: flex; justify-content: center;
 }
 .certificate {
-    background: #fff; width: 520px;
+    background: #fff;
+    width: 520px;
     padding: 10px;
 }
 .cert-outer-border {
-    border: 15px solid #2d2e81; padding: 4px;
+    border: 15px solid #2d2e81;
+    padding: 4px;
     border-radius: 10px;
 }
 .cert-inner-border {
     border: 8px solid #5e5f65;
     border-radius: 8px;
-    padding: 15px 34px 28px;
     background: #fff;
+    padding: 15px;
 }
-
 
 .cert-kingdom {
     text-align: center; margin-bottom: 20px;
@@ -319,13 +323,21 @@
     letter-spacing: .22em; color: #2d2e81;
     line-height: 2; text-transform: uppercase;
     font-family: 'Courier New', monospace;
+    & img{
+         display: block;
+    max-width: 150px;
+    height: auto;
+    margin: 4px auto 0;
+    object-fit: contain;
+    border: none;
+    }
 }
-
 
 .cert-logo-area { text-align: center; margin-bottom: 12px; }
 .cert-logo-img {
-    width: 120px; height: 120px;
+    width: 100px; height: 100px;
     object-fit: contain; display: inline-block;
+    border-radius: 13px;
 }
 .cert-logo-fallback {
     display: none; width: 88px; height: 88px;
@@ -335,11 +347,10 @@
     font-size: 2.4rem; color: #fff; margin: 0 auto;
 }
 
-
 .cert-school-kh {
     text-align: center; font-size: 1rem; font-weight: 700;
     color: #2d2e81; margin-bottom: 4px;
-      font-family: "Moul", serif;
+    font-family: "Moul", serif;
 }
 .cert-school-en {
     text-align: center; font-size: 16px; color: #2d2e81;
@@ -349,11 +360,10 @@
 
 .cert-title {
     text-align: center;
-     font-family: "UnifrakturCook", cursive;
+    font-family: "UnifrakturCook", cursive;
     font-size: 2rem; font-weight: 700; color: #111;
     margin: 8px 0 18px;
 }
-
 
 .cert-certify {
     text-align: center; font-size: 16px; color: #2d2e81;
@@ -362,38 +372,33 @@
     font-family: 'Courier New', monospace;
 }
 
-
 .cert-student-name {
     text-align: center; font-size: 1.45rem; font-weight: 900;
     color: #111; letter-spacing: .1em;
     text-transform: uppercase; margin-bottom: 20px;
-    
 }
-
 
 .cert-desc {
     text-align: center; font-size: 13px; color: #2d2e81;
     margin-bottom: 14px;
-    font-family: "Noto Serif", serif;; letter-spacing: .01em;
+    font-family: "Noto Serif", serif; letter-spacing: .01em;
 }
-
 
 .cert-course {
     text-align: center; font-size: 16px; font-weight: 900;
     color: black; letter-spacing: .07em; margin-bottom: 20px;
     font-family: 'Courier New', monospace;
-     word-break: break-word;
+    word-break: break-word;
     white-space: normal;
     max-width: 100%;
+    padding: 0px 60px;
 }
-
 
 .cert-granted {
     text-align: center; font-size: .86rem; font-weight: 700;
     color: #2d2e81; letter-spacing: .05em; margin-bottom: 36px;
     font-family: Arial, sans-serif;
 }
-
 
 .cert-footer {
     display: flex; align-items: flex-end;
@@ -421,12 +426,13 @@
     font-family: 'Courier New', monospace; letter-spacing: .07em;
 }
 
-/* ── PRINT STYLES: ONLY CERTIFICATE VISIBLE ──── */
-/* ================= PRINT FULL A4 ================= */
 
+/* ══════════════════════════════════════════════
+   PRINT STYLES — FULL A4 CERTIFICATE
+   ══════════════════════════════════════════════ */
 @media print {
 
-    /* A4 Setup */
+    /* A4 page setup */
     @page {
         size: A4 portrait;
         margin: 0;
@@ -446,7 +452,7 @@
         visibility: hidden !important;
     }
 
-    /* Show only certificate */
+    /* Show only the certificate */
     #printable-certificate,
     #printable-certificate * {
         visibility: visible !important;
@@ -473,6 +479,7 @@
         display: none !important;
     }
 
+    /* ── Wrap ── */
     .certificate-wrap {
         background: none !important;
         padding: 0 !important;
@@ -483,35 +490,53 @@
         justify-content: center !important;
     }
 
-    /* FULL SIZE CERTIFICATE */
+    /* ── Certificate shell: full A4, flex column so children stretch ── */
     .certificate {
         width: 210mm !important;
         height: 297mm !important;
         margin: 0 !important;
-        padding: 14px !important;
+        padding: 18px !important;
         background: #ffffff !important;
         display: flex !important;
+        flex-direction: column !important;   /* ← KEY FIX */
+        box-sizing: border-box !important;
     }
 
+    /* ── Outer border: grows to fill certificate, passes height down ── */
     .cert-outer-border {
         border: 20px solid #2d2e81 !important;
         padding: 6px !important;
-        width: 100% !important;
-        height: 100% !important;
+        border-radius: 10px !important;
+        flex: 1 !important;                  /* ← KEY FIX */
+        display: flex !important;            /* ← KEY FIX */
+        flex-direction: column !important;   /* ← KEY FIX */
         box-sizing: border-box !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-        border-radius: 10px;
     }
 
+    /* ── Inner border: grows to fill outer border ── */
     .cert-inner-border {
-        border: 4px solid #655e65 !important;
-        padding: 50px 48px 40px !important;
+        border: 13px solid #655e65 !important;
+        border-radius: 8px !important;
+        
+        flex: 1 !important;                  /* ← KEY FIX */
+        display: flex !important;            /* ← KEY FIX */
+        flex-direction: column !important;   /* ← KEY FIX */
+        box-sizing: border-box !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
 
+    /* ── Push footer to bottom of inner border ── */
+    .cert-granted {
+        margin-bottom: auto !important;      /* ← KEY FIX: pushes footer down */
+    }
+
+    /* ── Color overrides for print accuracy ── */
     .cert-school-kh,
+    .cert-certify,
+    .cert-desc,
     .cert-granted {
         color: #2d2e81 !important;
         -webkit-print-color-adjust: exact !important;
@@ -523,18 +548,26 @@
         print-color-adjust: exact !important;
     }
 
-    /* Bigger typography for full page */
+    /* ── Bigger typography scaled to full A4 ── */
     .cert-kingdom        { font-size: 1.2rem !important; }
-    .cert-logo-img,         
-    .cert-logo-fallback  { width: 160px !important; height: 160px !important; }
+
+    .cert-logo-img,
+    .cert-logo-fallback  { width: 140px !important; height: 140px !important; }
+
     .cert-school-kh      { font-size: 1.5rem !important; margin-bottom: 6px !important; }
     .cert-school-en      { font-size: 1.5rem !important; margin-bottom: 22px !important; }
+
     .cert-title          { font-size: 3.4rem !important; margin: 16px 0 28px !important; }
+
     .cert-certify        { font-size: 1.6rem !important; margin-bottom: 22px !important; }
+
     .cert-student-name   { font-size: 2.4rem !important; margin-bottom: 30px !important; }
+
     .cert-desc           { font-size: 1.2rem !important; margin-bottom: 22px !important; }
-    .cert-course         { font-size: 1.6rem !important; margin-bottom: 30px !important; }
-    .cert-granted        { font-size: 1.2rem !important; margin-bottom: 60px !important; }
+
+    .cert-course         { font-size: 1.6rem !important; margin-bottom: 30px !important;padding: 0px 80px; }
+
+    .cert-granted        { font-size: 1.2rem !important; margin-bottom: auto !important; }
 
     .cert-sig-line       { width: 220px !important; }
     .cert-sig-name       { font-size: 1.1rem !important; }

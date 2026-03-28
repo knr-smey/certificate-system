@@ -173,9 +173,10 @@
                                         <div class="cert-kingdom">
                                             <div>KINGDOM OF CAMBODIA</div>
                                             <div>NATION&nbsp; RELIGION &nbsp;KING</div>
+                                             <img src="<?= base_url('assets/Images/border.png') ?>" alt="">
                                         </div>
                                         <div class="cert-logo-area">
-                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCRerloxG_go8MpvD_FYvHwpSWb7580gwmBw&s"
+                                            <img src="<?= base_url('assets/Images/logo2.png') ?>"
                                                  alt="Logo" class="cert-logo-img"
                                                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                                             <div class="cert-logo-fallback">
