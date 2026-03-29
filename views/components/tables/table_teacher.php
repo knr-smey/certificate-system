@@ -155,8 +155,15 @@ let currentType = 'normal';
         loadClasses();
         loadSavedCourses();
 
-        $('#categoryCourse').on('change', function() {
-            renderAllTables($(this).val());
+       $('#categoryCourse').on('change', function() {
+            const selected = $(this).val();
+
+            // ✅ Save filter to URL
+            const url = new URL(window.location);
+            url.searchParams.set('category', selected);
+            window.history.replaceState(null, '', url);
+
+            renderAllTables(selected);
         });
 
         // Live preview updates
@@ -221,7 +228,10 @@ let currentType = 'normal';
                 select.find('option:not([value="all"])').remove();
                 categories.forEach(cat => select.append(`<option value="${cat}">${cat}</option>`));
 
-                renderAllTables();
+                const categoryFromUrl = urlParams.get('category') || 'all';
+
+                $('#categoryCourse').val(categoryFromUrl);
+                renderAllTables(categoryFromUrl);
             },
             error: function() {
                 container.html(`
