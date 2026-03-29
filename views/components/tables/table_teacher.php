@@ -149,7 +149,7 @@
     const perPage = 9;
     let allData = [];
     let categoryPages = {};
-let currentType = 'normal';
+    let currentType = 'normal';
 
     $(document).ready(function() {
         loadClasses();
@@ -209,6 +209,7 @@ let currentType = 'normal';
             },
             dataType: "json",
             success: function(result) {
+                // console.log(result);
                 if (!result.data || result.data.length === 0) {
                     container.html(`
                     <div class="text-center py-5 text-muted">
@@ -253,62 +254,68 @@ let currentType = 'normal';
         const filteredCategories = filterCategory === 'all' ?
             Object.keys(categoryPages) : [filterCategory];
 
-        filteredCategories.forEach(categoryName => {
-            const page = categoryPages[categoryName];
-            const categoryData = allData.filter(item => item.category === categoryName);
-            if (!categoryData.length) return;
-            anyData = true;
+            filteredCategories.forEach(categoryName => {
+                const page = categoryPages[categoryName];
+                const categoryData = allData.filter(item => item.category === categoryName);
+                if (!categoryData.length) return;
+                anyData = true;
 
-            const pageData = categoryData.slice((page - 1) * perPage, page * perPage);
+                const pageData = categoryData.slice((page - 1) * perPage, page * perPage);
 
-            const rows = pageData.map(item => {
-                const safeCourse = (item.course ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-                const safeTeacher = (item.teacher_name ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-                return `
-            <tr>
-                <td>${item.id}</td>
-                <td>${item.teacher_name ?? '<span class="badge bg-danger">គ្មានគ្រូ</span>'}</td>
-                <td>${item.course ?? '-'}</td>
-                <td>${item.time ?? '-'}</td>
-                <td>
-                    <a href="<?= base_url('certificate/students') ?>?class_id=${item.id}&course=${encodeURIComponent(item.course)}&teacher=${encodeURIComponent(item.teacher_name ?? 'គ្មានគ្រូ')}&time=${encodeURIComponent(item.time ?? '-')}"
-                        class="btn btn-primary  btn-sm">
-                        <i class="bi bi-people-fill me-1"></i>មើលសិស្ស
-                    </a>
-                </td>
-            </tr>`;
-            }).join('');
+                const rows = pageData.map(item => {
+                    const safeCourse = (item.course ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                    const safeTeacher = (item.teacher_name ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                    return `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.teacher_name ?? '<span class="badge bg-danger">គ្មានគ្រូ</span>'}</td>
+                    <td>${item.course ?? '-'}</td>
+                    <td>${item.time ?? '-'}</td>
+                    <td>
+                        <span class="badge bg-success">
+                            ${item.total_students ?? 0}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="<?= base_url('certificate/students') ?>?class_id=${item.id}&course=${encodeURIComponent(item.course)}&teacher=${encodeURIComponent(item.teacher_name ?? 'គ្មានគ្រូ')}&time=${encodeURIComponent(item.time ?? '-')}"
+                            class="btn btn-primary  btn-sm">
+                            <i class="bi bi-people-fill me-1"></i>មើលសិស្ស
+                        </a>
+                    </td>
+                </tr>`;
+                }).join('');
 
-            const totalPages = Math.ceil(categoryData.length / perPage);
-            let buttons = '';
-            if (page > 1) buttons += `<button class="btn btn-outline-primary me-2" onclick="changeCategoryPage('${categoryName}', ${page-1})">មុន</button>`;
-            for (let i = 1; i <= totalPages; i++) {
-                buttons += `<button class="btn ${i===page?'btn-primary':'btn-outline-primary'} me-2" onclick="changeCategoryPage('${categoryName}', ${i})">${i}</button>`;
-            }
-            if (page < totalPages) buttons += `<button class="btn btn-outline-primary" onclick="changeCategoryPage('${categoryName}', ${page+1})">បន្ទាប់</button>`;
+                const totalPages = Math.ceil(categoryData.length / perPage);
+                let buttons = '';
+                if (page > 1) buttons += `<button class="btn btn-outline-primary me-2" onclick="changeCategoryPage('${categoryName}', ${page-1})">មុន</button>`;
+                for (let i = 1; i <= totalPages; i++) {
+                    buttons += `<button class="btn ${i===page?'btn-primary':'btn-outline-primary'} me-2" onclick="changeCategoryPage('${categoryName}', ${i})">${i}</button>`;
+                }
+                if (page < totalPages) buttons += `<button class="btn btn-outline-primary" onclick="changeCategoryPage('${categoryName}', ${page+1})">បន្ទាប់</button>`;
 
-            container.append(`
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header fs-5 bg-category text-white fw-semibold">
-                    ប្រភេទវគ្គសិក្សារ ${categoryName}
-                </div>
-                <div class="card-body table-responsive">
-                    <table class="table table-bordered text-center align-middle mb-2">
-                        <thead class="table-primary">
-                            <tr>
-                                <th>ID</th>
-                                <th>គ្រូបង្រៀន</th>
-                                <th>មុខវិជ្ជា</th>
-                                <th>ម៉ោង</th>
-                                <th>សិស្ស</th>
-                            </tr>
-                        </thead>
-                        <tbody>${rows}</tbody>
-                    </table>
-                    <div class="d-flex justify-content-center mt-2">${buttons}</div>
-                </div>
-            </div>
-        `);
+                container.append(`
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header fs-5 bg-category text-white fw-semibold">
+                            ប្រភេទវគ្គសិក្សារ ${categoryName}
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="table table-bordered text-center align-middle mb-2">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>គ្រូបង្រៀន</th>
+                                        <th>មុខវិជ្ជា</th>
+                                        <th>ម៉ោង</th>
+                                        <th>ចំនួនសិស្ស</th>
+                                        <th>សិស្ស</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${rows}</tbody>
+                            </table>
+                            <div class="d-flex justify-content-center mt-2">${buttons}</div>
+                        </div>
+                    </div>
+                `);
         });
 
         if (!anyData) {

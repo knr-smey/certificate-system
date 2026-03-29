@@ -20,24 +20,35 @@ final class StudentModel
         $st = $this->pdo->prepare("
             SELECT 
                 s.id,
-                s.full_name as name,
+                s.full_name AS name,
                 s.tel,
                 'Male' AS gender,
+
                 CASE
-                    WHEN EXISTS (
-                        SELECT 1
-                        FROM student_certificate_normal scn
-                        WHERE scn.student_id = s.id
-                          AND scn.class_id = s.class_id
-                    ) THEN 1
+                    WHEN scn.id IS NOT NULL THEN 1
                     ELSE 0
                 END AS is_printed
-            FROM students s
-            INNER JOIN classes c ON c.id = s.class_id
-            WHERE s.class_id = ?
+
+            FROM req_certificate ec
+
+            INNER JOIN req_class_student rcs
+                ON rcs.req_certificate_id = ec.id
+
+            INNER JOIN students s
+                ON s.id = rcs.student_id
+
+            LEFT JOIN student_certificate_normal scn
+                ON scn.student_id = s.id
+            AND scn.class_id = ec.class_id
+
+            WHERE ec.class_id = :class_id
+
+            GROUP BY s.id
             ORDER BY s.id ASC
         ");
-        $st->execute([$classId]);
+
+        $st->execute(['class_id' => $classId]);
+
         return $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 }

@@ -80,16 +80,23 @@ final class CertificateController extends Controller
     {
         try {
 
-            $type   = (string) ($_GET['type'] ?? 'free');
-            $course = (string) ($_GET['course'] ?? '');
+            $type   = $_GET['type'] ?? '';
+            $course = $_GET['course'] ?? '';
+
+            // 🔥 map type
+            $typeMap = [
+                'normal' => 1,
+                'free'   => 2
+            ];
+
+            $typeId = $typeMap[$type] ?? '';
 
             $model   = new ClassModel();
-            $classes = $model->getFinishedClasses($type, $course);
+            $classes = $model->getFinishedClasses((string)$typeId, (string)$course);
 
             $this->jsonResponse(true, $classes);
 
         } catch (\Throwable $e) {
-
             $this->jsonResponse(false, [], $e->getMessage(), 500);
         }
     }

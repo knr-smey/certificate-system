@@ -1,6 +1,6 @@
 ﻿<input type="hidden" id="current_student_id" value="0">
 
-<div class="container-fluid py-4 px-4" id="print_area">
+<div class="container-fluid px-4" id="print_area">
 
     <!-- Back + Print All Buttons -->
     <div class="d-flex justify-content-between align-items-center mb-4 no-print">

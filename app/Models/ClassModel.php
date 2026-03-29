@@ -14,7 +14,7 @@ final class ClassModel
     {
         $this->pdo = Database::pdo();
     }
-    public function getFinishedClasses(string $type = '', string $course = ''): array
+   public function getFinishedClasses(string $type = '', string $course = ''): array
     {
         $sql = "
             SELECT 
@@ -24,10 +24,13 @@ final class ClassModel
                 tm.time,
                 u.name AS teacher_name,
                 c.class_type_id,
-                ct.name AS class_type_name
+                ct.name AS class_type_name,
+                COUNT(DISTINCT rcs.student_id) AS total_students
             FROM req_certificate ec
             INNER JOIN classes c
                 ON c.id = ec.class_id
+            LEFT JOIN req_class_student rcs
+                ON rcs.req_certificate_id = ec.id
             LEFT JOIN users u
                 ON u.id = c.instructor_id
             LEFT JOIN courses co
@@ -41,23 +44,35 @@ final class ClassModel
             WHERE 1 = 1
         ";
 
-    $params = [];
+        $params = [];
 
-    // if ($type !== '') {
-    //     $sql .= " AND c.class_type_id = :type";
-    //     $params['type'] = $type;
-    // }
+        // ❗ remove type filter for now (your type is wrong)
+        // if ($type !== '') {
+        //     $sql .= " AND c.class_type_id = :type";
+        //     $params['type'] = $type;
+        // }
 
-    // if ($course !== '') {
-    //     $sql .= " AND c.course_id = :course";
-    //     $params['course'] = $course;
-    // }
+        if ($course !== '') {
+            $sql .= " AND c.course_id = :course";
+            $params['course'] = $course;
+        }
 
-    // $sql .= " ORDER BY cat.category, co.course, c.id DESC";
+        // ✅ IMPORTANT (for COUNT)
+        $sql .= "
+            GROUP BY 
+                c.id,
+                co.course,
+                cat.category,
+                tm.time,
+                u.name,
+                c.class_type_id,
+                ct.name
+            ORDER BY c.id DESC
+        ";
 
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute($params);
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
