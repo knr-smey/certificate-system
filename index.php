@@ -27,6 +27,7 @@ $router->get('/form/fix-codes', [CertificateClassFreeController::class, 'fixCert
 // API Routes
 $router->get('/api/classes', [CertificateController::class, 'getClasses']);
 $router->get('/api/students', [CertificateController::class, 'getStudents']);
+$router->get('/api/certificate/printed-normal', [CertificateController::class, 'getPrintedNormalStudents']);
 $router->get('/api/certificate-date', [CertificateController::class, 'getCertificateDate']);
 $router->get('/api/generate-id', [CertificateController::class, 'generateId']);
 

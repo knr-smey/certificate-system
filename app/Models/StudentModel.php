@@ -22,7 +22,16 @@ final class StudentModel
                 s.id,
                 s.full_name as name,
                 s.tel,
-                'Male' AS gender
+                'Male' AS gender,
+                CASE
+                    WHEN EXISTS (
+                        SELECT 1
+                        FROM student_certificate_normal scn
+                        WHERE scn.student_id = s.id
+                          AND scn.class_id = s.class_id
+                    ) THEN 1
+                    ELSE 0
+                END AS is_printed
             FROM students s
             INNER JOIN classes c ON c.id = s.class_id
             WHERE s.class_id = ?

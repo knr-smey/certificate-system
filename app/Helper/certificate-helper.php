@@ -82,3 +82,28 @@ function generateCertificateId()
 function generateId(){
     return generateCertificateId();
 }
+
+function generateCertificateNormalId()
+{
+    $pdo = Database::pdo();
+
+    $yearMonth = date('ym'); // YYMM
+
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*) 
+        FROM student_certificate_normal
+        WHERE DATE_FORMAT(created_at,'%y%m') = ?
+    ");
+
+    $stmt->execute([$yearMonth]);
+
+    $count = (int)$stmt->fetchColumn() + 1;
+
+    $sequence = str_pad($count, 3, '0', STR_PAD_LEFT);
+
+    return $yearMonth . $sequence . 'ETEC';
+}
+
+function generateNormal(){
+    return generateCertificateNormalId();
+}

@@ -56,7 +56,7 @@
                         <input type="text" id="edit_granted" class="cert-field-input" placeholder="e.g. February 17, 2026">
                     </div>
 
-                    <div class="cert-field-group">
+                    <!-- <div class="cert-field-group">
                         <label class="cert-field-label">លេខ ID</label>
                         <div class="d-flex gap-2">
                             <input type="text" id="edit_id" class="cert-field-input" placeholder="Auto-generated">
@@ -64,7 +64,7 @@
                                 <i class="bi bi-arrow-clockwise"></i>
                             </button>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Saved courses from localStorage -->
                     <div class="cert-saved-section" id="saved_courses_wrap" style="display:none">

@@ -152,6 +152,32 @@ final class CertificateController extends Controller
     }
 
     /**
+     * Get printed student ids for a class (normal certificates)
+     */
+    public function getPrintedNormalStudents(): void
+    {
+        try {
+            $classId = (int) ($_GET['class_id'] ?? 0);
+            if ($classId <= 0) {
+                throw new \RuntimeException('Invalid class_id');
+            }
+
+            $stmt = Database::pdo()->prepare("
+                SELECT DISTINCT student_id
+                FROM student_certificate_normal
+                WHERE class_id = :class_id
+            ");
+            $stmt->execute(['class_id' => $classId]);
+            $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC) ?: [];
+
+            $studentIds = array_map(static fn(array $r): int => (int)$r['student_id'], $rows);
+            $this->jsonResponse(true, ['student_ids' => $studentIds]);
+        } catch (\Throwable $e) {
+            $this->jsonResponse(false, [], $e->getMessage(), 500);
+        }
+    }
+
+    /**
      * Students table page
      */
     public function students(): void
@@ -184,7 +210,6 @@ public function saveCertificateNormal(): void
 {
     try {
         $body = json_decode(file_get_contents('php://input'), true);
-
         $studentId   = (int)   ($body['student_id']     ?? 0);
         $classId     = (int)   ($body['class_id']       ?? 0);
         $studentName = (string)($body['student_name']   ?? '');
@@ -195,7 +220,8 @@ public function saveCertificateNormal(): void
         if ($studentId <= 0 || $classId <= 0 || !$studentName || !$course) {
             throw new \RuntimeException('Missing required fields');
         }
-
+        $pdo = Database::pdo();
+        
         $stmt = Database::pdo()->prepare("
             INSERT INTO student_certificate_normal
                 (student_id, class_id, student_name, course, granted_date, certificate_id)
@@ -211,7 +237,12 @@ public function saveCertificateNormal(): void
             'certificate_id' => $certId,
         ]);
 
-        $this->jsonResponse(true, [], 'Saved successfully');
+        $insertedId = $pdo->lastInsertId();
+
+        $this->jsonResponse(true, [
+            'id' => $insertedId,
+            'student_id' => $studentId
+        ], 'Saved successfully');
 
     } catch (\Throwable $e) {
         $this->jsonResponse(false, [], $e->getMessage(), 500);

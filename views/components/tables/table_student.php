@@ -1,4 +1,4 @@
-<input type="hidden" id="current_student_id" value="0">
+﻿<input type="hidden" id="current_student_id" value="0">
 
 <div class="container-fluid py-4 px-4" id="print_area">
 
@@ -149,7 +149,7 @@
                                placeholder="e.g. February 17, 2026">
                     </div>
 
-                    <div class="cert-field-group">
+                    <!-- <div class="cert-field-group">
                         <label class="cert-field-label">លេខ ID</label>
                         <div class="d-flex gap-2">
                             <input type="text" id="edit_id" class="cert-field-input"
@@ -159,7 +159,7 @@
                                 <i class="bi bi-arrow-clockwise"></i>
                             </button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- RIGHT: Certificate Preview -->
@@ -193,9 +193,11 @@
                                             of the Computer Training Courses in
                                         </div>
                                         <h4 class="cert-course" id="cert_course">—</h4>
-                                        <div class="cert-granted">Granted: <span id="cert_time">—</span></div>
+                                        <div class="cert-granted">Granted: <?= printCertificateDate('F j,Y') ?></div>
                                         <div class="cert-footer">
-                                            <div class="cert-id">ID : <span id="cert_id_val">—</span></div>
+                                            <?php $normalCertId = generateNormal(); ?>
+                                            <div class="cert-id">ID : <span id="certId"><?= htmlspecialchars($normalCertId) ?></span></div>
+                                            <input type="hidden" id="cert_id_value" value="<?= htmlspecialchars($normalCertId, ENT_QUOTES, 'UTF-8') ?>">
                                             <div class="cert-signature">
                                                 <div class="cert-sig-line"></div>
                                                 <div class="cert-sig-name text-center" id="cert_sign_teacher">Mr. Heng Pheakna</div>
@@ -293,9 +295,37 @@ function loadStudents(classId) {
                 const gender = s.gender || 'Male';
                 const gClass = gender === 'Female' ? 'gender-f' : 'gender-m';
                 const course = s.course || currentClass.course;
+                const isPrinted = parseInt(s.is_printed, 10) === 1;
+                const printedClass = isPrinted ? 'student-printed' : '';
+                const actionButtons = isPrinted
+                    ? `
+                        <div class="print-actions">
+                            <button type="button" class="btn-print-done text-white" disabled>
+                                <i class="bi bi-check-circle-fill"></i> Printed
+                            </button>
+                            <button type="button" class="btn-print-again text-white"
+                                onclick="openCertificate(
+                                    ${s.id},
+                                    '${escapeHtml(s.name)}',
+                                    '${escapeHtml(course)}',
+                                    '${escapeHtml(currentClass.teacher)}',
+                                    '${escapeHtml(currentClass.time)}')">
+                                <i class="bi bi-printer-fill"></i> Re-print
+                            </button>
+                        </div>`
+                    : `
+                        <button class="btn-print-cert text-white"
+                            onclick="openCertificate(
+                                ${s.id},
+                                '${escapeHtml(s.name)}',
+                                '${escapeHtml(course)}',
+                                '${escapeHtml(currentClass.teacher)}',
+                                '${escapeHtml(currentClass.time)}')">
+                            <i class="bi bi-printer-fill"></i> Print
+                        </button>`;
 
                 return `
-                <tr>
+                <tr data-student-id="${s.id}" class="${printedClass}">
                     <td class="text-center">
                         <span class="row-no text-white">${s.id}</span>
                     </td>
@@ -311,20 +341,13 @@ function loadStudents(classId) {
                     <td>${s.tel || '-'}</td>
                     <td>${course}</td>
                     <td class="text-center no-print">
-                        <button class="btn-print-cert text-white"
-                            onclick="openCertificate(
-                                ${s.id},
-                                '${escapeHtml(s.name)}',
-                                '${escapeHtml(course)}',
-                                '${escapeHtml(currentClass.teacher)}',
-                                '${escapeHtml(currentClass.time)}')">
-                            <i class="bi bi-printer-fill"></i> Print
-                        </button>
+                        ${actionButtons}
                     </td>
                 </tr>`;
             }).join('');
 
             tbody.html(rows);
+            markPrintedRowsFromServer(classId);
         },
         error: function (xhr) {
             let msg = 'Server Error';
@@ -365,7 +388,7 @@ function updatePreview() {
     $('#cert_student_name').text($('#edit_student_name').val() || '—');
     $('#cert_course').text($('#edit_course').val()             || '—');
     $('#cert_time').text($('#edit_granted').val()              || '—');
-    $('#cert_id_val').text($('#edit_id').val()                 || '—');
+    // $('#cert_id_val').text($('#edit_id').val()                 || '—');
     $('#cert_sign_teacher').text('Mr. Heng Pheakna');
 }
 
@@ -378,7 +401,7 @@ function generateId() {
     return year + random4 + 'ETEC';
 }
 function regenId() {
-    $('#edit_id').val(generateId());
+    // $('#edit_id').val(generateId());
     updatePreview();
 }
 
@@ -492,7 +515,7 @@ function printCertificateStudent() {
     const studentName = $('#edit_student_name').val().trim();
     const course      = $('#edit_course').val().trim();
     const granted     = $('#edit_granted').val().trim();
-    const certId      = $('#edit_id').val().trim();
+    const certId      = ($('#cert_id_value').val() || $('#certId').text() || '').trim();
 
     // 1. Print
     window.print();
@@ -514,22 +537,16 @@ function printCertificateStudent() {
             // 3. Insert to DB
             try {
                 const res = await saveCertificateToDB(studentId, studentName, course, granted, certId);
-                if (res.success) {
+                if (res.ok) {
+                    markStudentPrinted((res.data && res.data.student_id) ? res.data.student_id : studentId);
+                    // console.log('Certificate saved with ID:', res);  
                     Swal.fire({ icon: 'success', title: 'រក្សាទុករួច!', timer: 1500, showConfirmButton: false });
                 } else {
-                    Swal.fire({ icon: 'warning', title: res.message || 'មានបញ្ហា!' });
+                    Swal.fire({ icon: 'warning', title: res.error || 'មានបញ្ហា!' });
                 }
             } catch(e) {
-                Swal.fire({ icon: 'error', title: 'Server Error រក្សាទុកមិនបាន' });
+               console.error(e);
             }
-        } else {
-            Swal.fire({
-                icon: 'info',
-                title: 'មិនបានរក្សាទុក',
-                text: 'Certificate មិនត្រូវបានរក្សាទុកទេ',
-                timer: 1500,
-                showConfirmButton: false
-            });
         }
     }, 500);
 }
@@ -574,14 +591,14 @@ async function printAllCertificates() {
     for (let i = 0; i < allStudents.length; i++) {
         const s      = allStudents[i];
         const course = s.course || currentClass.course;
-        const certId = generateId();
+        const certId = ($('#cert_id_value').val() || $('#certId').text() || '').trim();
 
         // Fill preview
         $('#current_student_id').val(s.id);
         $('#edit_student_name').val(s.name);
         $('#edit_course').val(course);
         $('#edit_granted').val(granted);
-        $('#edit_id').val(certId);
+        // $('#edit_id').val(certId);
         updatePreview();
 
         // ✅ រង់ចាំ preview update
@@ -605,8 +622,10 @@ async function printAllCertificates() {
         if (res.isConfirmed) {
             try {
                 const saveRes = await saveCertificateToDB(s.id, s.name, course, granted, certId);
-                if (saveRes.success) savedCount++;
-                else failCount++;
+                if (saveRes.ok) {
+                    savedCount++;
+                    markStudentPrinted((saveRes.data && saveRes.data.student_id) ? saveRes.data.student_id : s.id);
+                } else failCount++;
             } catch(e) { failCount++; }
         } else {
             failCount++;
@@ -636,6 +655,46 @@ function showError(msg) {
         <tr><td colspan="7" class="text-center py-4 text-danger">
             <i class="bi bi-exclamation-triangle me-2"></i>${msg}
         </td></tr>`);
+}
+
+function markPrintedRowsFromServer(classId) {
+    $.ajax({
+        url: "<?= base_url('api/certificate/printed-normal') ?>",
+        method: "GET",
+        data: { class_id: classId },
+        dataType: "json",
+        success: function (result) {
+            if (!result.ok || !result.data || !Array.isArray(result.data.student_ids)) return;
+            result.data.student_ids.forEach(function (id) {
+                markStudentPrinted(parseInt(id, 10));
+            });
+        }
+    });
+}
+
+function markStudentPrinted(studentId) {
+    const row = $(`#student_list tr[data-student-id="${studentId}"]`);
+    if (!row.length) return;
+    row.addClass('student-printed');
+
+    const studentName = row.find('.student-name-text').text().trim();
+    const course = row.find('td').eq(4).text().trim();
+    const actionCell = row.find('td.text-center.no-print');
+
+    actionCell.html(`
+        <div class="print-actions">
+            <button type="button" class="btn-print-done text-white" disabled>
+                <i class="bi bi-check-circle-fill"></i> Printed
+            </button>
+            <button type="button" class="btn-print-again text-white">
+                <i class="bi bi-printer-fill"></i> Re-print
+            </button>
+        </div>
+    `);
+
+    actionCell.find('.btn-print-again').on('click', function () {
+        openCertificate(studentId, studentName, course, currentClass.teacher, currentClass.time);
+    });
 }
 
 function escapeHtml(str) {
