@@ -243,6 +243,7 @@
 let currentClass   = { course: '-', teacher: '-', time: '-' };
 let currentClassId = 0;
 let allStudents    = []; // ✅ រក្សាសិស្សទាំងអស់សម្រាប់ Print All
+let remainingStudents = 0;
 
 // ══════════════════════════════════════════
 //   INIT
@@ -289,7 +290,8 @@ function loadStudents(classId) {
             }
 
             allStudents = result.data; // ✅ save សម្រាប់ Print All
-            $('#student_count').text(result.data.length + ' នាក់');
+            remainingStudents = result.data.filter(s => parseInt(s.is_printed, 10) !== 1).length;
+            updateStudentCount();
 
             const rows = result.data.map((s) => {
                 const gender = s.gender || 'Male';
@@ -675,7 +677,11 @@ function markPrintedRowsFromServer(classId) {
 function markStudentPrinted(studentId) {
     const row = $(`#student_list tr[data-student-id="${studentId}"]`);
     if (!row.length) return;
+    if (row.hasClass('student-printed')) return;
+
     row.addClass('student-printed');
+    if (remainingStudents > 0) remainingStudents--;
+    updateStudentCount();
 
     const studentName = row.find('.student-name-text').text().trim();
     const course = row.find('td').eq(4).text().trim();
@@ -695,6 +701,10 @@ function markStudentPrinted(studentId) {
     actionCell.find('.btn-print-again').on('click', function () {
         openCertificate(studentId, studentName, course, currentClass.teacher, currentClass.time);
     });
+}
+
+function updateStudentCount() {
+    $('#student_count').text(remainingStudents + ' នាក់');
 }
 
 function escapeHtml(str) {

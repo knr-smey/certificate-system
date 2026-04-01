@@ -265,6 +265,10 @@
                 const rows = pageData.map(item => {
                     const safeCourse = (item.course ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
                     const safeTeacher = (item.teacher_name ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                    const totalStudents = parseInt(item.total_students ?? 0, 10) || 0;
+                    const printedStudents = parseInt(item.printed_students ?? 0, 10) || 0;
+                    const remainingStudents = Math.max(totalStudents - printedStudents, 0);
+                    const isClassDone = remainingStudents === 0 && totalStudents > 0;
                     return `
                 <tr>
                     <td>${item.id}</td>
@@ -272,15 +276,16 @@
                     <td>${item.course ?? '-'}</td>
                     <td>${item.time ?? '-'}</td>
                     <td>
-                        <span class="badge bg-success">
-                            ${item.total_students ?? 0}
+                        <span class="badge ${isClassDone ? 'bg-success' : 'bg-warning text-dark'}">
+                            ${remainingStudents}${isClassDone ? ' ✅' : ''}
                         </span>
                     </td>
                     <td>
                         <a href="<?= base_url('certificate/students') ?>?class_id=${item.id}&course=${encodeURIComponent(item.course)}&teacher=${encodeURIComponent(item.teacher_name ?? 'គ្មានគ្រូ')}&time=${encodeURIComponent(item.time ?? '-')}"
-                            class="btn btn-primary  btn-sm">
+                            class="btn btn-primary btn-sm">
                             <i class="bi bi-people-fill me-1"></i>មើលសិស្ស
                         </a>
+                        ${isClassDone ? '<button type="button" class="btn btn-success btn-sm ms-1" disabled><i class="bi bi-check2-circle me-1"></i>✅</button>' : ''}
                     </td>
                 </tr>`;
                 }).join('');

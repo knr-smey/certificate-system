@@ -25,7 +25,8 @@ final class ClassModel
                 u.name AS teacher_name,
                 c.class_type_id,
                 ct.name AS class_type_name,
-                COUNT(DISTINCT rcs.student_id) AS total_students
+                COUNT(DISTINCT rcs.student_id) AS total_students,
+                COUNT(DISTINCT scn.student_id) AS printed_students
             FROM req_certificate ec
             INNER JOIN classes c
                 ON c.id = ec.class_id
@@ -41,6 +42,8 @@ final class ClassModel
                 ON tm.id = c.time_id
             LEFT JOIN class_types ct
                 ON ct.id = c.class_type_id
+            LEFT JOIN student_certificate_normal scn
+                ON scn.class_id = c.id
             WHERE 1 = 1
         ";
 
