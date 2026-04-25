@@ -9,10 +9,40 @@
             <select class="form-select shadow-none" id="categoryCourse">
                 <option value="all">ទាំងអស់</option>
             </select>
-            <button class="btn btn-primary fw-bold py-2 col-4" id="btnPrintCertificate">
+            <button disabled class="btn btn-primary fw-bold py-2 col-4" id="btnPrintCertificate">
                 <i class="bi bi-award-fill me-2"></i>
                 បង្កើតវិញ្ញាបនបត្រ
             </button>
+        </div>
+    </div>
+
+    <div class="cert-summary-grid mb-4">
+        <div class="cert-summary-card">
+            <div class="cert-summary-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <div>
+                <div class="cert-summary-label">Total Student Request Certificate</div>
+                <div class="cert-summary-value" id="totalRequestCertificate">0</div>
+            </div>
+        </div>
+        <div class="cert-summary-card">
+            <div class="cert-summary-icon">
+                <i class="bi bi-journal-check"></i>
+            </div>
+            <div>
+                <div class="cert-summary-label">Total Course Finish</div>
+                <div class="cert-summary-value" id="totalCourseFinish">0</div>
+            </div>
+        </div>
+        <div class="cert-summary-card">
+            <div class="cert-summary-icon">
+                <i class="bi bi-award-fill"></i>
+            </div>
+            <div>
+                <div class="cert-summary-label">Total Certificate Done</div>
+                <div class="cert-summary-value" id="totalCertificateDone">0</div>
+            </div>
         </div>
     </div>
 
@@ -254,6 +284,8 @@
         const filteredCategories = filterCategory === 'all' ?
             Object.keys(categoryPages) : [filterCategory];
 
+            updateTotalRequestCertificate(filteredCategories);
+
             filteredCategories.forEach(categoryName => {
                 const page = categoryPages[categoryName];
                 const categoryData = allData.filter(item => item.category === categoryName);
@@ -263,7 +295,14 @@
                 const pageData = categoryData.slice((page - 1) * perPage, page * perPage);
 
                 const rows = pageData.map(item => {
-                    const safeCourse = (item.course ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                    let formattedCourse = item.course ?? '-';
+                    const isBasicItCategory = (item.category ?? '').trim().toLowerCase() === 'basic it';
+
+                    if (isBasicItCategory && String(item.class_network_for_basic_it) === '1') {
+                        formattedCourse = 'Basic IT (Network)';
+                    } else if (isBasicItCategory && String(item.class_network_for_basic_it) === '0') {
+                        formattedCourse = 'Basic IT (C++)';
+                    }
                     const safeTeacher = (item.teacher_name ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
                     const totalStudents = parseInt(item.total_students ?? 0, 10) || 0;
                     const printedStudents = parseInt(item.printed_students ?? 0, 10) || 0;
@@ -273,7 +312,7 @@
                 <tr>
                     <td>${item.id}</td>
                     <td>${item.teacher_name ?? '<span class="badge bg-danger">គ្មានគ្រូ</span>'}</td>
-                    <td>${item.course ?? '-'}</td>
+                    <td>${formattedCourse}</td>
                     <td>${item.time ?? '-'}</td>
                     <td>
                         <span class="badge ${isClassDone ? 'bg-success' : 'bg-warning text-dark'}">
@@ -281,7 +320,7 @@
                         </span>
                     </td>
                     <td>
-                        <a href="<?= base_url('certificate/students') ?>?class_id=${item.id}&course=${encodeURIComponent(item.course)}&teacher=${encodeURIComponent(item.teacher_name ?? 'គ្មានគ្រូ')}&time=${encodeURIComponent(item.time ?? '-')}"
+                        <a href="<?= base_url('certificate/students') ?>?class_id=${item.id}&course=${encodeURIComponent(formattedCourse)}&teacher=${encodeURIComponent(item.teacher_name ?? 'គ្មានគ្រូ')}&time=${encodeURIComponent(item.time ?? '-')}"
                             class="btn btn-primary btn-sm">
                             <i class="bi bi-people-fill me-1"></i>មើលសិស្ស
                         </a>
@@ -311,7 +350,7 @@
                                         <th>គ្រូបង្រៀន</th>
                                         <th>មុខវិជ្ជា</th>
                                         <th>ម៉ោង</th>
-                                        <th>ចំនួនសិស្ស</th>
+                                        <th>ចំនួនសិស្សដែលនៅសល់</th>
                                         <th>សិស្ស</th>
                                     </tr>
                                 </thead>
@@ -336,6 +375,17 @@
     function changeCategoryPage(categoryName, page) {
         categoryPages[categoryName] = page;
         renderAllTables($('#categoryCourse').val());
+    }
+
+    function updateTotalRequestCertificate(filteredCategories) {
+        const filteredData = allData.filter(item => filteredCategories.includes(item.category));
+        const totalRequested = filteredData.reduce((sum, item) => sum + (parseInt(item.total_students ?? 0, 10) || 0), 0);
+        const totalCourseFinish = new Set(filteredData.map(item => item.category ?? '')).size;
+        const totalCertificateDone = filteredData.reduce((sum, item) => sum + (parseInt(item.printed_students ?? 0, 10) || 0), 0);
+
+        $('#totalRequestCertificate').text(totalRequested);
+        $('#totalCourseFinish').text(totalCourseFinish);
+        $('#totalCertificateDone').text(totalCertificateDone);
     }
 
     // ==================== OPEN CERT MODAL ====================
@@ -409,3 +459,51 @@
         window.print();
     }
 </script>
+
+<style>
+    .cert-summary-grid {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .cert-summary-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex: 1 1 280px;
+        min-width: 240px;
+        padding: 18px 20px;
+        background: #fff;
+        border: 1px solid #d9e2f2;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(45, 46, 129, 0.08);
+    }
+
+    .cert-summary-icon {
+        width: 46px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: #eef3ff;
+        color: #2d2e81;
+        font-size: 1.1rem;
+    }
+
+    .cert-summary-label {
+        font-size: .8rem;
+        color: #6b7280;
+        margin-bottom: 4px;
+    }
+
+    .cert-summary-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2d2e81;
+        line-height: 1;
+    }
+</style>

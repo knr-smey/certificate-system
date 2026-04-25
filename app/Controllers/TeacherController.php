@@ -12,10 +12,12 @@ final class TeacherController extends Controller
     {
         $model = new TeacherModel();
         $teachers = $model->getAllTeachers();
+        $totalStudentRequestCertificate = $model->getTotalStudentRequestCertificate();
 
         $this->view('teacher/index', [
             'title' => 'Teacher',
-            'teachers' => $teachers
+            'teachers' => $teachers,
+            'totalStudentRequestCertificate' => $totalStudentRequestCertificate
         ]);
     }
 }

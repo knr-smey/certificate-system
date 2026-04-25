@@ -19,6 +19,8 @@ final class ClassModel
         $sql = "
             SELECT 
                 c.id,
+                ec.class_network_for_basic_it,
+                
                 co.course,
                 cat.category,
                 tm.time,
@@ -64,12 +66,15 @@ final class ClassModel
         $sql .= "
             GROUP BY 
                 c.id,
+                ec.class_network_for_basic_it,
                 co.course,
                 cat.category,
                 tm.time,
                 u.name,
                 c.class_type_id,
                 ct.name
+            HAVING COUNT(DISTINCT rcs.student_id) > 0
+                OR COUNT(DISTINCT scn.student_id) > 0
             ORDER BY c.id DESC
         ";
 

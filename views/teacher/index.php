@@ -11,6 +11,18 @@
         </div>
     </div>
 
+    <div class="t-stats-grid mb-4">
+        <div class="t-stat-card">
+            <div class="t-stat-icon">
+                <i class="bi bi-file-earmark-text-fill"></i>
+            </div>
+            <div>
+                <div class="t-stat-label">Student Request Certificate</div>
+                <div class="t-stat-value"><?= (int) ($totalStudentRequestCertificate ?? 0) ?></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Table Card -->
     <div class="t-card">
         <div class="t-card-header">
@@ -35,7 +47,7 @@
                         <th style="width:60px">ល.រ</th>
                         <th>ឈ្មោះ</th>
                         <th>អ៊ីមែល</th>
-                        <th>លេខទូរស័ព្ទ</th>
+                        <th>លេខទូរស័ព្ទ</th>    
                         <th style="width:120px;text-align:center">ស្ថានភាព</th>
                     </tr>
                 </thead>
@@ -118,6 +130,45 @@
 }
 
 /* ── Table Card ──────────────────────────────── */
+.t-stats-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 320px);
+    justify-content: space-between;
+    gap: 16px;
+}
+.t-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    background: var(--app-card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--app-card-border);
+    box-shadow: 0 2px 12px rgba(45,46,129,.09);
+}
+.t-stat-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    background: #eeeef8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--app-primary);
+    font-size: 1.15rem;
+}
+.t-stat-label {
+    font-size: .78rem;
+    color: var(--app-text-muted);
+    margin-bottom: 4px;
+}
+.t-stat-value {
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--app-primary-dark);
+}
+
 .t-card {
     background: var(--app-card-bg);
     border-radius: 12px;
