@@ -65,7 +65,7 @@ function regenId() {
         const random4 = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
 
         // Combine into certificate ID
-        const newId = year + random4 + 'ETEC';
+        const newId = year + random4 + ' ETEC';
 
         // Set values
         idInput.value = newId;

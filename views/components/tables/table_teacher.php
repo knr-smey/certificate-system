@@ -139,7 +139,7 @@
                                         <h4 class="cert-course" id="cert_course">—</h4>
                                         <div class="cert-granted">Granted: <span id="cert_time">—</span></div>
                                         <div class="cert-footer">
-                                            <div class="cert-id">ID : <span id="cert_id_val">—</span></div>
+                                            <div class="cert-id"><span class="id_text">ID:</span> <span id="certId"><?= htmlspecialchars($normalCertId) ?></span></div>
                                             <div class="cert-signature">
                                                 <div class="cert-sig-line"></div>
                                                 <div class="cert-sig-name text-center" id="cert_sign_teacher">Mr. Heng Pheakna</div>

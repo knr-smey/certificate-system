@@ -73,7 +73,7 @@ function generateCertificateId()
 
     $sequence = str_pad($count, 3, '0', STR_PAD_LEFT);
 
-    return $yearMonth . $sequence . 'ETEC';
+    return $yearMonth . $sequence . ' ETEC';
 }
 
 /**
@@ -101,7 +101,7 @@ function generateCertificateNormalId()
 
     $sequence = str_pad($count, 3, '0', STR_PAD_LEFT);
 
-    return $yearMonth . $sequence . 'ETEC';
+    return $yearMonth . $sequence . ' ETEC';
 }
 
 function generateNormal(){

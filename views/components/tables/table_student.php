@@ -191,7 +191,7 @@
                                         <h1 class="cert-student-name" id="cert_student_name">—</h1>
                                         <div class="cert-desc">
                                             has successfully completed all requirements for completion<br>
-                                            of the Computer Training Courses in
+                                            of the I.T Training Courses in
                                         </div>
                                         <h4 class="cert-course" id="cert_course">—</h4>
                                         <div class="cert-granted"
@@ -201,7 +201,7 @@
                                         </div>
                                         <div class="cert-footer">
                                             <?php $normalCertId = generateNormal(); ?>
-                                            <div class="cert-id">ID: <span id="certId"><?= htmlspecialchars($normalCertId) ?></span></div>
+                                            <div class="cert-id"><span class="id_text">ID:</span> <span id="certId"><?= htmlspecialchars($normalCertId) ?></span></div>
                                             <input type="hidden" id="cert_id_value" value="<?= htmlspecialchars($normalCertId, ENT_QUOTES, 'UTF-8') ?>">
                                             <div class="cert-signature">
                                                 <div class="cert-sig-line"></div>
