@@ -117,7 +117,7 @@
                                     <div class="cert-inner-border">
                                         <div class="cert-kingdom">
                                             <div>KINGDOM OF CAMBODIA</div>
-                                            <div>NATION&nbsp; RELIGION &nbsp;KING</div>
+                                            <div>NATION&nbsp;RELIGION&nbsp;KING</div>
                                         </div>
                                         <div class="cert-logo-area">
                                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCRerloxG_go8MpvD_FYvHwpSWb7580gwmBw&s"

@@ -13,6 +13,27 @@
     src: url('../fonts/Battambang-Regular.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'KhmerUI';
+  src: url('../fonts/KhmerUIb.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Simp';
+  src: url('../fonts/simpfxo.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'oldeng';
+  src: url('../fonts/oldenglishtextmt.ttf') format('truetype');
+}
+
+
+@font-face {
+  font-family: 'SimpBold';
+  src: url('../fonts/simpfxo.ttf') format('truetype');
+  font-weight: bold;
+}
 /* CSS Variables - Design System */
 :root {
     /* Colors - Base */

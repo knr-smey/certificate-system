@@ -356,7 +356,7 @@
     border-radius: 10px;
 }
 .cert-inner-border {
-    border: 8px solid #5e5f65;
+    border: 8px solid #A6A6A6;
     border-radius: 8px;
     background: #fff;
     padding: 15px;
@@ -364,17 +364,18 @@
 
 .cert-kingdom {
     text-align: center; margin-bottom: 20px;
-    font-size: .68rem; font-weight: 900;
-    letter-spacing: .22em; color: #2d2e81;
+    font-size: .68rem; font-weight: bolder;
+    letter-spacing: .02em; color: #2d2e81;
     line-height: 2; text-transform: uppercase;
-    font-family: 'Courier New', monospace;
+    /* font-family: 'Courier New', monospace; */
+    font-family: 'Simp', sans-serif;
     & img{
-         display: block;
-    max-width: 150px;
-    height: auto;
-    margin: 4px auto 0;
-    object-fit: contain;
-    border: none;
+        display: block;
+        max-width: 150px;
+        height: auto;
+        margin: 4px auto 0;
+        object-fit: contain;
+        border: none;
     }
 }
 
@@ -405,7 +406,7 @@
 
 .cert-title {
     text-align: center;
-    font-family: "UnifrakturCook", cursive;
+    font-family: "oldeng", cursive;
     font-size: 2rem; font-weight: 700; color: #111;
     margin: 2px 0 7px;
 }
@@ -419,7 +420,8 @@
 
 .cert-student-name {
     text-align: center; font-size: 1.45rem; font-weight: 900;
-    color: #111; letter-spacing: .1em;
+    letter-spacing: 1px;
+    color: #111;
     text-transform: uppercase; margin-bottom: 14px;
 }
 
@@ -430,13 +432,17 @@
 }
 
 .cert-course {
-    text-align: center; font-size: 16px; font-weight: 900;
-    color: black; letter-spacing: .07em; margin-bottom: 10px;
-    font-family: 'Courier New', monospace;
+    text-align: center; font-size: 18px;
+    color: black;
+    margin-bottom: 10px;
+    font-family: 'Simp', sans-serif;
+    font-weight: bolder;
     word-break: break-word;
     white-space: normal;
     max-width: 100%;
-    padding: 0px 60px;
+    text-shadow: 0 0 2px black;
+    -webkit-text-stroke: 0.5px black;
+    padding: 0px 30px;
 }
 
 .cert-granted {
@@ -464,11 +470,17 @@
 }
 .cert-sig-name {
     font-size: .78rem; font-weight: 700; color: #111;
-    font-family: 'Courier New', monospace; letter-spacing: .05em;
+    font-family: 'Simp', sans-serif; letter-spacing: .05em;
+    text-shadow: 0 0 0.4px black;
+    text-transform: uppercase;
+    -webkit-text-stroke: 0.5px black;
 }
 .cert-sig-role {
-    font-size: .74rem; color: #333;
-    font-family: 'Courier New', monospace; letter-spacing: .07em;
+    font-size: .78rem;
+    font-weight: 700; color: #111;
+    font-family: 'Simp', sans-serif;
+    text-shadow: 0 0 0.4px black;
+    -webkit-text-stroke: 0.5px black;
 }
 
 
@@ -562,7 +574,7 @@
 
     /* ── Inner border: grows to fill outer border ── */
     .cert-inner-border {
-        border: 13px solid #655e65 !important;
+        border: 13px solid #A6A6A6 !important;
         border-radius: 8px !important;
         
         flex: 1 !important;                  /* ← KEY FIX */

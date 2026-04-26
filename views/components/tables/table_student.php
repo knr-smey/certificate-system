@@ -144,9 +144,10 @@
                     </div>
 
                     <div class="cert-field-group">
-                        <label class="cert-field-label">ថ្ងៃខែឆ្នាំ / Granted Date</label>
-                        <input type="text" id="edit_granted" class="cert-field-input"
-                               placeholder="e.g. February 17, 2026">
+                        <label class="cert-field-label">
+                            ថ្ងៃខែឆ្នាំ / Granted Date
+                        </label>
+                        <input type="date" id="edit_granted" class="cert-field-input">
                     </div>
 
                     <!-- <div class="cert-field-group">
@@ -172,7 +173,7 @@
                                     <div class="cert-inner-border">
                                         <div class="cert-kingdom">
                                             <div>KINGDOM OF CAMBODIA</div>
-                                            <div>NATION&nbsp; RELIGION &nbsp;KING</div>
+                                            <div>NATION&nbsp;RELIGION&nbsp;KING</div>
                                              <img src="<?= base_url('assets/Images/border.png') ?>" alt="">
                                         </div>
                                         <div class="cert-logo-area">
@@ -193,10 +194,14 @@
                                             of the Computer Training Courses in
                                         </div>
                                         <h4 class="cert-course" id="cert_course">—</h4>
-                                        <div class="cert-granted">Granted: <?= printCertificateDate('F j,Y') ?></div>
+                                        <div class="cert-granted"
+                                            id="cert_granted"
+                                            data-default="<?= printCertificateDate('F j,Y') ?>">
+                                            Granted: <?= printCertificateDate('F j,Y') ?>
+                                        </div>
                                         <div class="cert-footer">
                                             <?php $normalCertId = generateNormal(); ?>
-                                            <div class="cert-id">ID : <span id="certId"><?= htmlspecialchars($normalCertId) ?></span></div>
+                                            <div class="cert-id">ID: <span id="certId"><?= htmlspecialchars($normalCertId) ?></span></div>
                                             <input type="hidden" id="cert_id_value" value="<?= htmlspecialchars($normalCertId, ENT_QUOTES, 'UTF-8') ?>">
                                             <div class="cert-signature">
                                                 <div class="cert-sig-line"></div>
@@ -233,6 +238,9 @@
 <style>
 #saved_courses_select { cursor: pointer; }
 #saved_courses_select option { padding: 8px; }
+input[type="date"] {
+  color: #555;
+}
 </style>
 
 <!-- SweetAlert2 -->
@@ -334,8 +342,8 @@ function loadStudents(classId) {
                     <td>
                         <div class="student-name">
                             <div class="student-avatar"><i class="bi bi-person-fill"></i></div>
-                            <span class="student-name-text">${s.name}</span>
-                        </div>
+                                <span class="student-name-text">${s.name.toUpperCase()}</span>
+                            </div>
                     </td>
                     <td class="text-center">
                         <span class="gender-badge ${gClass}">${gender}</span>
@@ -372,7 +380,8 @@ function openCertificate(studentId, name, course, teacher, time) {
     const months  = ['January','February','March','April','May','June',
                      'July','August','September','October','November','December'];
     const granted = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
-    $('#edit_granted').val(granted);
+    // $('#edit_granted').val(granted);
+    $('#edit_granted').val('');
     $('#edit_id').val(generateId());
 
     updatePreview();
@@ -385,12 +394,29 @@ $(document).on('input', '#edit_student_name, #edit_course, #edit_granted, #edit_
     updatePreview();
     if ($(this).attr('id') === 'edit_course') renderSavedCourses();
 });
+function formatDate(dateStr) {
+    if (!dateStr) return '';
 
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
 function updatePreview() {
     $('#cert_student_name').text($('#edit_student_name').val() || '—');
-    $('#cert_course').text($('#edit_course').val()             || '—');
-    $('#cert_time').text($('#edit_granted').val()              || '—');
-    // $('#cert_id_val').text($('#edit_id').val()                 || '—');
+    $('#cert_course').text($('#edit_course').val() || '—');
+
+    const raw = $('#edit_granted').val();
+    const defaultDate = $('#cert_granted').data('default');
+
+    if (raw) {
+        $('#cert_granted').text('Granted: ' + formatDate(raw));
+    } else {
+        $('#cert_granted').text('Granted: ' + defaultDate);
+    }
+
     $('#cert_sign_teacher').text('Mr. Heng Pheakna');
 }
 
@@ -599,10 +625,13 @@ async function printAllCertificates() {
         $('#current_student_id').val(s.id);
         $('#edit_student_name').val(s.name);
         $('#edit_course').val(course);
-        $('#edit_granted').val(granted);
+        // if (!$('#edit_granted').val()) {
+        //     $('#edit_granted').val(granted);
+        // }
         // $('#edit_id').val(certId);
         updatePreview();
 
+        
         // ✅ រង់ចាំ preview update
         await new Promise(resolve => setTimeout(resolve, 300));
 
