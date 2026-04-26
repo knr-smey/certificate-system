@@ -205,7 +205,7 @@
                                             <input type="hidden" id="cert_id_value" value="<?= htmlspecialchars($normalCertId, ENT_QUOTES, 'UTF-8') ?>">
                                             <div class="cert-signature">
                                                 <div class="cert-sig-line"></div>
-                                                <div class="cert-sig-name text-center" id="cert_sign_teacher">Mr. Heng Pheakna</div>
+                                                <div class="cert-sig-name text-center" id="cert_sign_teacher">Mr.<span>HENG PHEAKNA</span></div>
                                                 <div class="cert-sig-role text-center">Director</div>
                                             </div>
                                         </div>
@@ -417,7 +417,7 @@ function updatePreview() {
         $('#cert_granted').text('Granted: ' + defaultDate);
     }
 
-    $('#cert_sign_teacher').text('Mr. Heng Pheakna');
+    $('#cert_sign_teacher').text('Mr. HENG PHEAKNA');
 }
 
 // ══════════════════════════════════════════

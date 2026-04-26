@@ -65,7 +65,7 @@
                         <div class="cert-free-signature">
                             <div class="cert-free-sig-line"></div>
                             <div class="cert-free-sig-name">
-                                Mr. Heng Pheakna
+                                Mr. HENG PHEAKNA
                             </div>
                             <div class="cert-free-sig-role">
                                 Director
@@ -83,7 +83,7 @@
                         <div style="width: 20%;" class="cert-free-signatur">
                             <div class="cert-free-sig-line"></div>
                             <div class="cert-free-sig-name">
-                                Mr. Heng Pheakna
+                                Mr. HENG PHEAKNA
                             </div>
                             <div class="cert-free-sig-role">
                                 Director

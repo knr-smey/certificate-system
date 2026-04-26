@@ -110,7 +110,7 @@
                                             <div class="cert-id">ID : <span id="cert_id_val">—</span></div>
                                             <div class="cert-signature">
                                                 <div class="cert-sig-line"></div>
-                                                <div class="cert-sig-name text-center" id="cert_sign_teacher">Mr. Heng Pheakna</div>
+                                                <div class="cert-sig-name text-center" id="cert_sign_teacher">Mr. HENG PHEAKNA</div>
                                                 <div class="cert-sig-role text-center">Director</div>
                                             </div>
                                         </div>
@@ -225,7 +225,7 @@
     function openCertModal(studentName, course, teacher) {
         $('#edit_student_name').val(studentName || '').trigger('input');
         $('#edit_course').val(course || '').trigger('input');
-        $('#cert_sign_teacher').text(teacher || 'Mr. Heng Pheakna');
+        $('#cert_sign_teacher').text(teacher || 'Mr. HENG PHEAKNA');
         $('#edit_granted').val(new Date().toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
