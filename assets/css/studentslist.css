@@ -360,6 +360,8 @@
     border-radius: 8px;
     background: #fff;
     padding: 15px;
+    padding-bottom: 3px;
+    position: relative;
 }
 
 .cert-kingdom {
@@ -373,7 +375,7 @@
     -webkit-text-stroke: 0.3px #2d2e81;
     & img{
         display: block;
-        max-width: 150px;
+        max-width: 120px;
         height: auto;
         margin: 4px auto 0;
         object-fit: contain;
@@ -384,7 +386,7 @@
 
 .cert-logo-area { text-align: center; margin-bottom: 12px; }
 .cert-logo-img {
-    width: 100px; height: 100px;
+    width: 98px; height: 98px;
     object-fit: contain; display: inline-block;
     border-radius: 13px;
 }
@@ -397,13 +399,16 @@
 }
 
 .cert-school-kh {
-    text-align: center; font-size: 1rem; font-weight: 700;
+    text-align: center; font-size: 0.9rem; font-weight: 700;
     color: #2d2e81; margin-bottom: 4px;
     font-family: "Moul", serif;
 }
 .cert-school-en {
-    text-align: center; font-size: 16px; color: #2d2e81;
-    letter-spacing: .02em; margin-bottom: 14px;
+    text-align: center; 
+    font-weight: 550;
+    font-size: 13px; 
+    color: #2d2e81;
+    margin-bottom: 14px;
     font-family: Arial, sans-serif;
 }
 
@@ -422,8 +427,7 @@
 }
 
 .cert-student-name {
-    text-align: center; font-size: 1.45rem; font-weight: 900;
-    letter-spacing: 0.7px;
+    text-align: center; font-size: 1.40rem; font-weight: 900;
     color: #111;
     text-transform: uppercase; margin-bottom: 14px;
 }
@@ -446,18 +450,19 @@
     line-height: 28px;
     text-shadow: 0 0 2px black;
     -webkit-text-stroke: 0.5px black;
-    padding: 0px 30px;
+    /* padding: 0px 30px; */
+    white-space: pre-line;
 }
 
 .cert-granted {
-    text-align: center; font-size: .86rem; font-weight: 700;
+    text-align: center; font-size: .90rem; font-weight: 700;
     color: #2d2e81; letter-spacing: .05em; margin-bottom: 36px;
     font-family: Arial, sans-serif;
 }
 
 .cert-footer {
     display: flex; align-items: flex-end;
-    justify-content: space-between; padding-top: 10px;
+    justify-content: space-between; padding-top: 20px;
     position: relative;
 }
 .cert-id {
@@ -467,17 +472,21 @@
     white-space: nowrap; bottom: 0;
     font-weight: 700;
 }
+.cert-id-print-only {
+    display: none;
+}
 .id_text{
+    color: #2d2e81;
     font-size: 8px;
     font-family: 'Simp', sans-serif;
 }
 .cert-signature { text-align: right; margin-left: auto; }
 .cert-sig-line {
     height: 1px; background: #222;
-    width: 128px; margin-left: auto; margin-bottom: 4px;
+    width: 150px; margin-left: auto; margin-bottom: 2px;
 }
 .cert-sig-name {
-    font-size: .78rem; font-weight: 700; color: #111;
+    font-size: .80rem; font-weight: 700; color: #111;
     font-family: 'Simp', sans-serif; 
     /* letter-spacing: .05em; */
     text-shadow: 0 0 0.4px black;
@@ -585,7 +594,7 @@
     .cert-inner-border {
         border: 13px solid #A6A6A6 !important;
         border-radius: 8px !important;
-        
+        position: relative !important;
         flex: 1 !important;                  /* ← KEY FIX */
         display: flex !important;            /* ← KEY FIX */
         flex-direction: column !important;   /* ← KEY FIX */
@@ -625,16 +634,16 @@
     }
 
     .cert-logo-img,
-    .cert-logo-fallback  { width: 140px !important; height: 140px !important; }
+    .cert-logo-fallback  { width: 130px !important; height: 130px !important; }
 
-    .cert-school-kh      { font-size: 1.5rem !important; margin-bottom: 6px !important; }
-    .cert-school-en      { font-size: 1.5rem !important; margin-bottom: 22px !important; }
+    .cert-school-kh      { font-size: 21px !important; margin-bottom: 6px !important; }
+    .cert-school-en      { font-size: 20px !important; margin-bottom: 18px !important; }
 
-    .cert-title          { font-size: 2.9rem !important; margin: 2px 0 7px !important; }
+    .cert-title          { font-size: 2.6rem !important; margin: 0px 7px !important; margin-bottom: 13px !important;}
 
-    .cert-certify        { font-size: 1.6rem !important; margin-bottom: 22px !important; letter-spacing: .04em;}
+    .cert-certify        { font-size: 1.5rem !important; margin-bottom: 20px !important; letter-spacing: .04em;}
 
-    .cert-student-name   { font-size: 1.9rem !important; margin-bottom: 20px !important; letter-spacing: 0em !important;}
+    .cert-student-name   { font-size: 1.8rem !important; margin-top: 15px !important; margin-bottom: 25px !important; letter-spacing: 0em !important;}
 
     .cert-desc           { font-size: 1.2rem !important; margin-bottom: 22px !important; }
 
@@ -642,22 +651,67 @@
     .cert-course {
             text-align: center; font-size: 1.6rem;
             color: black;
-            margin-top:5px !important;
-            margin-bottom: 15px;
+            margin-top:10px !important;
+            margin-bottom: 18px !important;
             font-family: 'Simp', sans-serif;
             line-height: 43px;
             text-shadow: 0 0 2px black;
             -webkit-text-stroke: 1.2px black;
-            padding: 0px 30px;
+            /* padding: 0px 30px; */
         }
-    .cert-granted        { font-size: 1.2rem !important; margin-bottom: auto !important; }
+    .cert-granted        { font-size: 1.5rem !important; margin-bottom: auto !important; font-weight: 700 !important; letter-spacing: 0em !important;}
+
+    .cert-footer {
+        margin-top: auto !important;
+        padding-top: 18mm !important;
+        display: grid !important;
+        grid-template-columns: 1fr auto 1fr !important;
+        align-items: end !important;
+        position: relative !important;
+    }
+
+    .cert-id {
+        position: static !important;
+        transform: none !important;
+        bottom: auto !important;
+        left: auto !important;
+        margin: 0 !important;
+        justify-self: center !important;
+        align-self: end !important;
+        text-align: center !important;
+        grid-column: 2 !important;
+        white-space: nowrap !important;
+    }
+
+    .cert-footer .cert-id {
+        display: none !important;
+    }
+
+    .cert-id-print-only {
+        display: block !important;
+        position: absolute !important;
+        left: 50% !important;
+        bottom: 2.1mm !important;
+        transform: translateX(-50%) !important;
+        margin: 0 !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        z-index: 3 !important;
+    }
+
+    .cert-signature {
+        grid-column: 3 !important;
+        justify-self: end !important;
+        margin-left: 0 !important;
+    }
 
     .cert-sig-line       { width: 220px !important; }
-    .cert-sig-name       { font-size: 1.1rem !important; }
-    .cert-sig-role       { font-size: 1rem !important; }
-    .cert-id             { font-size: .7rem !important; }
+    .cert-sig-name       { font-size: 1.2rem !important; }
+    .cert-sig-role       { font-size: 1.2rem !important; }
+    .cert-id             { font-size: .6rem !important; }
     .id_text{
-        font-size: .8rem !important;
+        color: #2d2e81 !important;
+        font-size: .7rem !important;
         font-weight: 900 !important;
     }
 

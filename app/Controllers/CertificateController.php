@@ -203,7 +203,7 @@ final class CertificateController extends Controller
     {
         try {
 
-            $id = generateId(); // ហៅពី app/Helper/certificate-helper.php
+            $id = generateNormal();
 
             $this->jsonResponse(true, ['id' => $id]);
 

@@ -90,18 +90,30 @@ function generateCertificateNormalId()
     $yearMonth = date('ym'); // YYMM
 
     $stmt = $pdo->prepare("
-        SELECT COUNT(*) 
+        SELECT certificate_id
         FROM student_certificate_normal
-        WHERE DATE_FORMAT(created_at,'%y%m') = ?
+        WHERE certificate_id IS NOT NULL
+          AND certificate_id <> ''
+          AND certificate_id LIKE ?
+        ORDER BY id DESC
+        LIMIT 1
     ");
 
-    $stmt->execute([$yearMonth]);
+    $stmt->execute([$yearMonth . '%']);
+    $lastId = (string)$stmt->fetchColumn();
 
-    $count = (int)$stmt->fetchColumn() + 1;
+    $nextSequence = 1;
 
-    $sequence = str_pad($count, 3, '0', STR_PAD_LEFT);
+    if ($lastId !== '' && preg_match('/^(\d{4})(\d{3,})\s*ETEC$/i', trim($lastId), $matches)) {
+        $lastPrefix = $matches[1];
+        $lastSequence = (int)$matches[2];
 
-    return $yearMonth . $sequence . ' ETEC';
+        if ($lastPrefix === $yearMonth) {
+            $nextSequence = $lastSequence + 1;
+        }
+    }
+
+    return $yearMonth . str_pad((string)$nextSequence, 3, '0', STR_PAD_LEFT) . ' ETEC';
 }
 
 function generateNormal(){
