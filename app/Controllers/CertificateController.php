@@ -76,23 +76,42 @@ final class CertificateController extends Controller
     /**
      * Get classes API
      */
-    public function getClasses(): void
+    // public function getClasses(): void
+    // {
+    //     try {
+
+    //         $type   = $_GET['type'] ?? '';
+    //         $course = $_GET['course'] ?? '';
+
+    //         // 🔥 map type
+    //         $typeMap = [
+    //             'normal' => 1,
+    //             'free'   => 2
+    //         ];
+
+    //         $typeId = $typeMap[$type] ?? '';
+
+    //         $model   = new ClassModel();
+    //         $classes = $model->getFinishedClasses((string)$typeId, (string)$course);
+
+    //         $this->jsonResponse(true, $classes);
+
+    //     } catch (\Throwable $e) {
+    //         $this->jsonResponse(false, [], $e->getMessage(), 500);
+    //     }
+    // }
+
+
+        public function getClasses(): void
     {
         try {
 
             $type   = $_GET['type'] ?? '';
             $course = $_GET['course'] ?? '';
 
-            // 🔥 map type
-            $typeMap = [
-                'normal' => 1,
-                'free'   => 2
-            ];
-
-            $typeId = $typeMap[$type] ?? '';
-
+            // ✅ NO mapping (use DB value directly)
             $model   = new ClassModel();
-            $classes = $model->getFinishedClasses((string)$typeId, (string)$course);
+            $classes = $model->getFinishedClasses($type, $course);
 
             $this->jsonResponse(true, $classes);
 
@@ -124,6 +143,53 @@ final class CertificateController extends Controller
             $this->jsonResponse(false, [], $e->getMessage(), 500);
         }
     }
+
+    public function updateStudentName(): void
+    {
+        try {
+
+            $body = json_decode(file_get_contents('php://input'), true);
+
+            if (!is_array($body)) {
+                throw new \RuntimeException("Invalid JSON body");
+            }
+
+            $studentId   = (int) ($body['student_id'] ?? 0);
+            $classId     = (int) ($body['class_id'] ?? 0);
+            $studentName = trim($body['student_name'] ?? '');
+
+            if ($studentId <= 0 || $classId <= 0 || $studentName === '') {
+                throw new \RuntimeException("Missing required fields");
+            }
+
+            $pdo = \App\Core\Database::pdo();
+
+            $stmt = $pdo->prepare("
+                UPDATE students
+                SET name = :name,
+                    updated_at = NOW()
+                WHERE id = :student_id
+                AND class_id = :class_id
+            ");
+
+            $stmt->execute([
+                'name'        => $studentName,
+                'student_id'  => $studentId,
+                'class_id'    => $classId
+            ]);
+
+            $this->jsonResponse(true, [
+                'student_id' => $studentId
+            ], 'Name updated successfully');
+
+        } catch (\Throwable $e) {
+
+            $this->jsonResponse(false, [
+                'error' => $e->getMessage()
+            ], 'Update failed', 500);
+        }
+    }
+    
 
     /**
      * Get certificate date API

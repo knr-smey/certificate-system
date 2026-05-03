@@ -716,3 +716,12 @@
     }
 
 }
+
+.cert-table-panel {
+    background: #fff;
+    border-radius: 10px;
+}
+
+.table td input {
+    font-size: 14px;
+}
