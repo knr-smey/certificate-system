@@ -15,122 +15,152 @@ final class ClassModel
         $this->pdo = Database::pdo();
     }
 
-        // public function getFinishedClasses(string $type = '', string $course = ''): array
-    // {
-    //     $sql = "
-    //         SELECT 
-    //             c.id,
-    //             ec.class_network_for_basic_it,
+        public function getFinishedClasses(string $type = '', string $course = ''): array
+    {
+        $sql = "
+            SELECT 
+                c.id,
+                ec.class_network_for_basic_it,
                 
-    //             co.course,
-    //             cat.category,
-    //             tm.time,
-    //             u.name AS teacher_name,
-    //             c.class_type_id,
-    //             ct.name AS class_type_name,
-    //             COUNT(DISTINCT rcs.student_id) AS total_students,
-    //             COUNT(DISTINCT scn.student_id) AS printed_students
-    //         FROM req_certificate ec
-    //         INNER JOIN classes c
-    //             ON c.id = ec.class_id
-    //         LEFT JOIN req_class_student rcs
-    //             ON rcs.req_certificate_id = ec.id
-    //         LEFT JOIN users u
-    //             ON u.id = c.instructor_id
-    //         LEFT JOIN courses co
-    //             ON co.id = c.course_id
-    //         LEFT JOIN categories cat
-    //             ON cat.id = co.category_id
-    //         LEFT JOIN times tm
-    //             ON tm.id = c.time_id
-    //         LEFT JOIN class_types ct
-    //             ON ct.id = c.class_type_id
-    //         LEFT JOIN student_certificate_normal scn
-    //             ON scn.class_id = c.id
-    //         WHERE 1 = 1
-    //     ";
+                co.course,
+                cat.category,
+                tm.time,
+                u.name AS teacher_name,
+                c.class_type_id,
+                ct.name AS class_type_name,
+                COUNT(DISTINCT rcs.student_id) AS total_students,
+                COUNT(DISTINCT scn.student_id) AS printed_students
+            FROM req_certificate ec
+            INNER JOIN classes c
+                ON c.id = ec.class_id
+            LEFT JOIN req_class_student rcs
+                ON rcs.req_certificate_id = ec.id
+            LEFT JOIN users u
+                ON u.id = c.instructor_id
+            LEFT JOIN courses co
+                ON co.id = c.course_id
+            LEFT JOIN categories cat
+                ON cat.id = co.category_id
+            LEFT JOIN times tm
+                ON tm.id = c.time_id
+            LEFT JOIN class_types ct
+                ON ct.id = c.class_type_id
+            LEFT JOIN student_certificate_normal scn
+                ON scn.class_id = c.id
+            WHERE 1 = 1
+        ";
 
-    //     $params = [];
+        $params = [];
 
-    //     // ❗ remove type filter for now (your type is wrong)
-    //     // if ($type !== '') {
-    //     //     $sql .= " AND c.class_type_id = :type";
-    //     //     $params['type'] = $type;
-    //     // }
+        // ❗ remove type filter for now (your type is wrong)
+        // if ($type !== '') {
+        //     $sql .= " AND c.class_type_id = :type";
+        //     $params['type'] = $type;
+        // }
 
-    //     if ($course !== '') {
-    //         $sql .= " AND c.course_id = :course";
-    //         $params['course'] = $course;
-    //     }
+        if ($course !== '') {
+            $sql .= " AND c.course_id = :course";
+            $params['course'] = $course;
+        }
 
-    //     // ✅ IMPORTANT (for COUNT)
-    //     $sql .= "
-    //         GROUP BY 
-    //             c.id,
-    //             ec.class_network_for_basic_it,
-    //             co.course,
-    //             cat.category,
-    //             tm.time,
-    //             u.name,
-    //             c.class_type_id,
-    //             ct.name
-    //         HAVING COUNT(DISTINCT rcs.student_id) > 0
-    //             OR COUNT(DISTINCT scn.student_id) > 0
-    //         ORDER BY c.id DESC
-    //     ";
+        // ✅ IMPORTANT (for COUNT)
+        $sql .= "
+            GROUP BY 
+                c.id,
+                ec.class_network_for_basic_it,
+                co.course,
+                cat.category,
+                tm.time,
+                u.name,
+                c.class_type_id,
+                ct.name
+            HAVING COUNT(DISTINCT rcs.student_id) > 0
+                OR COUNT(DISTINCT scn.student_id) > 0
+            ORDER BY c.id DESC
+        ";
 
-    //     $stmt = $this->pdo->prepare($sql);
-    //     $stmt->execute($params);
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
 
-    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // }
-
-
-    public function getFinishedClasses(string $type = '', string $course = ''): array
-{
-    $sql = "
-        SELECT 
-            c.id AS class_id,
-            c.course,
-            c.category,   -- ✅ ADD THIS
-            c.time,
-            t.teacher_name,
-            COUNT(DISTINCT ecs.student_id) AS total_students
-
-        FROM classes c
-
-        LEFT JOIN teachers t 
-            ON t.id = c.teacher_id
-
-        LEFT JOIN end_class ec 
-            ON ec.class_id = c.id
-
-        LEFT JOIN end_class_students ecs 
-            ON ecs.end_class_id = ec.id
-
-        WHERE 1=1
-    ";
-
-    $params = [];
-
-    if (!empty($type)) {
-        $sql .= " AND c.type = :type";
-        $params['type'] = $type;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    if (!empty($course)) {
-        $sql .= " AND c.course = :course";
-        $params['course'] = $course;
-    }
 
-    $sql .= "
-        GROUP BY c.id, c.course, c.category, c.time, t.teacher_name
-        ORDER BY c.id ASC
-    ";
+//    public function getFinishedClasses(string $type = '', string $course = ''): array
+// {
+//     $sql = "
+//         SELECT 
+//             c.id,
+//             ec.class_network_for_basic_it,
 
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute($params);
+//             co.course,
+//             cat.category,
+//             tm.time,
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+//             u.name AS teacher_name,
+
+//             c.class_type_id,
+//             ct.name AS class_type_name,
+
+//             COUNT(DISTINCT rcs.student_id) AS total_students
+
+//         FROM req_certificate ec
+
+//         INNER JOIN classes c
+//             ON c.id = ec.class_id
+
+//         LEFT JOIN req_class_student rcs
+//             ON rcs.req_certificate_id = ec.id
+
+//         LEFT JOIN users u
+//             ON u.id = c.instructor_id
+
+//         LEFT JOIN courses co
+//             ON co.id = c.course_id
+
+//         LEFT JOIN categories cat
+//             ON cat.id = co.category_id
+
+//         LEFT JOIN times tm
+//             ON tm.id = c.time_id
+
+//         LEFT JOIN class_types ct
+//             ON ct.id = c.class_type_id
+
+//         WHERE 1 = 1
+//     ";
+
+//     $params = [];
+
+//     // Filter by class type
+//     if ($type !== '') {
+//         $sql .= " AND c.class_type_id = :type";
+//         $params['type'] = $type;
+//     }
+
+//     // Filter by course
+//     if ($course !== '') {
+//         $sql .= " AND c.course_id = :course";
+//         $params['course'] = $course;
+//     }
+
+//     $sql .= "
+//         GROUP BY 
+//             c.id,
+//             ec.class_network_for_basic_it,
+//             co.course,
+//             cat.category,
+//             tm.time,
+//             u.name,
+//             c.class_type_id,
+//             ct.name
+
+//         ORDER BY c.id DESC
+//     ";
+
+//     $stmt = $this->pdo->prepare($sql);
+//     $stmt->execute($params);
+
+//     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+// }
 }

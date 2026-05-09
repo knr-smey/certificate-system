@@ -48,7 +48,7 @@
 
                     <div class="cert-field-group">
                         <label class="cert-field-label">មុខវិជ្ជា / Course</label>
-                        <input type="text" id="edit_course" class="cert-field-input" placeholder="Course name...">
+                        <input type="text" class="cert-field-input edit_course" placeholder="Course name...">
                     </div>
 
                     <div class="cert-field-group">
@@ -158,9 +158,12 @@
         $('#edit_student_name').on('input', function() {
             $('#cert_student_name').text($(this).val() || '—');
         });
-        $('#edit_course').on('input', function() {
-            $('#cert_course').text($(this).val() || '—');
+
+        $(document).on('input', '#certTeacherModal .edit_course', function() {
+            const modal = $(this).closest('.modal-content');
+            modal.find('#cert_course').text($(this).val() || '—');
         });
+
         $('#edit_granted').on('input', function() {
             $('#cert_time').text($(this).val() || '—');
         });
@@ -223,16 +226,16 @@
 
     // ==================== OPEN CERT MODAL ====================
     function openCertModal(studentName, course, teacher) {
-        $('#edit_student_name').val(studentName || '').trigger('input');
-        $('#edit_course').val(course || '').trigger('input');
+        $('#certTeacherModal').find('#edit_student_name').val(studentName || '').trigger('input');
+        $('#certTeacherModal').find('.edit_course').val(course || '').trigger('input');
         $('#cert_sign_teacher').text(teacher || 'Mr. HENG PHEAKNA');
-        $('#edit_granted').val(new Date().toLocaleDateString('en-US', {
+        $('#certTeacherModal').find('#edit_granted').val(new Date().toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
         })).trigger('input');
         regenId();
-        $('#certModal').modal('show');
+        $('#certTeacherModal').modal('show');
     }
 
      // ==================== REGENERATE ID ====================
@@ -243,7 +246,7 @@
 
      // ==================== SAVE / LOAD / DELETE COURSES ====================
     function saveCourseTeacher() {
-        const course = $('#edit_course').val().trim();
+        const course = $('#certTeacherModal').find('.edit_course').val().trim();
         if (!course) {
             alert('សូមបញ្ចូលឈ្មោះ Course សិន!');
             return;
@@ -257,7 +260,7 @@
     }
 
     function applySavedCourse(c) {
-        $('#edit_course').val(c).trigger('input');
+        $('#certTeacherModal').find('.edit_course').val(c).trigger('input');
     }
 
     function deleteSavedCourse(c) {

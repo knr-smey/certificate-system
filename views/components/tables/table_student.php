@@ -111,28 +111,28 @@
 
                     <div class="cert-field-group">
                         <label class="cert-field-label">ឈ្មោះសិស្ស</label>
-                        <input type="text" id="edit_student_name" class="cert-field-input"
+                        <input type="text" id="edit_student_name" class="cert-field-input edit_student_name"
                             placeholder="Student name...">
                     </div>
 
                     <div class="cert-field-group">
                         <label class="cert-field-label">មុខវិជ្ជា / Course</label>
-                        <textarea id="edit_course"
-                            class="cert-field-input"
+                        <textarea 
+                            class="cert-field-input edit_course"
                             placeholder="Course name..."
                             rows="3"></textarea>
                     </div>
 
                     <!-- Saved Courses Dropdown -->
-                    <div class="cert-field-group" id="saved_courses_wrap" style="display:none;">
+                    <div class="cert-field-group saved_courses_wrap" style="display:none;">
                         <label class="cert-field-label">
                             <i class="bi bi-bookmark-fill me-1 text-primary"></i>
                             Course រក្សាទុក
-                            <span class="badge bg-primary ms-2" id="saved_count">0</span>
+                            <span class="badge bg-primary ms-2 saved_count">0</span>
                         </label>
                         <div class="d-flex gap-2">
-                            <select id="saved_courses_select"
-                                class="cert-field-input"
+                            <select
+                                class="cert-field-input saved_courses_select"
                                 onchange="applySavedCourseFromSelect(this, this.value)">
                                 <option value="">-- ជ្រើសរើស Course --</option>
                             </select>
@@ -149,7 +149,7 @@
                         <label class="cert-field-label">
                             ថ្ងៃខែឆ្នាំ / Granted Date
                         </label>
-                        <input type="date" id="edit_granted" class="cert-field-input">
+                        <input type="date" class="cert-field-input edit_granted">
                     </div>
 
                     <!-- <div class="cert-field-group">
@@ -267,30 +267,30 @@
                         <i class="bi bi-pencil-square me-2"></i>កែប្រែព័ត៌មាន
                     </div>
 
-                    <div class="cert-field-group">
+                    <!-- <div class="cert-field-group">
                         <label class="cert-field-label">ឈ្មោះសិស្ស</label>
                         <input type="text" id="edit_student_name" class="cert-field-input"
                             placeholder="Student name...">
-                    </div>
+                    </div> -->
 
                     <div class="cert-field-group">
                         <label class="cert-field-label">មុខវិជ្ជា / Course</label>
-                        <textarea id="edit_course"
-                            class="cert-field-input"
+                        <textarea
+                            class="cert-field-input edit_course"
                             placeholder="Course name..."
                             rows="3"></textarea>
                     </div>
 
                     <!-- Saved Courses Dropdown -->
-                    <div class="cert-field-group" id="saved_courses_wrap" style="display:none">
+                    <div class="cert-field-group saved_courses_wrap" style="display:none">
                         <label class="cert-field-label">
                             <i class="bi bi-bookmark-fill me-1 text-primary"></i>
                             Course រក្សាទុក
-                            <span class="badge bg-primary ms-2" id="saved_count">0</span>
+                            <span class="badge bg-primary ms-2 saved_count">0</span>
                         </label>
                         <div class="d-flex gap-2">
-                            <select id="saved_courses_select"
-                                class="cert-field-input"
+                            <select
+                                class="cert-field-input saved_courses_select"
                                 onchange="applySavedCourseFromSelect(this, this.value)">
                                 <option value="">-- ជ្រើសរើស Course --</option>
                             </select>
@@ -307,7 +307,7 @@
                         <label class="cert-field-label">
                             ថ្ងៃខែឆ្នាំ / Granted Date
                         </label>
-                        <input type="date" id="edit_granted" class="cert-field-input">
+                        <input type="date" class="cert-field-input edit_granted">
                     </div>
                 </div>
 
@@ -316,7 +316,7 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h6 class="mb-0">
-                            <i class="bi bi-people-fill me-2"></i>Student List
+                            <i class="bi bi-people-fill me-2"></i>សិស្សទាំងអស់ដែលត្រូវបោះពុម្ពសញ្ញាបត្រ
                         </h6>
                     </div>
 
@@ -324,10 +324,10 @@
                         <table class="table table-bordered table-hover align-middle text-center">
                             <thead class="table-light">
                                 <tr>
-                                    <th style="width:60px;">N°</th>
-                                    <th>Student Name</th>
-                                    <th style="width:120px;">Gender</th>
-                                    <th style="width:180px;">Action</th>
+                                    <th style="width:120px;">លេខរៀង</th>
+                                    <th>ឈ្មោះសិស្ស</th>
+                                    <th style="width:120px;">ភេទ</th>
+                                    <th style="width:180px;">សកម្មភាព</th>
                                 </tr>
                             </thead>
 
@@ -359,11 +359,11 @@
 </div>
 
 <style>
-    #saved_courses_select {
+    .saved_courses_select {
         cursor: pointer;
     }
 
-    #saved_courses_select option {
+    .saved_courses_select option {
         padding: 8px;
     }
 
@@ -596,7 +596,7 @@
 
             success: function(res) {
                 if (studentName) {
-                    modal.find('#edit_student_name').val(studentName);
+                    modal.find('.edit_student_name').val(studentName);
                     updatePreview('#tableCertModal');
                 }
 
@@ -642,8 +642,8 @@
     // ══════════════════════════════════════════
     function openCertificate(studentId, name, course, teacher, time) {
         $('#current_student_id').val(studentId); // ✅ save student_id
-        $('#edit_student_name').val(name);
-        $('#edit_course').val(course);
+        $('#certModal').find('.edit_student_name').val(name);
+        $('#certModal').find('.edit_course').val(course);
         const savedCourse = localStorage.getItem('selected_course');
 
         const today = new Date();
@@ -652,21 +652,21 @@
         ];
         const granted = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
         // $('#edit_granted').val(granted);
-        $('#edit_granted').val('');
-        $('#edit_id').val(generateId());
+        $('#certModal').find('.edit_granted').val('');
+        $('#certModal').find('.edit_id').val(generateId());
 
         if (savedCourse) {
-            $('#edit_course').val(savedCourse);
+            $('#certModal').find('.edit_course').val(savedCourse);
         } else {
-            $('#edit_course').val(course);
+            $('#certModal').find('.edit_course').val(course);
         }
 
         const savedDate = localStorage.getItem('cert_granted_date');
 
         if (savedDate) {
-            $('#edit_granted').val(savedDate);
+            $('#certModal').find('.edit_granted').val(savedDate);
         } else {
-            $('#edit_granted').val('');
+            $('#certModal').find('.edit_granted').val('');
         }
         updatePreview();
         renderSavedCourses();
@@ -680,13 +680,14 @@
         const savedCourse = localStorage.getItem('selected_course');
         const classCourse = currentClass.course && currentClass.course !== '-' ? currentClass.course : '';
         const firstStudentCourse = allStudents.length > 0 ? allStudents[0].course || '' : '';
-        const selectedCourse = classCourse || firstStudentCourse || savedCourse || '';
+        // const selectedCourse = classCourse || firstStudentCourse || savedCourse || '';
+        const selectedCourse = savedCourse || classCourse || firstStudentCourse || '';
         const selectedDate = localStorage.getItem('cert_granted_date') || '';
         const firstStudentName = allStudents.length > 0 ? allStudents[0].name : '';
 
-        modalBody.find('#edit_student_name').val(firstStudentName);
-        modalBody.find('#edit_course').val(selectedCourse);
-        modalBody.find('#edit_granted').val(selectedDate);
+        modalBody.find('.edit_student_name').val(firstStudentName);
+        modalBody.find('.edit_course').val(selectedCourse);
+        modalBody.find('.edit_granted').val(selectedDate);
 
         // Keep list stable and refresh if needed
         if (currentClassId > 0) {
@@ -702,7 +703,7 @@
         refreshNextCertificateId();
     }
 
-    $(document).on('change', '.modal-content #edit_granted', function() {
+    $(document).on('change', '.modal-content .edit_granted', function() {
         const modal = $(this).closest('.modal-content');
         const value = $(this).val();
 
@@ -716,17 +717,15 @@
     });
 
     // ── Live preview ──
-    $(document).on('input', '.modal-content #edit_student_name, .modal-content #edit_course, .modal-content #edit_granted, .modal-content #edit_id', function() {
+    $(document).on('input', '.modal-content .edit_student_name, .modal-content .edit_course, .modal-content .edit_granted, .modal-content .edit_id', function() {
         const modal = $(this).closest('.modal-content');
 
-        if ($(this).attr('id') === 'edit_course') {
-            const val = modal.find('#edit_course').val().trim();
+        if ($(this).is('.edit_course')) {
+            const val = modal.find('.edit_course').val().trim();
 
             if (val) {
-                // ✅ save when typing
                 localStorage.setItem('selected_course', val);
             } else {
-                // ❌ clear when empty (THIS FIXES YOUR BUG)
                 localStorage.removeItem('selected_course');
             }
 
@@ -749,10 +748,10 @@
 
     function updatePreview(modalSelector = '#certModal') {
         const modal = $(modalSelector);
-        modal.find('#cert_student_name').text(modal.find('#edit_student_name').val() || '—');
-        modal.find('#cert_course').text(modal.find('#edit_course').val() || '—');
+        modal.find('#cert_student_name').text(modal.find('.edit_student_name').val() || '—');
+        modal.find('#cert_course').text(modal.find('.edit_course').val() || '—');
 
-        const raw = modal.find('#edit_granted').val();
+        const raw = modal.find('.edit_granted').val();
         const defaultDate = modal.find('#cert_granted').data('default');
 
         if (raw) {
@@ -783,7 +782,7 @@
     // ══════════════════════════════════════════
     function saveCourse(el) {
         const modal = el ? $(el).closest('.modal-content') : $('#certModal');
-        const custom = modal.find('#edit_course').val().trim();
+        const custom = modal.find('.edit_course').val().trim();
         if (!custom) {
             Swal.fire({
                 icon: 'warning',
@@ -803,7 +802,7 @@
             success: function(result) {
                 if (result.success) {
                     localStorage.setItem('selected_course', custom);
-                    modal.find('#edit_course').val(custom);
+                    modal.find('.edit_course').val(custom);
                     renderSavedCourses('#' + modal.closest('.modal').attr('id'));
                     updatePreview('#' + modal.closest('.modal').attr('id'));
                     Swal.fire({
@@ -842,16 +841,16 @@
             success: function(result) {
                 const courses = result.courses || [];
 
-                modal.find('#saved_count').text(courses.length);
+                modal.find('.saved_count').text(courses.length);
 
                 if (courses.length === 0) {
-                    modal.find('#saved_courses_wrap').hide();
+                    modal.find('.saved_courses_wrap').hide();
                     return;
                 }
 
-                modal.find('#saved_courses_wrap').show();
+                modal.find('.saved_courses_wrap').show();
 
-                const currentVal = modal.find('#edit_course').val().trim().toLowerCase();
+                const currentVal = modal.find('.edit_course').val().trim().toLowerCase();
 
                 let options = `<option value="">-- ជ្រើសរើស Course --</option>`;
 
@@ -859,19 +858,21 @@
                     const name = typeof c === 'object' ? c.course_name : c;
 
                     const isSelected =
-                        name.toLowerCase() === currentVal ||
-                        (savedCourse && name === savedCourse);
+                            savedCourse
+                                ? name === savedCourse
+                                : name.toLowerCase() === currentVal;
 
                     return `<option value="${escapeHtml(name)}" ${isSelected ? 'selected' : ''}>
                             ${escapeHtml(name)}
                         </option>`;
                 }).join('');
 
-                modal.find('#saved_courses_select').html(options);
+                modal.find('.saved_courses_select').html(options);
 
-                if (!currentVal && savedCourse) {
-                    modal.find('#edit_course').val(savedCourse);
-                    updatePreview();
+                if (savedCourse) {
+                    modal.find('.edit_course').val(savedCourse);
+                    modal.find('.saved_courses_select').val(savedCourse);
+                    updatePreview('#' + modal.closest('.modal').attr('id'));
                 }
             },
 
@@ -883,23 +884,29 @@
 
     function applySavedCourseFromSelect(el, value) {
         const modal = $(el).closest('.modal-content');
+        const modalId = '#' + modal.closest('.modal').attr('id');
+        const selected = value || $(el).val() || '';
 
-        if (!value) {
-            localStorage.removeItem('selected_course'); // ✅ clear
-            modal.find('#edit_course').val('');
-            updatePreview();
+        console.log('selected:', selected);
+
+        if (!selected) {
+            localStorage.removeItem('selected_course');
+            modal.find('.edit_course').val('');
+            renderSavedCourses(modalId);
+            updatePreview(modalId);
             return;
         }
 
-        modal.find('#edit_course').val(value);
-        localStorage.setItem('selected_course', value);
+        modal.find('.edit_course').val(selected);
+        localStorage.setItem('selected_course', selected);
 
-        updatePreview();
+        renderSavedCourses(modalId);
+        updatePreview(modalId);
     }
 
     function deleteSelectedCourse(el) {
         const modal = $(el).closest('.modal-content');
-        const val = modal.find('#saved_courses_select').val();
+        const val = modal.find('.saved_courses_select').val();
         if (!val) {
             Swal.fire({
                 icon: 'warning',
@@ -919,11 +926,11 @@
             success: function(res) {
                 if (res.success) {
 
-                    const currentVal = modal.find('#edit_course').val().trim();
+                    const currentVal = modal.find('.edit_course').val().trim();
 
                     if (currentVal.toLowerCase() === val.toLowerCase()) {
-                        modal.find('#edit_course').val('');
-                        updatePreview();
+                        modal.find('.edit_course').val('');
+                        updatePreview('#' + modal.closest('.modal').attr('id'));
                     }
 
                     if (val === localStorage.getItem('selected_course')) {
@@ -1075,9 +1082,9 @@
     // ══════════════════════════════════════════
     async function printCertificateStudent() {
         const studentId = parseInt($('#current_student_id').val()) || 0;
-        const studentName = $('#edit_student_name').val().trim();
-        const course = $('#edit_course').val().trim();
-        const granted = $('#edit_granted').val().trim();
+        const studentName = $('#certModal').find('.edit_student_name').val().trim();
+        const course = $('#certModal').find('.edit_course').val().trim();
+        const granted = $('#certModal').find('.edit_granted').val().trim();
 
         let certId = '';
 
@@ -1160,8 +1167,8 @@
 
     async function confirmPrintAll(modalId = 'certModal') {
         const modal = $('#' + modalId);
-        const course = modal.find('#edit_course').val().trim();
-        const date = modal.find('#edit_granted').val().trim();
+        const course = modal.find('.edit_course').val().trim();
+        const date = modal.find('.edit_granted').val().trim();
 
         if (!course || !date) {
             Swal.fire({
@@ -1216,8 +1223,8 @@
         const savedCourse = localStorage.getItem('selected_course');
         const savedDate = localStorage.getItem('cert_granted_date');
 
-        if (savedCourse) $('#edit_course').val(savedCourse);
-        if (savedDate) $('#edit_granted').val(savedDate);
+        if (savedCourse) $('#certModal').find('.edit_course').val(savedCourse);
+        if (savedDate) $('#certModal').find('.edit_granted').val(savedDate);
 
         updatePreview();
     }
@@ -1245,9 +1252,9 @@
             let certId = '';
 
             $('#current_student_id').val(s.id);
-            $('#edit_student_name').val(s.name);
-            $('#edit_course').val(selectedCourse);
-            $('#edit_granted').val(date || '');
+            $('#certModal').find('.edit_student_name').val(s.name);
+            $('#certModal').find('.edit_course').val(selectedCourse);
+            $('#certModal').find('.edit_granted').val(date || '');
 
             updatePreview();
             await waitForRender();
@@ -1259,15 +1266,26 @@
                 failCount++;
                 continue;
             }
+            // ✅ PRINT FIRST
+            await printPreparedCertificate();
 
+            // ✅ ASK AFTER PRINT
             const res = await Swal.fire({
                 icon: 'question',
                 title: `[${i + 1}/${allStudents.length}] បោះពុម្ពជោគជ័យទេ?`,
-                html: `<b>${escapeHtml(s.name)}</b><br><small>${escapeHtml(selectedCourse)}</small>`,
+                html: `
+                    <b>${escapeHtml(s.name)}</b>
+                    <br>
+                    <small>${escapeHtml(selectedCourse)}</small>
+                `,
 
                 showCancelButton: true,
-                confirmButtonText: '<i class="bi bi-check-lg me-1"></i> បាទ ជោគជ័យ',
-                cancelButtonText: '<i class="bi bi-x-lg me-1"></i> ទេ មានបញ្ហា',
+
+                confirmButtonText:
+                    '<i class="bi bi-check-lg me-1"></i> បាទ ជោគជ័យ',
+
+                cancelButtonText:
+                    '<i class="bi bi-x-lg me-1"></i> ទេ មានបញ្ហា',
 
                 confirmButtonColor: '#198754',
                 cancelButtonColor: '#dc3545',
@@ -1275,8 +1293,9 @@
                 allowEnterKey: false,
 
                 didOpen: () => {
-                    // ✅ FIX focus after print dialog issues
-                    setTimeout(() => Swal.getConfirmButton().focus(), 50);
+                    setTimeout(() => {
+                        Swal.getConfirmButton().focus();
+                    }, 100);
 
                     const handler = (e) => {
                         if (e.key === 'Enter') {
@@ -1290,14 +1309,18 @@
                 },
 
                 willClose: () => {
-                    document.removeEventListener('keydown', Swal.__enterHandler);
+                    document.removeEventListener(
+                        'keydown',
+                        Swal.__enterHandler
+                    );
                 }
             });
 
+            // ✅ SAVE ONLY IF SUCCESS
             if (res.isConfirmed) {
-                await printPreparedCertificate();
 
                 try {
+
                     const saveRes = await saveCertificateToDB(
                         s.id,
                         s.name,
@@ -1307,17 +1330,22 @@
                     );
 
                     if (saveRes.ok) {
+
                         savedCount++;
                         markStudentPrinted(s.id);
+
                     } else {
+
                         failCount++;
                     }
 
                 } catch (e) {
+
                     failCount++;
                 }
 
             } else {
+
                 failCount++;
             }
         }

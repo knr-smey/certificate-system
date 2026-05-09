@@ -164,22 +164,39 @@ final class CertificateController extends Controller
 
             $pdo = \App\Core\Database::pdo();
 
+            $checkStmt = $pdo->prepare("
+                SELECT 1
+                FROM req_certificate rc
+                INNER JOIN req_class_student rcs
+                    ON rcs.req_certificate_id = rc.id
+                WHERE rc.class_id = :class_id
+                    AND rcs.student_id = :student_id
+                LIMIT 1
+            ");
+
+            $checkStmt->execute([
+                'student_id' => $studentId,
+                'class_id'   => $classId
+            ]);
+
+            if (!$checkStmt->fetchColumn()) {
+                throw new \RuntimeException("Student does not belong to this class");
+            }
+
             $stmt = $pdo->prepare("
                 UPDATE students
-                SET name = :name,
-                    updated_at = NOW()
+                SET full_name = :name
                 WHERE id = :student_id
-                AND class_id = :class_id
             ");
 
             $stmt->execute([
                 'name'        => $studentName,
-                'student_id'  => $studentId,
-                'class_id'    => $classId
+                'student_id'  => $studentId
             ]);
 
             $this->jsonResponse(true, [
-                'student_id' => $studentId
+                'student_id' => $studentId,
+                'name'       => $studentName
             ], 'Name updated successfully');
 
         } catch (\Throwable $e) {
