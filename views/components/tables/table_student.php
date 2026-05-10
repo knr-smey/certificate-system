@@ -112,7 +112,7 @@
                     <div class="cert-field-group">
                         <label class="cert-field-label">ឈ្មោះសិស្ស</label>
                         <input type="text" id="edit_student_name" class="cert-field-input"
-                               placeholder="Student name...">
+                            placeholder="Student name...">
                     </div>
 
                     <div class="cert-field-group">
@@ -132,14 +132,14 @@
                         </label>
                         <div class="d-flex gap-2">
                             <select id="saved_courses_select"
-                                    class="cert-field-input"
-                                    onchange="applySavedCourseFromSelect(this.value)">
+                                class="cert-field-input"
+                                onchange="applySavedCourseFromSelect(this, this.value)">
                                 <option value="">-- ជ្រើសរើស Course --</option>
                             </select>
                             <button type="button"
-                                    class="btn btn-danger"
-                                    onclick="deleteSelectedCourse()"
-                                    title="លុប Course ដែលជ្រើស">
+                                class="btn btn-danger"
+                                onclick="deleteSelectedCourse(this)"
+                                title="លុប Course ដែលជ្រើស">
                                 <i class="bi bi-trash3-fill"></i>
                             </button>
                         </div>
@@ -176,12 +176,12 @@
                                         <div class="cert-kingdom">
                                             <div>KINGDOM OF CAMBODIA</div>
                                             <div>NATION&nbsp; RELIGION &nbsp;KING</div>
-                                             <img src="<?= base_url('assets/Images/border.png') ?>" alt="">
+                                            <img src="<?= base_url('assets/Images/border.png') ?>" alt="">
                                         </div>
                                         <div class="cert-logo-area">
                                             <img src="<?= base_url('assets/Images/logo2.png') ?>"
-                                                 alt="Logo" class="cert-logo-img"
-                                                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                                                alt="Logo" class="cert-logo-img"
+                                                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                                             <div class="cert-logo-fallback">
                                                 <i class="bi bi-award-fill"></i>
                                             </div>
@@ -230,10 +230,10 @@
                     <i class="bi bi-x-circle me-2"></i>បិទ
                 </button>
                 <button type="button" class="btn btn-success"
-                        onclick="confirmPrintAll()">
+                    onclick="confirmPrintAll()">
                     <i class="bi bi-printer-fill me-1"></i> Start Print All
                 </button>
-                <button type="button" class="btn-cert-save" onclick="saveCourse()">
+                <button type="button" class="btn-cert-save" onclick="saveCourse(this)">
                     <i class="bi bi-bookmark-fill me-2"></i>រក្សាទុក Course
                 </button>
                 <button type="button" class="btn-cert-print text-white" onclick="printCertificateStudent()">
@@ -245,80 +245,205 @@
     </div>
 </div>
 
+<!-- ====================TABLE CERTIFICATE MODAL ==================== -->
+<div class="modal fade" id="tableCertModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content cert-modal-content">
+
+            <!-- Header -->
+            <div class="modal-header cert-modal-header no-print">
+                <h5 class="modal-title text-white">
+                    <i class="bi bi-printer-fill me-2"></i>បោះពុម្ពសញ្ញាបត្រ
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-0 d-flex no-print" style="min-height:500px;">
+
+                <!-- LEFT: Edit Form -->
+                <div class="cert-edit-panel">
+                    <div class="cert-edit-title">
+                        <i class="bi bi-pencil-square me-2"></i>កែប្រែព័ត៌មាន
+                    </div>
+
+                    <div class="cert-field-group">
+                        <label class="cert-field-label">ឈ្មោះសិស្ស</label>
+                        <input type="text" id="edit_student_name" class="cert-field-input"
+                            placeholder="Student name...">
+                    </div>
+
+                    <div class="cert-field-group">
+                        <label class="cert-field-label">មុខវិជ្ជា / Course</label>
+                        <textarea id="edit_course"
+                            class="cert-field-input"
+                            placeholder="Course name..."
+                            rows="3"></textarea>
+                    </div>
+
+                    <!-- Saved Courses Dropdown -->
+                    <div class="cert-field-group" id="saved_courses_wrap" style="display:none">
+                        <label class="cert-field-label">
+                            <i class="bi bi-bookmark-fill me-1 text-primary"></i>
+                            Course រក្សាទុក
+                            <span class="badge bg-primary ms-2" id="saved_count">0</span>
+                        </label>
+                        <div class="d-flex gap-2">
+                            <select id="saved_courses_select"
+                                class="cert-field-input"
+                                onchange="applySavedCourseFromSelect(this, this.value)">
+                                <option value="">-- ជ្រើសរើស Course --</option>
+                            </select>
+                            <button type="button"
+                                class="btn btn-danger"
+                                onclick="deleteSelectedCourse(this)"
+                                title="លុប Course ដែលជ្រើស">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="cert-field-group">
+                        <label class="cert-field-label">
+                            ថ្ងៃខែឆ្នាំ / Granted Date
+                        </label>
+                        <input type="date" id="edit_granted" class="cert-field-input">
+                    </div>
+                </div>
+
+                <!-- RIGHT: Student Table Panel -->
+                <div class="cert-table-panel w-100 p-3">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">
+                            <i class="bi bi-people-fill me-2"></i>Student List
+                        </h6>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle text-center">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:60px;">N°</th>
+                                    <th>Student Name</th>
+                                    <th style="width:120px;">Gender</th>
+                                    <th style="width:180px;">Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="listPrintAllModal">
+                                <!--  -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer cert-modal-footer no-print">
+                <button type="button" class="btn-cert-close" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-2"></i>បិទ
+                </button>
+                <button type="button" class="btn-cert-save" onclick="saveCourse(this)">
+                    <i class="bi bi-bookmark-fill me-2"></i>រក្សាទុក Course
+                </button>
+                <!-- ✅ Print All Button -->
+                <button class="btn btn-success fw-bold" onclick="confirmPrintAll('tableCertModal')">
+                    <i class="bi bi-printer-fill me-2"></i>បោះពុម្ពទាំងអស់
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <style>
-#saved_courses_select { cursor: pointer; }
-#saved_courses_select option { padding: 8px; }
-input[type="date"] {
-  color: #555;
-}
+    #saved_courses_select {
+        cursor: pointer;
+    }
+
+    #saved_courses_select option {
+        padding: 8px;
+    }
+
+    input[type="date"] {
+        color: #555;
+    }
 </style>
 
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
+    let currentClass = {
+        course: '-',
+        teacher: '-',
+        time: '-'
+    };
+    let currentClassId = 0;
+    let allStudents = []; // ✅ រក្សាសិស្សទាំងអស់សម្រាប់ Print All
+    let remainingStudents = 0;
 
-let currentClass   = { course: '-', teacher: '-', time: '-' };
-let currentClassId = 0;
-let allStudents    = []; // ✅ រក្សាសិស្សទាំងអស់សម្រាប់ Print All
-let remainingStudents = 0;
+    // ══════════════════════════════════════════
+    //   INIT
+    // ══════════════════════════════════════════
+    $(document).ready(function() {
+        const params = new URLSearchParams(window.location.search);
+        currentClassId = parseInt(params.get('class_id')) || 0;
 
-// ══════════════════════════════════════════
-//   INIT
-// ══════════════════════════════════════════
-$(document).ready(function () {
-    const params = new URLSearchParams(window.location.search);
-    currentClassId = parseInt(params.get('class_id')) || 0;
+        currentClass.course = params.get('course') || '-';
+        currentClass.teacher = params.get('teacher') || '-';
+        currentClass.time = params.get('time') || '-';
 
-    currentClass.course  = params.get('course')  || '-';
-    currentClass.teacher = params.get('teacher') || '-';
-    currentClass.time    = params.get('time')    || '-';
+        $('#info_course').text(currentClass.course);
+        $('#info_teacher').text(currentClass.teacher);
+        $('#info_time').text(currentClass.time);
 
-    $('#info_course').text(currentClass.course);
-    $('#info_teacher').text(currentClass.teacher);
-    $('#info_time').text(currentClass.time);
+        if (currentClassId > 0) {
+            loadStudents(currentClassId);
+            loadStudentsInModal(currentClassId)
+        } else {
+            showError('មិនមាន class_id');
+        }
+    });
 
-    if (currentClassId > 0) {
-        loadStudents(currentClassId);
-    } else {
-        showError('មិនមាន class_id');
-    }
-});
+    // ══════════════════════════════════════════
+    //   Load Students
+    // ══════════════════════════════════════════
+    function loadStudents(classId) {
+        $.ajax({
+            url: "<?= base_url('api/students') ?>",
+            method: "GET",
+            data: {
+                class_id: classId
+            },
+            dataType: "json",
+            success: function(result) {
+                const tbody = $('#student_list');
 
-// ══════════════════════════════════════════
-//   Load Students
-// ══════════════════════════════════════════
-function loadStudents(classId) {
-    $.ajax({
-        url: "<?= base_url('api/students') ?>",
-        method: "GET",
-        data: { class_id: classId },
-        dataType: "json",
-        success: function (result) {
-            const tbody = $('#student_list');
-
-            if (!result.data || result.data.length === 0) {
-                tbody.html(`
+                if (!result.data || result.data.length === 0) {
+                    tbody.html(`
                     <tr><td colspan="7" class="text-center py-5 text-muted">
                         <i class="bi bi-inbox fs-2 d-block mb-2 text-primary opacity-25"></i>
                         មិនមានសិស្ស
                     </td></tr>`);
-                $('#student_count').text('0 នាក់');
-                return;
-            }
+                    $('#student_count').text('0 នាក់');
+                    return;
+                }
 
-            allStudents = result.data; // ✅ save សម្រាប់ Print All
-            remainingStudents = result.data.filter(s => parseInt(s.is_printed, 10) !== 1).length;
-            updateStudentCount();
+                allStudents = result.data; // ✅ save សម្រាប់ Print All
+                remainingStudents = result.data.filter(s => parseInt(s.is_printed, 10) !== 1).length;
+                updateStudentCount();
 
-            const rows = result.data.map((s) => {
-                const gender = s.gender || 'Male';
-                const gClass = gender === 'Female' ? 'gender-f' : 'gender-m';
-                const course = s.course || currentClass.course;
-                const isPrinted = parseInt(s.is_printed, 10) === 1;
-                const printedClass = isPrinted ? 'student-printed' : '';
-                const actionButtons = isPrinted
-                    ? `
+                const rows = result.data.map((s) => {
+                    const gender = s.gender || 'Male';
+                    const gClass = gender === 'Female' ? 'gender-f' : 'gender-m';
+                    const course = s.course || currentClass.course;
+                    const isPrinted = parseInt(s.is_printed, 10) === 1;
+                    const printedClass = isPrinted ? 'student-printed' : '';
+                    const actionButtons = isPrinted ?
+                        `
                         <div class="print-actions">
                             <button type="button" class="btn-print-done text-white" disabled>
                                 <i class="bi bi-check-circle-fill"></i> Printed
@@ -332,8 +457,8 @@ function loadStudents(classId) {
                                     '${escapeHtml(currentClass.time)}')">
                                 <i class="bi bi-printer-fill"></i> Re-print
                             </button>
-                        </div>`
-                    : `
+                        </div>` :
+                        `
                         <button class="btn-print-cert text-white"
                             onclick="openCertificate(
                                 ${s.id},
@@ -344,7 +469,7 @@ function loadStudents(classId) {
                             <i class="bi bi-printer-fill"></i> Print
                         </button>`;
 
-                return `
+                    return `
                 <tr data-student-id="${s.id}" class="${printedClass}">
                     <td class="text-center">
                         <span class="row-no text-white">${s.id}</span>
@@ -364,625 +489,846 @@ function loadStudents(classId) {
                         ${actionButtons}
                     </td>
                 </tr>`;
-            }).join('');
+                }).join('');
 
-            tbody.html(rows);
-            markPrintedRowsFromServer(classId);
-        },
-        error: function (xhr) {
-            let msg = 'Server Error';
-            try { msg = JSON.parse(xhr.responseText).message || msg; } catch(e) {}
-            showError(msg);
-            $('#student_count').text('Error');
-        }
-    });
-}
-
-// ══════════════════════════════════════════
-//   Open Certificate Modal (Single)
-// ══════════════════════════════════════════
-function openCertificate(studentId, name, course, teacher, time) {
-    $('#current_student_id').val(studentId); // ✅ save student_id
-    $('#edit_student_name').val(name);
-    $('#edit_course').val(course);
-    const savedCourse = localStorage.getItem('selected_course');
-
-    const today   = new Date();
-    const months  = ['January','February','March','April','May','June',
-                     'July','August','September','October','November','December'];
-    const granted = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
-    // $('#edit_granted').val(granted);
-    $('#edit_granted').val('');
-    $('#edit_id').val(generateId());
-
-    if (savedCourse) {
-        $('#edit_course').val(savedCourse);
-    } else {
-        $('#edit_course').val(course);
-    }
-
-    const savedDate = localStorage.getItem('cert_granted_date');
-
-    if (savedDate) {
-        $('#edit_granted').val(savedDate);
-    } else {
-        $('#edit_granted').val('');
-    }
-    updatePreview();
-    renderSavedCourses();
-    new bootstrap.Modal(document.getElementById('certModal')).show();
-    refreshNextCertificateId();
-}
-
-$(document).on('change', '#edit_granted', function () {
-    const value = $(this).val();
-
-    if (value) {
-        localStorage.setItem('cert_granted_date', value);
-    } else {
-        localStorage.removeItem('cert_granted_date');
-    }
-
-    updatePreview();
-});
-
-// ── Live preview ──
-$(document).on('input', '#edit_student_name, #edit_course, #edit_granted, #edit_id', function () {
-
-    if ($(this).attr('id') === 'edit_course') {
-        const val = $('#edit_course').val().trim();
-
-        if (val) {
-            // ✅ save when typing
-            localStorage.setItem('selected_course', val);
-        } else {
-            // ❌ clear when empty (THIS FIXES YOUR BUG)
-            localStorage.removeItem('selected_course');
-        }
-
-        renderSavedCourses();
-    }
-
-    updatePreview();
-});
-function formatDate(dateStr) {
-    if (!dateStr) return '';
-
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-}
-function updatePreview() {
-    $('#cert_student_name').text($('#edit_student_name').val() || '—');
-    $('#cert_course').text($('#edit_course').val() || '—');
-
-    const raw = $('#edit_granted').val();
-    const defaultDate = $('#cert_granted').data('default');
-
-    if (raw) {
-        $('#cert_granted').text('Granted: ' + formatDate(raw));
-    } else {
-        $('#cert_granted').text('Granted: ' + defaultDate);
-    }
-
-    $('#cert_sign_teacher').text('Mr. HENG PHEAKNA');
-}
-
-// ══════════════════════════════════════════
-//   ID Generator
-// ══════════════════════════════════════════
-function generateId() {
-    const year    = new Date().getFullYear();
-    const random4 = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
-    return year + random4 + 'ETEC';
-}
-function regenId() {
-    // $('#edit_id').val(generateId());
-    updatePreview();
-}
-
-// ══════════════════════════════════════════
-//   Course Management (Database)
-// ══════════════════════════════════════════
-function saveCourse() {
-    const custom = $('#edit_course').val().trim();
-    if (!custom) {
-        Swal.fire({ icon: 'warning', title: 'សូមបញ្ចូល Course សិន!', timer: 1500, showConfirmButton: false });
-        return;
-    }
-    $.ajax({
-        url: "<?= base_url('api/course/savenormal') ?>",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ course_name: custom }),
-        success: function (result) {
-            if (result.success) {
-                localStorage.setItem('selected_course', custom);
-                $('#edit_course').val(custom);
-                renderSavedCourses();
-                updatePreview();
-                Swal.fire({ icon: 'success', title: 'រក្សាទុករួច!', timer: 1200, showConfirmButton: false });
-            } else {
-                Swal.fire({ icon: 'info', title: result.message || 'មានរួចហើយ!', timer: 1500, showConfirmButton: false });
+                tbody.html(rows);
+                markPrintedRowsFromServer(classId);
+            },
+            error: function(xhr) {
+                let msg = 'Server Error';
+                try {
+                    msg = JSON.parse(xhr.responseText).message || msg;
+                } catch (e) {}
+                showError(msg);
+                $('#student_count').text('Error');
             }
-        },
-        error: function () { Swal.fire({ icon: 'error', title: 'Server Error' }); }
-    });
-}
-
-function renderSavedCourses() {
-    const savedCourse = localStorage.getItem('selected_course');
-
-    $.ajax({
-        url: "<?= base_url('api/course/listnormal') ?>",
-        method: "GET",
-        dataType: "json",
-
-        success: function (result) {
-            const courses = result.courses || [];
-
-            $('#saved_count').text(courses.length);
-
-            if (courses.length === 0) {
-                $('#saved_courses_wrap').hide();
-                return;
-            }
-
-            $('#saved_courses_wrap').show();
-
-            const currentVal = $('#edit_course').val().trim().toLowerCase();
-
-            let options = `<option value="">-- ជ្រើសរើស Course --</option>`;
-
-            options += courses.map(c => {
-                const name = typeof c === 'object' ? c.course_name : c;
-
-                // ✅ FIX: check BOTH current value + localStorage
-                const isSelected =
-                    name.toLowerCase() === currentVal ||
-                    (savedCourse && name === savedCourse);
-
-                return `<option value="${escapeHtml(name)}" ${isSelected ? 'selected' : ''}>
-                            ${escapeHtml(name)}
-                        </option>`;
-            }).join('');
-
-            $('#saved_courses_select').html(options);
-
-            // ✅ EXTRA: if textarea empty → auto fill from localStorage
-            if (!currentVal && savedCourse) {
-                $('#edit_course').val(savedCourse);
-                updatePreview();
-            }
-        },
-
-        error: function () {
-            console.error('Cannot load courses');
-        }
-    });
-}
-function applySavedCourseFromSelect(value) {
-    if (!value) {
-        localStorage.removeItem('selected_course'); // ✅ clear
-        $('#edit_course').val('');
-        updatePreview();
-        return;
+        });
     }
 
-    $('#edit_course').val(value);
-    localStorage.setItem('selected_course', value);
+    // ══════════════════════════════════════════
+    //   Load Students In Modal PrintAll
+    // ══════════════════════════════════════════
+    function loadStudentsInModal(classId) {
+        $.ajax({
+            url: "<?= base_url('api/students') ?>",
+            method: "GET",
+            data: {
+                class_id: classId
+            },
+            dataType: "json",
+            success: function(result) {
+                const tbody = $('#listPrintAllModal');
 
-    updatePreview();
-}
-
-function deleteSelectedCourse() {
-    const val = $('#saved_courses_select').val();
-    if (!val) {
-        Swal.fire({ icon: 'warning', title: 'សូមជ្រើសរើស Course មុនសិន!', timer: 1500, showConfirmButton: false });
-        return;
-    }
-    $.ajax({
-        url: "<?= base_url('api/course/delete') ?>",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ course_name: val }),
-        success: function (res) {
-            if (res.success) {
-
-                const currentVal = $('#edit_course').val().trim();
-
-                // ✅ clear textarea if same
-                if (currentVal.toLowerCase() === val.toLowerCase()) {
-                    $('#edit_course').val('');
-                    updatePreview();
+                if (!result.data || result.data.length === 0) {
+                    tbody.html(`
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-2 d-block mb-2 text-primary opacity-25"></i>
+                            មិនមានសិស្ស
+                        </td>
+                    </tr>
+                `);
+                    return;
                 }
 
-                // ✅ 🔥 THIS IS WHERE YOU PUT IT
-                if (val === localStorage.getItem('selected_course')) {
-                    localStorage.removeItem('selected_course');
-                }
 
-                renderSavedCourses();
 
-                Swal.fire({
-                    icon: 'success',
-                    title: 'លុបរួច!',
-                    timer: 1200,
-                    showConfirmButton: false
-                });
-            }
-        },
-        error: function () { Swal.fire({ icon: 'error', title: 'Server Error' }); }
-    });
-}
+                const rows = result.data.map((s, index) => {
+                    const gender = s.gender || 'Male';
+                    const gClass = gender === 'Female' ? 'text-danger' : 'text-dark';
+                    const course = s.course || currentClass.course;
 
-// ══════════════════════════════════════════
-//   ✅ Helper: Save Certificate to DB
-// ══════════════════════════════════════════
-function saveCertificateToDB(studentId, studentName, course, granted, certId) {
-    return $.ajax({
-        url: "<?= base_url('api/certificate/savenormal') ?>",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            student_id:     studentId,
-            class_id:       currentClassId,
-            student_name:   studentName,
-            course:         course,
-            granted_date:   granted,
-            certificate_id: certId
-        })
-    });
-}
+                    return `
+                <tr data-student-id="${s.id}" data-class-id="${classId}">
+                    <td>${s.id}</td>
 
-async function getNewCertificateId() {
-    try {
-        const res = await fetch("<?= base_url('api/generate-id') ?>", {
-            method: 'GET',
-            headers: { 'Accept': 'application/json' },
-            cache: 'no-store'
-        });
+                    <td>
+                        <input type="text"
+                            class="form-control form-control-sm student-name"
+                            value="${s.name.toUpperCase()}">
+                    </td>
 
-        if (!res.ok) {
-            throw new Error(`HTTP ${res.status}`);
-        }
+                    <td>
+                        <span class="${gClass}">${gender}</span>
+                    </td>
 
-        const payload = await res.json();
-        const certId = String(
-            payload?.data?.id ||
-            payload?.id ||
-            ''
-        ).trim();
+                    <td>
+                        <button onclick="btnSaveListStudentInModal(${s.id} , this)"
+                            class="btn btn-primary btn-sm">
+                            Save
+                        </button>
+                    </td>
+                </tr>`;
+                }).join('');
 
-        if (!certId) {
-            throw new Error('Missing certificate ID');
-        }
-
-        return certId;
-    } catch (error) {
-        console.error('Failed to generate certificate ID:', error);
-        throw error;
-    }
-}
-
-function setCertificateId(certId) {
-    $('#cert_id_value').val(certId);
-    $('#certId').text(certId);
-    $('#certIdPrint').text(certId);
-}
-
-function waitForRender(delay = 80) {
-    return new Promise((resolve) => {
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                setTimeout(resolve, delay);
-            });
-        });
-    });
-}
-
-async function waitForPrintAssets() {
-    if (document.fonts && document.fonts.ready) {
-        try {
-            await document.fonts.ready;
-        } catch (error) {
-            console.warn('Font readiness check failed:', error);
-        }
-    }
-
-    const printable = document.getElementById('printable-certificate');
-    if (!printable) return;
-
-    const images = Array.from(printable.querySelectorAll('img'));
-    await Promise.all(images.map((img) => {
-        if (img.complete) return Promise.resolve();
-
-        return new Promise((resolve) => {
-            img.addEventListener('load', resolve, { once: true });
-            img.addEventListener('error', resolve, { once: true });
-        });
-    }));
-}
-
-async function prepareCertificateForPrint(certId) {
-    setCertificateId(certId);
-    updatePreview();
-    await waitForPrintAssets();
-    await waitForRender();
-}
-
-async function printPreparedCertificate() {
-    await waitForPrintAssets();
-    await waitForRender();
-    window.print();
-}
-
-async function refreshNextCertificateId(silent = true) {
-    try {
-        const nextCertId = await getNewCertificateId();
-        setCertificateId(nextCertId);
-        await waitForRender();
-        return nextCertId;
-    } catch (error) {
-        if (!silent) {
-            console.error('Failed to refresh next certificate ID:', error);
-        }
-        return '';
-    }
-}
-
-// ══════════════════════════════════════════
-//   ✅ PRINT SINGLE — SweetAlert confirm
-// ══════════════════════════════════════════
-async function printCertificateStudent() {
-    const studentId   = parseInt($('#current_student_id').val()) || 0;
-    const studentName = $('#edit_student_name').val().trim();
-    const course      = $('#edit_course').val().trim();
-    const granted     = $('#edit_granted').val().trim();
-
-    let certId = '';
-
-    try {
-        certId = await getNewCertificateId();
-        await prepareCertificateForPrint(certId);
-        await printPreparedCertificate();
-    } catch (error) {
-        await Swal.fire({
-            icon: 'error',
-            title: 'Cannot generate certificate ID',
-            text: 'Please try again.'
-        });
-        return;
-    }
-
-    // 2. Ask after print dialog closes
-    setTimeout(async function () {
-        const result = await Swal.fire({
-            icon: 'question',
-            title: 'បោះពុម្ពជោគជ័យទេ?',
-            html: `<b>${studentName}</b><br><small class="text-muted">${course}</small>`,
-
-            showCancelButton: true,
-            confirmButtonText: '<i class="bi bi-check-lg me-1"></i> បាទ ជោគជ័យ',
-            cancelButtonText: '<i class="bi bi-x-lg me-1"></i> ទេ មានបញ្ហា',
-
-            confirmButtonColor: '#198754',
-            cancelButtonColor: '#dc3545',
-
-            allowEnterKey: false, // ❗ disable default
-
-            didOpen: () => {
-                // ✅ FIX: restore focus after print dialog
-                setTimeout(() => {
-                    Swal.getConfirmButton().focus();
-                }, 50);
-
-                const handler = (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        Swal.clickConfirm();
-                    }
-                };
-
-                Swal.__enterHandler = handler;
-                document.addEventListener('keydown', handler);
+                tbody.html(rows);
             },
 
-            willClose: () => {
-                document.removeEventListener('keydown', Swal.__enterHandler);
+            error: function(xhr) {
+                let msg = 'Server Error';
+                try {
+                    msg = JSON.parse(xhr.responseText).message || msg;
+                } catch (e) {}
+                console.error(msg);
             }
         });
-
-        if (result.isConfirmed) {
-            // 3. Insert to DB
-            try {
-                const res = await saveCertificateToDB(studentId, studentName, course, granted, certId);
-                if (res.ok) {
-                    markStudentPrinted((res.data && res.data.student_id) ? res.data.student_id : studentId);
-                    await Swal.fire({
-                        icon: 'success',
-                        title: 'រក្សាទុករួច!',
-                        timer: 900,
-                        showConfirmButton: false
-                    });
-                    window.location.reload();
-                } else {
-                    Swal.fire({ icon: 'warning', title: res.error || 'មានបញ្ហា!' });
-                }
-            } catch(e) {
-               console.error(e);
-            }
-        }
-    }, 500);
-}
-
-async function confirmPrintAll() {
-    const course = $('#edit_course').val().trim();
-    const date   = $('#edit_granted').val().trim();
-
-    if (!course || !date) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'សូមបញ្ចូល Course និង Date!',
-            timer: 1500,
-            showConfirmButton: false
-        });
-        return;
     }
 
-    // Save for reuse
-    localStorage.setItem('selected_course', course);
-    localStorage.setItem('cert_granted_date', date);
+    function btnSaveListStudentInModal(studentId, btn) {
 
-    const confirm = await Swal.fire({
-        icon: 'question',
-        title: `បោះពុម្ព ${allStudents.length} នាក់?`,
-        showCancelButton: true,
-        confirmButtonText: 'ចាប់ផ្តើម',
-        cancelButtonText: 'បោះបង់'
+        const row = $(btn).closest('tr');
+        const modal = $('#tableCertModal');
+
+        const studentName = row.find('.student-name').val().trim();
+        const classId = row.data('class-id');
+
+        const payload = {
+            student_id: studentId,
+            class_id: classId,
+            student_name: studentName
+        };
+
+        $.ajax({
+            url: "<?= base_url('api/certificate/update-student-name') ?>",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+
+            success: function(res) {
+                if (studentName) {
+                    modal.find('#edit_student_name').val(studentName);
+                    updatePreview('#tableCertModal');
+                }
+
+                // ✅ show success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'រក្សាទុករួចរាល់!',
+                    text: 'ឈ្មោះសិស្សបានអាប់ដេតដោយជោគជ័យ',
+                    timer: 1400,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+
+                // ✅ only UI feedback (NO disable)
+                $(btn)
+                    .removeClass("btn-primary")
+                    .addClass("btn-success")
+                    .text("Saved");
+
+                // optional highlight
+                row.addClass("table-success");
+
+                // 🔥 remove highlight after 1.5s (optional)
+                setTimeout(() => {
+                    row.removeClass("table-success");
+                    $(btn)
+                        .removeClass("btn-success")
+                        .addClass("btn-primary")
+                        .text("Save");
+                }, 1500);
+            },
+
+            error: function(xhr) {
+                console.error(xhr.responseText);
+                alert("Update Failed ❌");
+            }
+        });
+    }
+
+    // ══════════════════════════════════════════
+    //   Open Certificate Modal (Single)
+    // ══════════════════════════════════════════
+    function openCertificate(studentId, name, course, teacher, time) {
+        $('#current_student_id').val(studentId); // ✅ save student_id
+        $('#edit_student_name').val(name);
+        $('#edit_course').val(course);
+        const savedCourse = localStorage.getItem('selected_course');
+
+        const today = new Date();
+        const months = ['January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        const granted = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
+        // $('#edit_granted').val(granted);
+        $('#edit_granted').val('');
+        $('#edit_id').val(generateId());
+
+        if (savedCourse) {
+            $('#edit_course').val(savedCourse);
+        } else {
+            $('#edit_course').val(course);
+        }
+
+        const savedDate = localStorage.getItem('cert_granted_date');
+
+        if (savedDate) {
+            $('#edit_granted').val(savedDate);
+        } else {
+            $('#edit_granted').val('');
+        }
+        updatePreview();
+        renderSavedCourses();
+        new bootstrap.Modal(document.getElementById('certModal')).show();
+        refreshNextCertificateId();
+    }
+
+    // openAllModalCertificate
+    function openAllModalCertificate() {
+        const modalBody = $('#tableCertModal');
+        const savedCourse = localStorage.getItem('selected_course');
+        const classCourse = currentClass.course && currentClass.course !== '-' ? currentClass.course : '';
+        const firstStudentCourse = allStudents.length > 0 ? allStudents[0].course || '' : '';
+        const selectedCourse = classCourse || firstStudentCourse || savedCourse || '';
+        const selectedDate = localStorage.getItem('cert_granted_date') || '';
+        const firstStudentName = allStudents.length > 0 ? allStudents[0].name : '';
+
+        modalBody.find('#edit_student_name').val(firstStudentName);
+        modalBody.find('#edit_course').val(selectedCourse);
+        modalBody.find('#edit_granted').val(selectedDate);
+
+        // Keep list stable and refresh if needed
+        if (currentClassId > 0) {
+            loadStudentsInModal(currentClassId);
+        }
+
+        renderSavedCourses('#tableCertModal');
+
+        const modalEl = document.getElementById('tableCertModal');
+        const modal = new bootstrap.Modal(modalEl);
+
+        modal.show();
+        refreshNextCertificateId();
+    }
+
+    $(document).on('change', '.modal-content #edit_granted', function() {
+        const modal = $(this).closest('.modal-content');
+        const value = $(this).val();
+
+        if (value) {
+            localStorage.setItem('cert_granted_date', value);
+        } else {
+            localStorage.removeItem('cert_granted_date');
+        }
+
+        updatePreview('#' + modal.closest('.modal').attr('id'));
     });
 
-    if (!confirm.isConfirmed) return;
+    // ── Live preview ──
+    $(document).on('input', '.modal-content #edit_student_name, .modal-content #edit_course, .modal-content #edit_granted, .modal-content #edit_id', function() {
+        const modal = $(this).closest('.modal-content');
 
-    // Close modal before printing
-    bootstrap.Modal.getInstance(document.getElementById('certModal')).hide();
+        if ($(this).attr('id') === 'edit_course') {
+            const val = modal.find('#edit_course').val().trim();
 
-    await printAllCertificatesCore(course, date);
-}
+            if (val) {
+                // ✅ save when typing
+                localStorage.setItem('selected_course', val);
+            } else {
+                // ❌ clear when empty (THIS FIXES YOUR BUG)
+                localStorage.removeItem('selected_course');
+            }
 
+            renderSavedCourses('#' + modal.closest('.modal').attr('id'));
+        }
 
-function startPrintAll() {
-    if (allStudents.length === 0) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'មិនមានសិស្ស!',
-            timer: 1500,
-            showConfirmButton: false
+        updatePreview('#' + modal.closest('.modal').attr('id'));
+    });
+
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
         });
-        return;
     }
 
-    // Open modal for editing first
-    const modal = new bootstrap.Modal(document.getElementById('certModal'));
-    modal.show();
+    function updatePreview(modalSelector = '#certModal') {
+        const modal = $(modalSelector);
+        modal.find('#cert_student_name').text(modal.find('#edit_student_name').val() || '—');
+        modal.find('#cert_course').text(modal.find('#edit_course').val() || '—');
 
-    // Load saved values
-    const savedCourse = localStorage.getItem('selected_course');
-    const savedDate   = localStorage.getItem('cert_granted_date');
+        const raw = modal.find('#edit_granted').val();
+        const defaultDate = modal.find('#cert_granted').data('default');
 
-    if (savedCourse) $('#edit_course').val(savedCourse);
-    if (savedDate) $('#edit_granted').val(savedDate);
+        if (raw) {
+            modal.find('#cert_granted').text('Granted: ' + formatDate(raw));
+        } else {
+            modal.find('#cert_granted').text('Granted: ' + defaultDate);
+        }
 
-    updatePreview();
-}
+        modal.find('#cert_sign_teacher').text('Mr. HENG PHEAKNA');
+    }
 
-// ══════════════════════════════════════════
-//   ✅ PRINT ALL — loop + SweetAlert each
-// ══════════════════════════════════════════
-async function printAllCertificatesCore(course, date) {
-    const modalEl = document.getElementById('certModal');
-    const modalInstance = bootstrap.Modal.getInstance(modalEl);
-    const modal = modalInstance || new bootstrap.Modal(modalEl, { backdrop: false, keyboard: false });
+    // ══════════════════════════════════════════
+    //   ID Generator
+    // ══════════════════════════════════════════
+    function generateId() {
+        const year = new Date().getFullYear();
+        const random4 = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+        return year + random4 + 'ETEC';
+    }
 
-    modal.show();
-    await waitForRender(200);
+    function regenId() {
+        // $('#edit_id').val(generateId());
+        updatePreview();
+    }
 
-    let savedCount = 0;
-    let failCount  = 0;
+    // ══════════════════════════════════════════
+    //   Course Management (Database)
+    // ══════════════════════════════════════════
+    function saveCourse(el) {
+        const modal = el ? $(el).closest('.modal-content') : $('#certModal');
+        const custom = modal.find('#edit_course').val().trim();
+        if (!custom) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'សូមបញ្ចូល Course សិន!',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            return;
+        }
+        $.ajax({
+            url: "<?= base_url('api/course/savenormal') ?>",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                course_name: custom
+            }),
+            success: function(result) {
+                if (result.success) {
+                    localStorage.setItem('selected_course', custom);
+                    modal.find('#edit_course').val(custom);
+                    renderSavedCourses('#' + modal.closest('.modal').attr('id'));
+                    updatePreview('#' + modal.closest('.modal').attr('id'));
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'រក្សាទុករួច!',
+                        timer: 1200,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'info',
+                        title: result.message || 'មានរួចហើយ!',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                }
+            },
+            error: function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Server Error'
+                });
+            }
+        });
+    }
 
-    for (let i = 0; i < allStudents.length; i++) {
-        const s = allStudents[i];
-        const selectedCourse = course || s.course || currentClass.course;
-        let certId = '';
+    function renderSavedCourses(modalSelector = '#certModal') {
+        const modal = $(modalSelector);
+        const savedCourse = localStorage.getItem('selected_course');
 
-        $('#current_student_id').val(s.id);
-        $('#edit_student_name').val(s.name);
-        $('#edit_course').val(selectedCourse);
-        $('#edit_granted').val(date || '');
+        $.ajax({
+            url: "<?= base_url('api/course/listnormal') ?>",
+            method: "GET",
+            dataType: "json",
+
+            success: function(result) {
+                const courses = result.courses || [];
+
+                modal.find('#saved_count').text(courses.length);
+
+                if (courses.length === 0) {
+                    modal.find('#saved_courses_wrap').hide();
+                    return;
+                }
+
+                modal.find('#saved_courses_wrap').show();
+
+                const currentVal = modal.find('#edit_course').val().trim().toLowerCase();
+
+                let options = `<option value="">-- ជ្រើសរើស Course --</option>`;
+
+                options += courses.map(c => {
+                    const name = typeof c === 'object' ? c.course_name : c;
+
+                    const isSelected =
+                        name.toLowerCase() === currentVal ||
+                        (savedCourse && name === savedCourse);
+
+                    return `<option value="${escapeHtml(name)}" ${isSelected ? 'selected' : ''}>
+                            ${escapeHtml(name)}
+                        </option>`;
+                }).join('');
+
+                modal.find('#saved_courses_select').html(options);
+
+                if (!currentVal && savedCourse) {
+                    modal.find('#edit_course').val(savedCourse);
+                    updatePreview();
+                }
+            },
+
+            error: function() {
+                console.error('Cannot load courses');
+            }
+        });
+    }
+
+    function applySavedCourseFromSelect(el, value) {
+        const modal = $(el).closest('.modal-content');
+
+        if (!value) {
+            localStorage.removeItem('selected_course'); // ✅ clear
+            modal.find('#edit_course').val('');
+            updatePreview();
+            return;
+        }
+
+        modal.find('#edit_course').val(value);
+        localStorage.setItem('selected_course', value);
 
         updatePreview();
+    }
+
+    function deleteSelectedCourse(el) {
+        const modal = $(el).closest('.modal-content');
+        const val = modal.find('#saved_courses_select').val();
+        if (!val) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'សូមជ្រើសរើស Course មុនសិន!',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            return;
+        }
+        $.ajax({
+            url: "<?= base_url('api/course/delete') ?>",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                course_name: val
+            }),
+            success: function(res) {
+                if (res.success) {
+
+                    const currentVal = modal.find('#edit_course').val().trim();
+
+                    if (currentVal.toLowerCase() === val.toLowerCase()) {
+                        modal.find('#edit_course').val('');
+                        updatePreview();
+                    }
+
+                    if (val === localStorage.getItem('selected_course')) {
+                        localStorage.removeItem('selected_course');
+                    }
+
+                    renderSavedCourses('#' + modal.closest('.modal').attr('id'));
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'លុបរួច!',
+                        timer: 1200,
+                        showConfirmButton: false
+                    });
+                }
+            },
+            error: function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Server Error'
+                });
+            }
+        });
+    }
+
+    // ══════════════════════════════════════════
+    //   ✅ Helper: Save Certificate to DB
+    // ══════════════════════════════════════════
+    function saveCertificateToDB(studentId, studentName, course, granted, certId) {
+        return $.ajax({
+            url: "<?= base_url('api/certificate/savenormal') ?>",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                student_id: studentId,
+                class_id: currentClassId,
+                student_name: studentName,
+                course: course,
+                granted_date: granted,
+                certificate_id: certId
+            })
+        });
+    }
+
+    async function getNewCertificateId() {
+        try {
+            const res = await fetch("<?= base_url('api/generate-id') ?>", {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                },
+                cache: 'no-store'
+            });
+
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}`);
+            }
+
+            const payload = await res.json();
+            const certId = String(
+                payload?.data?.id ||
+                payload?.id ||
+                ''
+            ).trim();
+
+            if (!certId) {
+                throw new Error('Missing certificate ID');
+            }
+
+            return certId;
+        } catch (error) {
+            console.error('Failed to generate certificate ID:', error);
+            throw error;
+        }
+    }
+
+    function setCertificateId(certId) {
+        $('#cert_id_value').val(certId);
+        $('#certId').text(certId);
+        $('#certIdPrint').text(certId);
+    }
+
+    function waitForRender(delay = 80) {
+        return new Promise((resolve) => {
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setTimeout(resolve, delay);
+                });
+            });
+        });
+    }
+
+    async function waitForPrintAssets() {
+        if (document.fonts && document.fonts.ready) {
+            try {
+                await document.fonts.ready;
+            } catch (error) {
+                console.warn('Font readiness check failed:', error);
+            }
+        }
+
+        const printable = document.getElementById('printable-certificate');
+        if (!printable) return;
+
+        const images = Array.from(printable.querySelectorAll('img'));
+        await Promise.all(images.map((img) => {
+            if (img.complete) return Promise.resolve();
+
+            return new Promise((resolve) => {
+                img.addEventListener('load', resolve, {
+                    once: true
+                });
+                img.addEventListener('error', resolve, {
+                    once: true
+                });
+            });
+        }));
+    }
+
+    async function prepareCertificateForPrint(certId) {
+        setCertificateId(certId);
+        updatePreview();
+        await waitForPrintAssets();
         await waitForRender();
+    }
+
+    async function printPreparedCertificate() {
+        await waitForPrintAssets();
+        await waitForRender();
+        window.print();
+    }
+
+    async function refreshNextCertificateId(silent = true) {
+        try {
+            const nextCertId = await getNewCertificateId();
+            setCertificateId(nextCertId);
+            await waitForRender();
+            return nextCertId;
+        } catch (error) {
+            if (!silent) {
+                console.error('Failed to refresh next certificate ID:', error);
+            }
+            return '';
+        }
+    }
+
+    // ══════════════════════════════════════════
+    //   ✅ PRINT SINGLE — SweetAlert confirm
+    // ══════════════════════════════════════════
+    async function printCertificateStudent() {
+        const studentId = parseInt($('#current_student_id').val()) || 0;
+        const studentName = $('#edit_student_name').val().trim();
+        const course = $('#edit_course').val().trim();
+        const granted = $('#edit_granted').val().trim();
+
+        let certId = '';
 
         try {
             certId = await getNewCertificateId();
             await prepareCertificateForPrint(certId);
+            await printPreparedCertificate();
         } catch (error) {
-            failCount++;
-            continue;
+            await Swal.fire({
+                icon: 'error',
+                title: 'Cannot generate certificate ID',
+                text: 'Please try again.'
+            });
+            return;
         }
 
-        const res = await Swal.fire({
-            icon: 'question',
-            title: `[${i + 1}/${allStudents.length}] បោះពុម្ពជោគជ័យទេ?`,
-            html: `<b>${escapeHtml(s.name)}</b><br><small>${escapeHtml(selectedCourse)}</small>`,
+        // 2. Ask after print dialog closes
+        setTimeout(async function() {
+            const result = await Swal.fire({
+                icon: 'question',
+                title: 'បោះពុម្ពជោគជ័យទេ?',
+                html: `<b>${studentName}</b><br><small class="text-muted">${course}</small>`,
 
-            showCancelButton: true,
-            confirmButtonText: '<i class="bi bi-check-lg me-1"></i> បាទ ជោគជ័យ',
-            cancelButtonText: '<i class="bi bi-x-lg me-1"></i> ទេ មានបញ្ហា',
+                showCancelButton: true,
+                confirmButtonText: '<i class="bi bi-check-lg me-1"></i> បាទ ជោគជ័យ',
+                cancelButtonText: '<i class="bi bi-x-lg me-1"></i> ទេ មានបញ្ហា',
 
-            confirmButtonColor: '#198754',
-            cancelButtonColor: '#dc3545',
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#dc3545',
 
-            allowEnterKey: false,
+                allowEnterKey: false, // ❗ disable default
 
-            didOpen: () => {
-                // ✅ FIX focus after print dialog issues
-                setTimeout(() => Swal.getConfirmButton().focus(), 50);
+                didOpen: () => {
+                    // ✅ FIX: restore focus after print dialog
+                    setTimeout(() => {
+                        Swal.getConfirmButton().focus();
+                    }, 50);
 
-                const handler = (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        Swal.clickConfirm();
+                    const handler = (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            Swal.clickConfirm();
+                        }
+                    };
+
+                    Swal.__enterHandler = handler;
+                    document.addEventListener('keydown', handler);
+                },
+
+                willClose: () => {
+                    document.removeEventListener('keydown', Swal.__enterHandler);
+                }
+            });
+
+            if (result.isConfirmed) {
+                // 3. Insert to DB
+                try {
+                    const res = await saveCertificateToDB(studentId, studentName, course, granted, certId);
+                    if (res.ok) {
+                        markStudentPrinted((res.data && res.data.student_id) ? res.data.student_id : studentId);
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'រក្សាទុករួច!',
+                            timer: 900,
+                            showConfirmButton: false
+                        });
+                        window.location.reload();
+                    } else {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: res.error || 'មានបញ្ហា!'
+                        });
                     }
-                };
-
-                Swal.__enterHandler = handler;
-                document.addEventListener('keydown', handler);
-            },
-
-            willClose: () => {
-                document.removeEventListener('keydown', Swal.__enterHandler);
+                } catch (e) {
+                    console.error(e);
+                }
             }
+        }, 500);
+    }
+
+    async function confirmPrintAll(modalId = 'certModal') {
+        const modal = $('#' + modalId);
+        const course = modal.find('#edit_course').val().trim();
+        const date = modal.find('#edit_granted').val().trim();
+
+        if (!course || !date) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'សូមបញ្ចូល Course និង Date!',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            return;
+        }
+
+        // Save for reuse
+        localStorage.setItem('selected_course', course);
+        localStorage.setItem('cert_granted_date', date);
+
+        const confirm = await Swal.fire({
+            icon: 'question',
+            title: `បោះពុម្ព ${allStudents.length} នាក់?`,
+            showCancelButton: true,
+            confirmButtonText: 'ចាប់ផ្តើម',
+            cancelButtonText: 'បោះបង់'
         });
 
-        if (res.isConfirmed) {
-            await printPreparedCertificate();
+        if (!confirm.isConfirmed) return;
+
+        const modalEl = document.getElementById(modalId);
+        const instance = bootstrap.Modal.getInstance(modalEl);
+        if (instance) {
+            instance.hide();
+        }
+
+        await printAllCertificatesCore(course, date);
+    }
+
+
+    function startPrintAll() {
+        if (allStudents.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'មិនមានសិស្ស!',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            return;
+        }
+
+        // Open modal for editing first
+        const modal = new bootstrap.Modal(document.getElementById('certModal'));
+        modal.show();
+
+        // Load saved values
+        const savedCourse = localStorage.getItem('selected_course');
+        const savedDate = localStorage.getItem('cert_granted_date');
+
+        if (savedCourse) $('#edit_course').val(savedCourse);
+        if (savedDate) $('#edit_granted').val(savedDate);
+
+        updatePreview();
+    }
+
+    // ══════════════════════════════════════════
+    //   ✅ PRINT ALL — loop + SweetAlert each
+    // ══════════════════════════════════════════
+    async function printAllCertificatesCore(course, date) {
+        const modalEl = document.getElementById('certModal');
+        const modalInstance = bootstrap.Modal.getInstance(modalEl);
+        const modal = modalInstance || new bootstrap.Modal(modalEl, {
+            backdrop: false,
+            keyboard: false
+        });
+
+        modal.show();
+        await waitForRender(200);
+
+        let savedCount = 0;
+        let failCount = 0;
+
+        for (let i = 0; i < allStudents.length; i++) {
+            const s = allStudents[i];
+            const selectedCourse = course || s.course || currentClass.course;
+            let certId = '';
+
+            $('#current_student_id').val(s.id);
+            $('#edit_student_name').val(s.name);
+            $('#edit_course').val(selectedCourse);
+            $('#edit_granted').val(date || '');
+
+            updatePreview();
+            await waitForRender();
 
             try {
-                const saveRes = await saveCertificateToDB(
-                    s.id,
-                    s.name,
-                    selectedCourse,
-                    date,
-                    certId
-                );
+                certId = await getNewCertificateId();
+                await prepareCertificateForPrint(certId);
+            } catch (error) {
+                failCount++;
+                continue;
+            }
 
-                if (saveRes.ok) {
-                    savedCount++;
-                    markStudentPrinted(s.id);
-                } else {
+            const res = await Swal.fire({
+                icon: 'question',
+                title: `[${i + 1}/${allStudents.length}] បោះពុម្ពជោគជ័យទេ?`,
+                html: `<b>${escapeHtml(s.name)}</b><br><small>${escapeHtml(selectedCourse)}</small>`,
+
+                showCancelButton: true,
+                confirmButtonText: '<i class="bi bi-check-lg me-1"></i> បាទ ជោគជ័យ',
+                cancelButtonText: '<i class="bi bi-x-lg me-1"></i> ទេ មានបញ្ហា',
+
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#dc3545',
+
+                allowEnterKey: false,
+
+                didOpen: () => {
+                    // ✅ FIX focus after print dialog issues
+                    setTimeout(() => Swal.getConfirmButton().focus(), 50);
+
+                    const handler = (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            Swal.clickConfirm();
+                        }
+                    };
+
+                    Swal.__enterHandler = handler;
+                    document.addEventListener('keydown', handler);
+                },
+
+                willClose: () => {
+                    document.removeEventListener('keydown', Swal.__enterHandler);
+                }
+            });
+
+            if (res.isConfirmed) {
+                await printPreparedCertificate();
+
+                try {
+                    const saveRes = await saveCertificateToDB(
+                        s.id,
+                        s.name,
+                        selectedCourse,
+                        date,
+                        certId
+                    );
+
+                    if (saveRes.ok) {
+                        savedCount++;
+                        markStudentPrinted(s.id);
+                    } else {
+                        failCount++;
+                    }
+
+                } catch (e) {
                     failCount++;
                 }
 
-            } catch (e) {
+            } else {
                 failCount++;
             }
-
-        } else {
-            failCount++;
         }
-    }
 
-    modal.hide();
-    await refreshNextCertificateId();
+        modal.hide();
+        await refreshNextCertificateId();
 
-    Swal.fire({
-        icon: savedCount > 0 ? 'success' : 'warning',
-        title: 'រួចរាល់ទាំងអស់!',
-        html: `
+        Swal.fire({
+            icon: savedCount > 0 ? 'success' : 'warning',
+            title: 'រួចរាល់ទាំងអស់!',
+            html: `
             <div class="d-flex justify-content-center gap-4 mt-2">
                 <div>
                     <span class="fs-4 fw-bold text-success">${savedCount}</span>
@@ -993,74 +1339,65 @@ async function printAllCertificatesCore(course, date) {
                     <br><small>មិនបានរក្សា ❌</small>
                 </div>
             </div>`,
-        confirmButtonText: 'បិទ'
-    });
-}
-
-async function printAllCertificates() {
-    if (allStudents.length === 0) {
-        Swal.fire({ icon: 'warning', title: 'មិនមានសិស្ស!', timer: 1500, showConfirmButton: false });
-        return;
+            confirmButtonText: 'បិទ'
+        });
     }
 
-    const course = ($('#edit_course').val() || localStorage.getItem('selected_course') || '').trim();
-    const date = ($('#edit_granted').val() || localStorage.getItem('cert_granted_date') || '').trim();
+    async function printAllCertificates() {
+        if (allStudents.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'មិនមានសិស្ស!',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            return;
+        }
 
-    const confirmAll = await Swal.fire({
-        icon: 'question',
-        title: `បោះពុម្ព ${allStudents.length} នាក់?`,
-        text: 'វានឹងបោះពុម្ព Certificate សម្រាប់សិស្សទាំងអស់មួយម្នាក់ម្តង',
-        showCancelButton: true,
-        confirmButtonText: '<i class="bi bi-printer-fill me-1"></i> បាទ ចាប់ផ្តើម',
-        cancelButtonText: 'បោះបង់',
-        confirmButtonColor: '#0d6efd',
-        cancelButtonColor: '#6c757d',
-    });
+        openAllModalCertificate();
+    }
 
-    if (!confirmAll.isConfirmed) return;
-
-    await printAllCertificatesCore(course, date);
-}
-
-// ══════════════════════════════════════════
-//   Helpers
-// ══════════════════════════════════════════
-function showError(msg) {
-    $('#student_list').html(`
+    // ══════════════════════════════════════════
+    //   Helpers
+    // ══════════════════════════════════════════
+    function showError(msg) {
+        $('#student_list').html(`
         <tr><td colspan="7" class="text-center py-4 text-danger">
             <i class="bi bi-exclamation-triangle me-2"></i>${msg}
         </td></tr>`);
-}
+    }
 
-function markPrintedRowsFromServer(classId) {
-    $.ajax({
-        url: "<?= base_url('api/certificate/printed-normal') ?>",
-        method: "GET",
-        data: { class_id: classId },
-        dataType: "json",
-        success: function (result) {
-            if (!result.ok || !result.data || !Array.isArray(result.data.student_ids)) return;
-            result.data.student_ids.forEach(function (id) {
-                markStudentPrinted(parseInt(id, 10));
-            });
-        }
-    });
-}
+    function markPrintedRowsFromServer(classId) {
+        $.ajax({
+            url: "<?= base_url('api/certificate/printed-normal') ?>",
+            method: "GET",
+            data: {
+                class_id: classId
+            },
+            dataType: "json",
+            success: function(result) {
+                if (!result.ok || !result.data || !Array.isArray(result.data.student_ids)) return;
+                result.data.student_ids.forEach(function(id) {
+                    markStudentPrinted(parseInt(id, 10));
+                });
+            }
+        });
+    }
 
-function markStudentPrinted(studentId) {
-    const row = $(`#student_list tr[data-student-id="${studentId}"]`);
-    if (!row.length) return;
-    if (row.hasClass('student-printed')) return;
+    function markStudentPrinted(studentId) {
+        const row = $(`#student_list tr[data-student-id="${studentId}"]`);
+        if (!row.length) return;
+        if (row.hasClass('student-printed')) return;
 
-    row.addClass('student-printed');
-    if (remainingStudents > 0) remainingStudents--;
-    updateStudentCount();
+        row.addClass('student-printed');
+        if (remainingStudents > 0) remainingStudents--;
+        updateStudentCount();
 
-    const studentName = row.find('.student-name-text').text().trim();
-    const course = row.find('td').eq(4).text().trim();
-    const actionCell = row.find('td.text-center.no-print');
+        const studentName = row.find('.student-name-text').text().trim();
+        const course = row.find('td').eq(4).text().trim();
+        const actionCell = row.find('td.text-center.no-print');
 
-    actionCell.html(`
+        actionCell.html(`
         <div class="print-actions">
             <button type="button" class="btn-print-done text-white" disabled>
                 <i class="bi bi-check-circle-fill"></i> Printed
@@ -1071,19 +1408,19 @@ function markStudentPrinted(studentId) {
         </div>
     `);
 
-    actionCell.find('.btn-print-again').on('click', function () {
-        openCertificate(studentId, studentName, course, currentClass.teacher, currentClass.time);
-    });
-}
+        actionCell.find('.btn-print-again').on('click', function() {
+            openCertificate(studentId, studentName, course, currentClass.teacher, currentClass.time);
+        });
+    }
 
-function updateStudentCount() {
-    $('#student_count').text(remainingStudents + ' នាក់');
-}
+    function updateStudentCount() {
+        $('#student_count').text(remainingStudents + ' នាក់');
+    }
 
-function escapeHtml(str) {
-    return String(str)
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
 </script>

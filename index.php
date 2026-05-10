@@ -33,6 +33,8 @@ $router->get('/api/generate-id', [CertificateController::class, 'generateId']);
 
 // ✅ Certificate Normal Save
 $router->post('/api/certificate/savenormal', [CertificateController::class, 'saveCertificateNormal']);
+// Save Or Update Student Name in modal list student printAll
+$router->post('/api/certificate/update-student-name', [CertificateController::class, 'updateStudentName']);
 
 // Course API
 $router->post('/certificate-sys/api/course/save', [CourseApiController::class, 'save']);

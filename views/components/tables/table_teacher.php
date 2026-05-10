@@ -239,7 +239,7 @@
             },
             dataType: "json",
             success: function(result) {
-                // console.log(result);
+                console.log(result);
                 if (!result.data || result.data.length === 0) {
                     container.html(`
                     <div class="text-center py-5 text-muted">
@@ -310,7 +310,7 @@
                     const isClassDone = remainingStudents === 0 && totalStudents > 0;
                     return `
                 <tr>
-                    <td>${item.id}</td>
+                    <td>${item.class_id}</td>
                     <td>${item.teacher_name ?? '<span class="badge bg-danger">គ្មានគ្រូ</span>'}</td>
                     <td>${formattedCourse}</td>
                     <td>${item.time ?? '-'}</td>
@@ -320,7 +320,7 @@
                         </span>
                     </td>
                     <td>
-                        <a href="<?= base_url('certificate/students') ?>?class_id=${item.id}&course=${encodeURIComponent(formattedCourse)}&teacher=${encodeURIComponent(item.teacher_name ?? 'គ្មានគ្រូ')}&time=${encodeURIComponent(item.time ?? '-')}"
+                        <a href="<?= base_url('certificate/students') ?>?class_id=${item.class_id}&course=${encodeURIComponent(formattedCourse)}&teacher=${encodeURIComponent(item.teacher_name ?? 'គ្មានគ្រូ')}&time=${encodeURIComponent(item.time ?? '-')}"
                             class="btn btn-primary btn-sm">
                             <i class="bi bi-people-fill me-1"></i>មើលសិស្ស
                         </a>
