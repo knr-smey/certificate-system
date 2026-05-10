@@ -229,10 +229,10 @@
                 <button type="button" class="btn-cert-close" data-bs-dismiss="modal">
                     <i class="bi bi-x-circle me-2"></i>បិទ
                 </button>
-                <button type="button" class="btn btn-success"
+                <!-- <button type="button" class="btn btn-success"
                     onclick="confirmPrintAll()">
                     <i class="bi bi-printer-fill me-1"></i> Start Print All
-                </button>
+                </button> -->
                 <button type="button" class="btn-cert-save" onclick="saveCourse(this)">
                     <i class="bi bi-bookmark-fill me-2"></i>រក្សាទុក Course
                 </button>
@@ -728,8 +728,6 @@
             } else {
                 localStorage.removeItem('selected_course');
             }
-
-            renderSavedCourses('#' + modal.closest('.modal').attr('id'));
         }
 
         updatePreview('#' + modal.closest('.modal').attr('id'));
@@ -749,7 +747,9 @@
     function updatePreview(modalSelector = '#certModal') {
         const modal = $(modalSelector);
         modal.find('#cert_student_name').text(modal.find('.edit_student_name').val() || '—');
-        modal.find('#cert_course').text(modal.find('.edit_course').val() || '—');
+        modal.find('#cert_course').html(
+            escapeHtml(modal.find('.edit_course').val() || '—').replace(/\n/g, '<br>')
+        );
 
         const raw = modal.find('.edit_granted').val();
         const defaultDate = modal.find('#cert_granted').data('default');
@@ -840,38 +840,49 @@
 
             success: function(result) {
                 const courses = result.courses || [];
+                const selectedCourse = (savedCourse || modal.find('.edit_course').val() || '').trim();
+                const selectedCourseKey = selectedCourse.toLowerCase();
 
                 modal.find('.saved_count').text(courses.length);
 
-                if (courses.length === 0) {
+                if (courses.length === 0 && !selectedCourse) {
                     modal.find('.saved_courses_wrap').hide();
                     return;
                 }
 
                 modal.find('.saved_courses_wrap').show();
 
-                const currentVal = modal.find('.edit_course').val().trim().toLowerCase();
+                const courseNames = courses.map(c => typeof c === 'object' ? c.course_name : c);
+                const hasSelectedCourse = selectedCourse && courseNames.some(name => {
+                    return String(name).trim().toLowerCase() === selectedCourseKey;
+                });
 
                 let options = `<option value="">-- ជ្រើសរើស Course --</option>`;
 
-                options += courses.map(c => {
-                    const name = typeof c === 'object' ? c.course_name : c;
+                if (selectedCourse && !hasSelectedCourse) {
+                    options += `<option value="${escapeHtml(selectedCourse)}" selected>
+                            ${escapeHtml(selectedCourse)}
+                        </option>`;
+                }
+
+                options += courseNames.map(name => {
+                    const normalizedName = String(name).trim();
 
                     const isSelected =
-                            savedCourse
-                                ? name === savedCourse
-                                : name.toLowerCase() === currentVal;
+                            selectedCourse
+                                ? normalizedName.toLowerCase() === selectedCourseKey
+                                : false;
 
-                    return `<option value="${escapeHtml(name)}" ${isSelected ? 'selected' : ''}>
-                            ${escapeHtml(name)}
+                    return `<option value="${escapeHtml(normalizedName)}" ${isSelected ? 'selected' : ''}>
+                            ${escapeHtml(normalizedName)}
                         </option>`;
                 }).join('');
 
                 modal.find('.saved_courses_select').html(options);
 
-                if (savedCourse) {
-                    modal.find('.edit_course').val(savedCourse);
-                    modal.find('.saved_courses_select').val(savedCourse);
+                if (selectedCourse) {
+                    modal.find('.edit_course').val(selectedCourse);
+                    modal.find('.saved_courses_select').val(selectedCourse);
                     updatePreview('#' + modal.closest('.modal').attr('id'));
                 }
             },

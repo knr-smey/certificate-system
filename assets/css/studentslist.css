@@ -439,19 +439,29 @@
 }
 
 .cert-course {
-    text-align: center; font-size: 18px;
+    text-align: center;
+    font-size: 18px;
     color: black;
+
+    margin-top: 10px;
     margin-bottom: 10px;
+
     font-family: 'Simp', sans-serif;
     font-weight: bolder;
-    word-break: break-word;
-    white-space: normal;
+
     max-width: 100%;
+    /* max-width: 520px; */
+    margin-left: auto;
+    margin-right: auto;
+
+    white-space: pre-line;
+    word-break: break-word;
+    overflow-wrap: break-word;
+
     line-height: 28px;
+
     text-shadow: 0 0 2px black;
     -webkit-text-stroke: 0.5px black;
-    /* padding: 0px 30px; */
-    white-space: pre-line;
 }
 
 .cert-granted {
@@ -649,16 +659,31 @@
 
     /* .cert-course         { font-size: 1.6rem !important; margin-bottom: 10px !important;padding: 0px 30px; line-height: 28px !important;} */
     .cert-course {
-            text-align: center; font-size: 1.6rem;
-            color: black;
-            margin-top:10px !important;
-            margin-bottom: 18px !important;
-            font-family: 'Simp', sans-serif;
-            line-height: 43px;
-            text-shadow: 0 0 2px black;
-            -webkit-text-stroke: 1.2px black;
-            /* padding: 0px 30px; */
-        }
+        text-align: center !important;
+        font-size: 1.6rem !important;
+
+        color: black;
+
+        margin-top: 10px !important;
+        margin-bottom: 18px !important;
+
+        font-family: 'Simp', sans-serif;
+
+        /* width: 80% !important;
+        max-width: 520px !important; */
+
+        margin-left: auto !important;
+        margin-right: auto !important;
+
+        white-space: pre-line !important;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+
+        line-height: 43px !important;
+
+        text-shadow: 0 0 2px black;
+        -webkit-text-stroke: 1.2px black;
+    }
     .cert-granted        { font-size: 1.5rem !important; margin-bottom: auto !important; font-weight: 700 !important; letter-spacing: 0em !important;}
 
     .cert-footer {
