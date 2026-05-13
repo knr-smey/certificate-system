@@ -9,6 +9,21 @@
             <select class="form-select shadow-none" id="categoryCourse">
                 <option value="all">ទាំងអស់</option>
             </select>
+            <select class="form-select shadow-none" id="monthFilter">
+                <option value="">ខែទាំងអស់</option>
+                <option value="1">មករា</option>
+                <option value="2">កុម្ភៈ</option>
+                <option value="3">មីនា</option>
+                <option value="4">មេសា</option>
+                <option value="5">ឧសភា</option>
+                <option value="6">មិថុនា</option>
+                <option value="7">កក្កដា</option>
+                <option value="8">សីហា</option>
+                <option value="9">កញ្ញា</option>
+                <option value="10">តុលា</option>
+                <option value="11">វិច្ឆិកា</option>
+                <option value="12">ធ្នូ</option>
+            </select>
             <button disabled class="btn btn-primary fw-bold py-2 col-4" id="btnPrintCertificate">
                 <i class="bi bi-award-fill me-2"></i>
                 បង្កើតវិញ្ញាបនបត្រ
@@ -196,6 +211,24 @@
             renderAllTables(selected);
         });
 
+        $('#monthFilter').on('change', function() {
+            const selected = $(this).val();
+            const url = new URL(window.location);
+
+            if (selected) {
+                url.searchParams.set('month', selected);
+                if (!url.searchParams.get('year')) {
+                    url.searchParams.set('year', new Date().getFullYear());
+                }
+            } else {
+                url.searchParams.delete('month');
+                url.searchParams.delete('year');
+            }
+
+            window.history.replaceState(null, '', url);
+            loadClasses();
+        });
+
         // Live preview updates
         $('#edit_student_name').on('input', function() {
             $('#cert_student_name').text($(this).val() || '—');
@@ -233,12 +266,16 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     const type = urlParams.get('type') || 'free';
+    const month = urlParams.get('month') || '';
+    const year = urlParams.get('year') || '';
 
         $.ajax({
             url: "<?= base_url('api/classes') ?>",
             method: "GET",
             data: {
-                type: type
+                type: type,
+                month: month,
+                year: year
             },
             dataType: "json",
             success: function(result) {
@@ -263,8 +300,10 @@
                 categories.forEach(cat => select.append(`<option value="${cat}">${cat}</option>`));
 
                 const categoryFromUrl = urlParams.get('category') || 'all';
+                const monthFromUrl = urlParams.get('month') || '';
 
                 $('#categoryCourse').val(categoryFromUrl);
+                $('#monthFilter').val(monthFromUrl);
                 renderAllTables(categoryFromUrl);
             },
             error: function() {

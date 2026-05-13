@@ -15,7 +15,7 @@ final class ClassModel
         $this->pdo = Database::pdo();
     }
 
-        public function getFinishedClasses(string $type = '', string $course = ''): array
+        public function getFinishedClasses(string $type = '', string $course = '', ?int $month = null, ?int $year = null): array
     {
         $sql = "
             SELECT 
@@ -61,6 +61,16 @@ final class ClassModel
         if ($course !== '') {
             $sql .= " AND c.course_id = :course";
             $params['course'] = $course;
+        }
+
+        if ($month !== null && $month >= 1 && $month <= 12) {
+            $sql .= " AND MONTH(ec.created_at) = :month";
+            $params['month'] = $month;
+
+            if ($year !== null && $year >= 1970) {
+                $sql .= " AND YEAR(ec.created_at) = :year";
+                $params['year'] = $year;
+            }
         }
 
         // ✅ IMPORTANT (for COUNT)

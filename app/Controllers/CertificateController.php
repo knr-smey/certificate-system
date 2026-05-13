@@ -108,10 +108,20 @@ final class CertificateController extends Controller
 
             $type   = $_GET['type'] ?? '';
             $course = $_GET['course'] ?? '';
+            $month  = (isset($_GET['month']) && $_GET['month'] !== '') ? (int) $_GET['month'] : null;
+            $year   = (isset($_GET['year']) && $_GET['year'] !== '') ? (int) $_GET['year'] : null;
+
+            if ($month !== null && ($month < 1 || $month > 12)) {
+                $month = null;
+            }
+
+            if ($month !== null && $year === null) {
+                $year = (int) date('Y');
+            }
 
             // ✅ NO mapping (use DB value directly)
             $model   = new ClassModel();
-            $classes = $model->getFinishedClasses($type, $course);
+            $classes = $model->getFinishedClasses($type, $course, $month, $year);
 
             $this->jsonResponse(true, $classes);
 
