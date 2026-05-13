@@ -279,6 +279,38 @@
     }
 
     // ==================== RENDER TABLES ====================
+    const getStudentTotals = (item) => {
+        const totalStudents = Number.parseInt(item.total_students ?? 0, 10) || 0;
+        const printedStudents = Number.parseInt(item.printed_students ?? 0, 10) || 0;
+        const remainingStudents = Math.max(totalStudents - printedStudents, 0);
+
+        return {
+            totalStudents,
+            printedStudents,
+            remainingStudents
+        };
+    };
+
+    const sortByRemainingStudents = (items) => {
+        return items
+            .map((item, index) => ({
+                item,
+                index,
+                remainingStudents: getStudentTotals(item).remainingStudents
+            }))
+            .sort((a, b) => {
+                const aHasRemaining = a.remainingStudents > 0;
+                const bHasRemaining = b.remainingStudents > 0;
+
+                if (aHasRemaining !== bHasRemaining) {
+                    return aHasRemaining ? -1 : 1;
+                }
+
+                return a.index - b.index;
+            })
+            .map(({ item }) => item);
+    };
+
     function renderAllTables(filterCategory = 'all') {
         const container = $('#tables_container');
         container.html('');
@@ -291,7 +323,9 @@
 
             filteredCategories.forEach(categoryName => {
                 const page = categoryPages[categoryName];
-                const categoryData = allData.filter(item => item.category === categoryName);
+                const categoryData = sortByRemainingStudents(
+                    allData.filter(item => item.category === categoryName)
+                );
                 if (!categoryData.length) return;
                 anyData = true;
 
@@ -306,10 +340,7 @@
                     } else if (isBasicItCategory && String(item.class_network_for_basic_it) === '0') {
                         formattedCourse = 'Basic IT (C++)';
                     }
-                    const safeTeacher = (item.teacher_name ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-                    const totalStudents = parseInt(item.total_students ?? 0, 10) || 0;
-                    const printedStudents = parseInt(item.printed_students ?? 0, 10) || 0;
-                    const remainingStudents = Math.max(totalStudents - printedStudents, 0);
+                    const { totalStudents, remainingStudents } = getStudentTotals(item);
                     const isClassDone = remainingStudents === 0 && totalStudents > 0;
                     return `
                 <tr>
@@ -382,9 +413,9 @@
 
     function updateTotalRequestCertificate(filteredCategories) {
         const filteredData = allData.filter(item => filteredCategories.includes(item.category));
-        const totalRequested = filteredData.reduce((sum, item) => sum + (parseInt(item.total_students ?? 0, 10) || 0), 0);
+        const totalRequested = filteredData.reduce((sum, item) => sum + getStudentTotals(item).totalStudents, 0);
         const totalCourseFinish = new Set(filteredData.map(item => item.category ?? '')).size;
-        const totalCertificateDone = filteredData.reduce((sum, item) => sum + (parseInt(item.printed_students ?? 0, 10) || 0), 0);
+        const totalCertificateDone = filteredData.reduce((sum, item) => sum + getStudentTotals(item).printedStudents, 0);
 
         $('#totalRequestCertificate').text(totalRequested);
         $('#totalCourseFinish').text(totalCourseFinish);
